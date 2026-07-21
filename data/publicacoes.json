@@ -1,0 +1,85 @@
+[
+  {
+    "ano": "2026",
+    "titulo": "Unveiling the Use of Ontologies in Adaptive User Interface Systems Development: A Systematic Mapping Study",
+    "autores": "Alexandre Adler Cunha de Freitas, Simone Dornelas Costa, Murilo Borghardt Scalser, Monalessa Perini Barcellos",
+    "local": "Applied Ontology Journal (Accepted with minor revision)",
+    "resumo": "This paper investigates how ontologies have been used to support the development of Adaptive User Interface (AUI) systems through a Systematic Mapping Study (SMS). A total of 165 publications were identified, from which 30 addressed AUI development with ontologies. After grouping complementary studies, 23 proposals were analyzed. Results indicate that ontologies are mainly used as a conceptual foundation to organize elements such as user profiles, devices, and context of use, supporting dynamic UI adaptations, especially in the implementation phase. The study also highlights gaps and opportunities for improving systematic ontology-based approaches in AUI systems development.",
+    "links": {},
+    "bibtex": "@article{Freitas_2025-AO,\n  title={Unveiling the Use of Ontologies in Adaptive User Interface Systems Development: A Systematic Mapping Study},\n  author={Freitas, Alexandre Adler Cunha de and Costa, Simone Dornelas and Scalser, Murilo Borghardt and Barcellos, Monalessa Perini},\n  journal={Applied Ontology},\n  url={},\n  DOI={},\n  year={2025},\n  note={Accepted with minor revision}\n}"
+  },
+    {
+      "ano": "2024",
+      "titulo": "An Ontology-Based Approach to Support the Development of Adaptive Interface Systems",
+      "autores": "Alexandre A. C. de Freitas, Monalessa P. Barcellos",
+      "local": "Proceedings of the 17th Seminar on Ontology Research in Brazil (ONTOBRAS 2024) and 8th Doctoral and Masters Consortium on Ontologies (WTDO 2024), Vitória, Brazil",
+      "resumo": "Advances in technology have introduced new challenges to ensure optimal usability for diverse users. Adaptive User Interface (AUI) systems offer a potential solution by dynamically adjusting the interface to the user. However, developing these systems is complex, requiring capturing user characteristics and preferences. This paper provides an overview of a doctoral proposal that proposes OADAPT, an ontology-based approach to support AUI system development. The approach comprises a knowledge framework about AUI systems (represented through networked ontologies) and a process that guides the steps to use the ontologies to develop AUI systems. OADAPT emerged from developing a social network called SNOPI, which automatically adapts its interface based on users’ needs and characteristics, such as low vision and colorblindness.",
+      "links": {
+        "url": "https://ceur-ws.org/Vol-3905/master1.pdf",
+        "pdf": "paper-pdf/wtdo_2024_paper_8.pdf"
+      },
+      "bibtex": "@inproceedings{Freitas2024-OADAPT-ONTOBRAS,\n  author = {Freitas, Alexandre A. C. de and Barcellos, Monalessa P.},\n  title = {An Ontology-Based Approach to Support the Development of Adaptive Interface Systems},\n  year = {2024},\n  booktitle = {Proceedings of the 17th Seminar on Ontology Research in Brazil (ONTOBRAS 2024) and 8th Doctoral and Masters Consortium on Ontologies (WTDO 2024)},\n  location = {Vitória, Brazil}\n}"
+    },
+    {
+    "ano": "2023",
+    "titulo": "Using Networked Ontologies to Support the Development of Software Systems with Adaptive User Interface",
+    "autores": "Alexandre Adler Cunha de Freitas, Simone Dornelas Costa, Murilo Borghardt Scalser, Monalessa Perini Barcellos",
+    "local": "Journal on Interactive Systems, Porto Alegre, RS, v. 14, n. 1, p. 257–273",
+    "resumo": "The new ways of interacting with computers, smartphones, and other devices have brought new challenges, such as the need to ensure that different types of users can easily use the same system. Adaptive User Interface (AUI) systems have been recognized as a solution to this matter. They change the user interface to better meet the needs of different users. However, developing such systems is not trivial. It is necessary to capture the users’ characteristics and preferences and constantly adapt the system accordingly. In this paper, we discuss the use of ontologies to support the development of AUI systems. We argue that by providing structured knowledge about such systems, ontologies help understand how they work and offer a basis to structure them, identify the necessary adaptations and implement mechanisms to make them happen in run-time. We have explored the use of ontologies from an ontology network (i.e., networked ontologies) to develop a social network about academic subjects that automatically adapts its interface according to the low vision and colorblind user’s needs and usage characteristics. This exploratory study showed that using networked ontologies to develop an AUI system is useful and feasible. The ontology was useful at the conceptual level by serving as a basis to define the system’s structural model and at the operational level by providing the semantics used in a reasoning engine to adapt the UI at run-time. The first version of an ontology-based process to guide the development of AUI systems emerged from this experience and it is also presented in this paper.",
+    "links": {
+      "doi": "https://doi.org/10.5753/jis.2023.3256",
+      "pdf": "paper-pdf/10.5753_jis.2023.3256.pdf"
+    },
+    "bibtex": "@article{Freitas_2023-OADAPT,\n  place={Porto Alegre, RS},\n  title={Using Networked Ontologies to Support the Development of Software Systems with Adaptive User Interface},\n  volume={14},\n  url={https://sol.sbc.org.br/journals/index.php/jis/article/view/3256},\n  DOI={10.5753/jis.2023.3256},\n  number={1},\n  journal={Journal on Interactive Systems},\n  author={Freitas, Alexandre Adler Cunha de and Costa, Simone Dornelas and Scalser, Murilo Borghardt and Barcellos, Monalessa Perini},\n  year={2023},\n  month={Jul.},\n  pages={257–273}\n}"
+    },
+    {
+      "ano": "2022",
+      "titulo": "Towards an Ontology-Based Approach to Develop Software Systems with Adaptive User Interface",
+      "autores": "Alexandre A. C. de Freitas, Murilo B. Scalser, Simone D. Costa, Monalessa P. Barcellos",
+      "local": "Proceedings of the 21st Brazilian Symposium on Human Factors in Computing Systems, Diamantina, Brazil",
+      "resumo": "The new ways of manipulating computers, smartphones and other devices have brought challenges such as the need to ensure a good usability when different user types use the same system. Adaptive user interface (AUI) systems are a possible solution. They change the user interface to better meet the needs of different users. However, developing such systems is not trivial. It is necessary to capture the users' characteristics and preferences and constantly adapt the system accordingly. In this paper, we discuss the use of ontologies to support the development of AUI systems. We argue that by providing structured knowledge about such systems, ontologies help understand how they work and offer a basis to structure them, identify the necessary adaptations and implement mechanisms to make them happen in run-time. We have explored the use of ontologies from an ontology network to develop a social network about academic subjects that automatically adapts its interface according to the low vision and colorblind user's needs and usage characteristics. The first version of an ontology-based process to guide the development of AUI systems raised from this experience.",
+      "links": {
+        "doi": "https://dl.acm.org/doi/10.1145/3554364.3559139",
+        "pdf": "paper-pdf/10.1145_3554364.3559139.pdf"
+      },
+      "bibtex": "@inproceedings{Freitas2022-SNOPI-IHC,\n  author = {Freitas, Alexandre A. C. de and Scalser, Murilo B. and Costa, Simone D. and Barcellos, Monalessa P.},\n  title = {Towards an Ontology-Based Approach to Develop Software Systems with Adaptive User Interface},\n  year = {2022},\n  publisher = {Association for Computing Machinery},\n  url = {https://doi.org/10.1145/3554364.3559139},\n  doi = {10.1145/3554364.3559139},\n  booktitle = {Proceedings of the 21st Brazilian Symposium on Human Factors in Computing Systems},\n  location = {Diamantina, Brazil}\n}"
+    },
+    {
+    "ano": "2019",
+    "titulo": "Implementação de uma Interface Adaptativa para um Sistema de Apoio a Pacientes com Diabetes",
+    "autores": "Alexandre A. C. de Freitas, Francisco Neto, Salatiel Silva, Ademar Neto, Arthur Domingues, Igor dos Santos, Wesley dos Santos, Daniel Passos",
+    "local": "Anais do XIX Simpósio Brasileiro de Computação Aplicada à Saúde, Niterói, p. 312–317",
+    "resumo": "Com os avanços tecnológicos, o tratamento e acompanhamento de doenças como a Diabetes ficou mais fácil. Porém, as interfaces humano- computador desenvolvidas, geralmente, são projetadas na suposição de que serão utilizadas por pessoas com habilidades sensório-motoras e cognitivas normais. Logo, qualquer desvio desses ''padrões'' pode dificultar o uso desses sistemas. Este é um trabalho em andamento no qual apresentamos um mapeamento das características/dificuldades associadas aos pacientes com Diabetes. Os resultados deste mapeamento foram representados ontologicamente. Visando implementar uma interface adaptativa ao sistema, possibilitando-o adaptar-se de forma dinâmica às necessidades dos usuários.",
+    "links": {
+      "doi": "https://doi.org/10.5753/sbcas.2019.6268",
+      "url": "https://sol.sbc.org.br/index.php/sbcas/article/view/6268",
+      "pdf": "paper-pdf/10.5753_sbcas.2019.6268.pdf"
+    },
+    "bibtex": "@inproceedings{Freitas_SBCAS_2019,\n  author = {Alexandre de Freitas and Francisco Neto and Salatiel Silva and Ademar Neto and Arthur Domingues and Igor dos Santos and Wesley dos Santos and Daniel Passos},\n  title = {Implementação de uma Interface Adaptativa para um Sistema de Apoio a Pacientes com Diabetes},\n  booktitle = {Anais do XIX Simpósio Brasileiro de Computação Aplicada à Saúde},\n  location = {Niterói},\n  year = {2019},\n  keywords = {},\n  issn = {2763-8952},\n  pages = {312--317},\n  publisher = {SBC},\n  address = {Porto Alegre, RS, Brasil},\n  doi = {10.5753/sbcas.2019.6268},\n  url = {https://sol.sbc.org.br/index.php/sbcas/article/view/6268}\n}"
+  },
+  {
+    "ano": "2019",
+    "titulo": "Aprendizado de Máquina nos Jogos para Medicina: Uma Revisão Sistemática",
+    "autores": "Jesaías Silva, Everton de Oliveira, Francisco Neto, Araken Santos, Paulo Gabriel Queiroz, Alexandre A. C. de Freitas",
+    "local": "Anais do XIX Simpósio Brasileiro de Computação Aplicada à Saúde, Niterói, p. 70–81",
+    "resumo": "Este trabalho apresenta a condução de uma Revisão Sistemática da Literatura sobre o Aprendizado de Máquina em Jogos para medicina realizada em 4 fontes de pesquisa internacionais nos últimos 10 anos, cujo objetivo é identificar o estado da arte do aprendizado de máquina nos jogos para medicina. Como resultado da Revisão Sistemática apresentada neste trabalho, foram analisados 1040 trabalhos, e desse total, 40 foram pré-selecionados e 12 foram selecionados para extração de dados. Entre os trabalhos selecionados, foi possível elencar várias técnicas de aprendizado de máquina, tipos de aprendizado, áreas da saúde e jogos utilizados na atualidade.",
+    "links": {
+      "doi": "https://doi.org/10.5753/sbcas.2019.6243",
+      "url": "https://sol.sbc.org.br/index.php/sbcas/article/view/6243",
+      "pdf": "paper-pdf/10.5753_sbcas.2019.6243.pdf"
+    },
+    "bibtex": "@inproceedings{sbcas,\n  author = {Jesaías Silva and Everton de Oliveira and Francisco Neto and Araken Santos and Paulo Gabriel Queiroz and Alexandre de Freitas},\n  title = {Aprendizado de Máquina nos Jogos para Medicina: Uma Revisão Sistemática},\n  booktitle = {Anais do XIX Simpósio Brasileiro de Computação Aplicada à Saúde},\n  location = {Niterói},\n  year = {2019},\n  keywords = {},\n  issn = {2763-8952},\n  pages = {70--81},\n  publisher = {SBC},\n  address = {Porto Alegre, RS, Brasil},\n  doi = {10.5753/sbcas.2019.6243},\n  url = {https://sol.sbc.org.br/index.php/sbcas/article/view/6243}\n}"
+  },
+  {
+    "ano": "2019",
+    "titulo": "Um ambiente de aprendizagem informal com recomendações de conteúdos para portadores de doenças crônicas",
+    "autores": "Salatiel Dantas, Ademar Neto, Francisco Mendes Neto, Alexandre Adler C. de Freitas, Arthur Domingues, Jesaías Silva, Ramiro Santos Júnior, Igor Santos",
+    "local": "Brazilian Symposium on Computers in Education (Simpósio Brasileiro de Informática na Educação - SBIE), v. 30, p. 1481",
+    "resumo": "Doenças crônicas impõem diversas limitações às condições de saúde do seu portador. Estas doenças, nos últimos 10 anos, cresceram mais de 60%, tornando assim necessário um software que possa atender tanto a demanda do paciente, quanto a demanda do especialista em saúde. Dessa forma, aprender mais sobre a doença ajuda a melhorar a qualidade de vida. Web 2.0, ao longo dos anos, se tornou uma grande aliada na busca de conhecimento, possibilitando que o paciente se torne mais ativo no tratamento da sua doença. Todavia, a procura por informações que se adequem ao contexto do paciente pode ser difícil, devido ao grande volume de informações disponíveis. Este trabalho apresenta um ambiente que busca amenizar essa dificuldade, analisando o perfil do usuário, seus dados de saúde e suas relações com pessoas com o mesmo problema de saúde e assim proporcionando uma recomendação mais adequada às suas necessidades. Parte desse ambiente é constituído por um Módulo de Intermediário do Especialista que possibilita o acesso a um conjunto de informações do tratamento de pacientes, buscando tornar o tratamento dos pacientes mais adequado.",
+    "links": {
+      "doi": "https://doi.org/10.5753/cbie.sbie.2019.1481",
+      "pdf": "paper-pdf/10.5753_cbie.sbie.2019.1481.pdf"
+    },
+    "bibtex": "@inproceedings{inproceedings,\n  author = {Dantas, Salatiel and Neto, Ademar and MENDES NETO, FRANCISCO and Freitas, Alexandre Adler C. de and Domingues, Arthur and Silva, Jesaías and Santos Júnior, Ramiro and Santos, Igor},\n  year = {2019},\n  month = {11},\n  pages = {1481},\n  title = {Um ambiente de aprendizagem informal com recomendações de conteúdos para portadores de doenças crônicas},\n  volume = {30},\n  journal = {Brazilian Symposium on Computers in Education (Simpósio Brasileiro de Informática na Educação - SBIE)},\n  doi = {10.5753/cbie.sbie.2019.1481}\n}"
+  }
+]

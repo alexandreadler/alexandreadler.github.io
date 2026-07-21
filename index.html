@@ -1,67 +1,70 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prof. Alexandre Adler - Em Construção</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #38bdf8;
-        }
-        p {
-            font-size: 1.1rem;
-            color: #94a3b8;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-        .badge {
-            display: inline-block;
-            padding: 8px 16px;
-            background-color: #0ea5e9;
-            color: white;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Início - Prof. Alexandre Adler</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  
+<header class="container">
+    <a href="index.html" class="brand">Prof. Alexandre Adler</a>
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="ensino.html">Ensino</a>
+        <a href="pesquisa.html">Pesquisa</a>
+        <a href="publicacoes.html">Publicações</a>
+        <a href="contato.html">Contato</a>
+    </nav>
+</header>
 
-    <div class="container">
-        <div class="badge">Em construção...</div>
-        <!-- <h1>alexandreadler.eu.org</h1> -->
-        <p>Olá!</p>
-        <p>O site está pronto para começar a ser desenvolvido!</p>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="badge">Professor • UFES</span>
+        <h1>Alexandre Adler Cunha de Freitas</h1>
+        <p>Departamento de Computação • Engenharia de Software  • Ontologias • Interfaces Adaptativas</p>
+        <div class="actions">
+          <a class="btn" href="publicacoes.html">Publicações</a>
+          <a class="btn ghost" href="ensino.html">Ensino</a>
+        </div>
+        <div class="metrics">
+          <div><strong>3+</strong><span>Disciplinas</span></div>
+          <div><strong>7+</strong><span>Publicações</span></div>
+          <div><strong>2+</strong><span>Projetos</span></div>
+        </div>
+      </div>
+      <div class="photo-container">
+        <figure class="circle">
+          <img src="img/logo_index.png" alt="Foto de Alexandre Adler">
+          <figcaption>Alexandre Adler</figcaption>
+        </figure>
+      </div>
     </div>
+  </section>
+  <section class="container grid3">
+    <article class="card"><h3>Ensino</h3><p>Disciplinas ministradas e materiais.</p><a href="ensino.html" class="btn ghost" style="margin-top:10px; display:inline-block; padding:8px 15px;">Ver Disciplinas</a></article>
+    <article class="card"><h3>Pesquisa</h3><p>Projetos.</p><a href="pesquisa.html" class="btn ghost" style="margin-top:10px; display:inline-block; padding:8px 15px;">Ver Pesquisas</a></article>
+    <article class="card"><h3>Publicações</h3><p>Artigos.</p><a href="publicacoes.html" class="btn ghost" style="margin-top:10px; display:inline-block; padding:8px 15px;">Ver Publicações</a></article>
+  </section>
+
+  <main class="container" style="padding: 0px 0;">   
+    <h2 style="margin-top: 0px;">Agenda</h2>
+    <div id="eventos-container"></div>
+  </main> 
+
+  <div class="accessibility-panel">
+    <strong>Acessibilidade</strong><br>
+    <button id="incFont" title="Aumentar Fonte">A+</button>
+    <button id="decFont" title="Diminuir Fonte">A-</button>
+    <button id="toggleTheme" title="Alternar Tema Escuro">🌙</button>
+    <button id="scrollTop" title="Voltar ao Topo">⬆️</button>
+  </div>
+  
+<script src="js/main.js"></script>
 
 </body>
 </html>

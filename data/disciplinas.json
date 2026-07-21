@@ -1,0 +1,51 @@
+[
+  {
+    "id": "LC_2026.2",
+    "nome": "Lógica Computacional",
+    "codigo": "COM06853",
+    "semestre": "2026/2",
+    "status": "atual",
+    "ementa": "Cálculo proposicional: sintaxe e semântica. Sistemas dedutivos. Cálculo de predicados de primeira ordem: introdução à sintaxe e semântica.",
+    "horarios": "Quinta e Sexta às 20 horas, Sala 3 (Ciclo Básico - Prédio Novo).",
+    "materiais": [
+            {
+        "titulo": "Apresentação da Disciplina",
+        "url": "/disciplinas/2026.2/Lógica_Computacional/01-Apresentação_Disciplina_LC.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ED1_2026.2",
+    "nome": "Estruturas de Dados I",
+    "codigo": "COM06992",
+    "semestre": "2026/2",
+    "status": "atual",
+    "ementa": "Recursividade. Alocação dinâmica de memória. Conceito de tipos abstratos de dados. Listas, pilhas, filas e árvores como tipos abstratos de dados. Implementação de tipos abstratos de dados.",
+    "horarios": "Terça e Quinta às 18 horas, Laboratório 2 (Prédio Chichiu).",
+    "materiais": [
+      {
+        "titulo": "Apresentação da Disciplina",
+        "url": "/disciplinas/2026.2/Estruturas_de_Dados_I/01-Apresentação_Disciplina_EDI.pdf"
+      },
+      {
+        "titulo": "Livro de Introdução ao C",
+        "url": "/disciplinas/2026.2/Estruturas_de_Dados_I/Introdução_C_10_Aulas.pdf"
+      }
+    ]
+  },
+    {
+    "id": "LP_2026.2",
+    "nome": "Linguagem de Programação",
+    "codigo": "COM10392",
+    "semestre": "2026/2",
+    "status": "atual",
+    "ementa": "Definição de linguagens: sintaxe e semântica. Paradigmas de programação. Modelos de implementação: compilação e interpretação. Amarrações. Tipos de dados. Alocação estática e dinâmica de memória. Subprogramas. Unidades genéricas. Comunicação entre unidades. Polimorfismo. Tratamento de exceções. Noções de programação em linguagens funcionais, lógicas e orientadas a objetos. Estudo comparativo de linguagens.",
+    "horarios": "Terça e Quinta às 10 horas, Sala 4 (Prédio Central).",
+    "materiais": [
+      {
+        "titulo": "Apresentação da Disciplina",
+        "url": "/disciplinas/2026.2/Linguagem_de_Programação/01-Apresentação_Disciplina_LP.pdf"
+      }
+    ]
+  }
+]
