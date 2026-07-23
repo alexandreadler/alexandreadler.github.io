@@ -1,12 +1,12 @@
 [
   {
     "id": "LC_2026.2",
-    "nome": "Lógica Computacional",
+    "nome": "Lógica Computacional I",
     "codigo": "COM06853",
     "semestre": "2026/2",
     "status": "atual",
     "ementa": "Cálculo proposicional: sintaxe e semântica. Sistemas dedutivos. Cálculo de predicados de primeira ordem: introdução à sintaxe e semântica.",
-    "horarios": "Quinta e Sexta às 20 horas, Sala 3 (Ciclo Básico - Prédio Novo).",
+    "horarios": "Quinta e Sexta às 20h-22h, Sala 3 (Ciclo Básico - Prédio Novo).",
     "materiais": [
             {
         "titulo": "Apresentação da Disciplina",
@@ -21,7 +21,7 @@
     "semestre": "2026/2",
     "status": "atual",
     "ementa": "Recursividade. Alocação dinâmica de memória. Conceito de tipos abstratos de dados. Listas, pilhas, filas e árvores como tipos abstratos de dados. Implementação de tipos abstratos de dados.",
-    "horarios": "Terça e Quinta às 18 horas, Laboratório 2 (Prédio Chichiu).",
+    "horarios": "Terça às 18h-20h: Lab 02 - Chichiu ou Sala 07 (Prédio Central) e Quinta às 18h-20h, Laboratório 2 (Prédio Chichiu).",
     "materiais": [
       {
         "titulo": "Apresentação da Disciplina",
@@ -40,7 +40,7 @@
     "semestre": "2026/2",
     "status": "atual",
     "ementa": "Definição de linguagens: sintaxe e semântica. Paradigmas de programação. Modelos de implementação: compilação e interpretação. Amarrações. Tipos de dados. Alocação estática e dinâmica de memória. Subprogramas. Unidades genéricas. Comunicação entre unidades. Polimorfismo. Tratamento de exceções. Noções de programação em linguagens funcionais, lógicas e orientadas a objetos. Estudo comparativo de linguagens.",
-    "horarios": "Terça e Quinta às 10 horas, Sala 4 (Prédio Central).",
+    "horarios": "Terça e Quinta às 10h-12h, Sala 4 (Prédio Central) ou Laboratório 2 (Prédio Chichiu).",
     "materiais": [
       {
         "titulo": "Apresentação da Disciplina",
