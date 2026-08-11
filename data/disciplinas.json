@@ -40,7 +40,7 @@
     "semestre": "2026/2",
     "status": "atual",
     "ementa": "Definição de linguagens: sintaxe e semântica. Paradigmas de programação. Modelos de implementação: compilação e interpretação. Amarrações. Tipos de dados. Alocação estática e dinâmica de memória. Subprogramas. Unidades genéricas. Comunicação entre unidades. Polimorfismo. Tratamento de exceções. Noções de programação em linguagens funcionais, lógicas e orientadas a objetos. Estudo comparativo de linguagens.",
-    "horarios": "Terça e Quinta às 10h-12h, Sala 4 (Prédio Central) ou Laboratório 2 (Prédio Chichiu).",
+    "horarios": "Terça e Quinta às 10h-12h, Sala 4 (Prédio Central) ou Laboratório 1 (Prédio Chichiu).",
     "materiais": [
       {
         "titulo": "Apresentação da Disciplina",
