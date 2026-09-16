@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade - Lista Encadeada</title>
+    
+    <!-- Biblioteca Prism.js para Syntax Highlighting (Tema Claro) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --container-bg: #ffffff;
+            --text-color: #333333;
+            --primary-color: #0056b3;
+            --border-color: #cccccc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-top: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .student-info {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+
+        .student-info div {
+            flex: 1;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .inline-input {
+            width: 200px !important;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        /* Estilos do Bloco Expansível (Código de Referência) */
+        details {
+            background-color: #f1f8ff;
+            border: 1px solid #c8e1ff;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 25px;
+        }
+
+        summary {
+            font-weight: bold;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        summary:hover {
+            text-decoration: underline;
+        }
+
+        pre[class*="language-"] {
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #e1e1e1;
+            background-color: #fdfdfd;
+        }
+
+        .question-box {
+            background: #eef5ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .btn-print {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background 0.3s;
+        }
+
+        .btn-print:hover {
+            background-color: #004494;
+        }
+
+        /* Classes de Validação Visual */
+        .is-correct {
+            border-color: #28a745 !important;
+            background-color: #f0fdf4;
+            color: #155724;
+        }
+        
+        .is-incorrect {
+            border-color: #dc3545 !important;
+            background-color: #fef2f2;
+            color: #721c24;
+        }
+
+        /* Estilos para PDF / Impressão */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            .btn-print {
+                display: none;
+            }
+            details {
+                display: none;
+            }
+            input[type="text"], textarea {
+                border: none;
+                border-bottom: 1px solid #000;
+                background: transparent;
+                border-radius: 0;
+                resize: none;
+                overflow: hidden;
+            }
+            .is-correct, .is-incorrect {
+                background-color: transparent !important;
+                color: #000 !important;
+            }
+            pre[class*="language-"] {
+                background-color: transparent !important;
+                border: 1px solid #000;
+                page-break-inside: avoid;
+            }
+            h2 {
+                page-break-after: avoid;
+            }
+            .question-box {
+                page-break-inside: avoid;
+                border-left-color: #000;
+                background: transparent;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Atividade - Lista Encadeada</h1>
+    
+    <div class="student-info">
+        <div>
+            <label for="nome">Nome do Aluno:</label>
+            <input type="text" id="nome" placeholder="Digite seu nome completo">
+        </div>
+        <div>
+            <label for="matricula">Matrícula:</label>
+            <input type="text" id="matricula" placeholder="Digite sua matrícula">
+        </div>
+    </div>
+
+    <!-- Bloco de Referência Expansível -->
+    <details>
+        <summary>📎 Ver Código de Referência (exemploAula7_5.2-ListaSimplesmenteEncadeada.c)</summary>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt; // Necessário para usar malloc
+
+// Definindo a estrutura do nó
+struct No {
+    int dado;
+    struct No* proximo;
+};
+
+int main() {
+    // 1. Criando os ponteiros para os nós
+    struct No* primeiro = NULL;
+    struct No* segundo = NULL;
+    struct No* terceiro = NULL;
+
+    // 2. Alocando memória para cada nó no computador
+    primeiro = (struct No*)malloc(sizeof(struct No));
+    segundo = (struct No*)malloc(sizeof(struct No));
+    terceiro = (struct No*)malloc(sizeof(struct No));
+
+    // 3. Inserindo valores dentro dos nós
+    primeiro->dado = 10; // O primeiro nó guarda o valor 10
+    segundo->dado = 20;  // O segundo nó guarda o valor 20
+    terceiro->dado = 30;  // O terceiro nó guarda o valor 30
+
+    // 4. FAZENDO A LIGAÇÃO
+    // O 'proximo' do primeiro nó aponta para o endereço do segundo nó
+    primeiro->proximo = segundo;
+
+    // O segundo nó é o último, então o 'proximo' dele aponta para o vazio (NULL)
+    //segundo->proximo = NULL;
+    
+    //Nó criado para demonstrar o slide "Percorrendo um lista"
+    //'Descomentar' durante a explicação do slide
+    segundo->proximo = terceiro;
+    
+    terceiro->proximo = NULL;
+
+    // 5. Imprimindo os valores navegando pela estrutura
+    printf("Valor do primeiro no: %d\n", primeiro->dado);
+    
+    // Conseguimos acessar o valor do segundo nó através do primeiro!
+    printf("Valor do segundo no (via primeiro): %d\n", primeiro->proximo->dado);
+
+    // Conseguimos acessar o valor do segundo nó através do primeiro!
+    printf("Valor do terceiro no (via segundo): %d\n", segundo->proximo->dado);
+    
+    // ====================================================================
+    // 6. EXIBINDO A LISTA COMPLETA (Percorrendo a estrutura do início ao fim)
+    // ====================================================================
+
+    // Ponteiro auxiliar que servirá como o nosso "navegador" ou "cursor".
+    // Usamos ele para não perder a referência de onde a lista começa (o 'primeiro').
+    struct No *atual;
+
+    // Posiciona o nosso cursor no início da lista (no primeiro nó)
+    atual = primeiro;
+
+    // O laço continuará rodando enquanto o cursor estiver apontando para um nó válido.
+    // Ele só vai parar quando chegar no 'proximo' do último nó, que vale NULL.
+    while (atual != NULL) {
+
+        // Exibe o valor armazenado dentro do nó onde o cursor está parado agora
+        printf("%d\n", atual->dado);
+
+        // Atualiza o 'cursor'. Ele deixa de apontar para o nó atual
+        // e passa a apontar para o endereço do próximo nó da sequência.
+        atual = atual->proximo;
+    }
+
+
+    // 7. Percorre enquanto houver nós com o objetivo de Buscar um valor na lista
+    int valor;
+    
+    printf("Digite o valor para buscar: ");
+    scanf("%d", &valor);
+    
+    // Reinicia e começa pelo primeiro nó
+    atual = primeiro;
+    
+    while (atual != NULL) {
+    
+        // Verifica se encontrou o valor
+        if (atual->dado == valor) {
+    
+            printf("Elemento %d encontrado no nó: %p!\n", valor, atual);
+    
+            break;
+            
+        } else{
+            
+            printf("Elemento %d Não encontrado no 'nó': %p!\n", valor, atual);  
+            
+        }
+    
+        // Avança para o próximo nó
+        atual = atual->proximo;
+    }
+    // 8. Liberando a memória alocada
+    free(primeiro);
+    free(segundo);
+    free(terceiro);
+
+    return 0;
+}</code></pre>
+    </details>
+
+    <p><strong>Objetivo:</strong> Praticar a criação de nós, ligação entre nós, acesso por ponteiros e percurso de uma lista simplesmente encadeada baseando-se no arquivo <code>exemploAula7_5.2-ListaSimplesmenteEncadeada.c</code>.</p>
+
+    <!-- Parte 1 -->
+    <h2>Parte 1 - Crie a estrutura do nó</h2>
+    <p>Observe as linhas do código abaixo:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct No {
+    int dado;
+    struct No *proximo;
+};
+
+int main() {
+    // Ponteiros para os nós
+    struct No *primeiro = NULL;
+    struct No *segundo = NULL;
+    struct No *terceiro = NULL;
+    struct No *quarto = NULL;
+    
+    return 0;
+}</code></pre>
+    
+    <div class="question-box">
+        <label>Neste exato momento da execução do código, quantos 'nós' existem na memória?</label>
+        <input type="text" id="resp-p1" placeholder="Sua resposta...">
+    </div>
+
+    <!-- Parte 2 -->
+    <h2>Parte 2 - Alocando os nós</h2>
+    <p>Após a alocação de memória (<code>malloc</code>) e atribuição de valores, temos:</p>
+<pre><code class="language-c">primeiro->dado = 10;
+segundo->dado = 20;
+terceiro->dado = 30;
+quarto->dado = 40;</code></pre>
+
+    <!-- Parte 3 -->
+    <h2>Parte 3 - Ligação</h2>
+    <p>Faça a ligação entre os <strong>quatro nós</strong> para produzir a lista estruturada da seguinte forma:</p>
+    <pre style="text-align: center; font-weight: bold; font-size: 16px; background: transparent; border: none;">primeiro<br>   ↓<br>[10] → [20] → [30] → [40] → NULL</pre>
+    
+    <div class="question-box">
+        <p>Complete os comandos abaixo:</p>
+        <code>primeiro->proximo = </code><input type="text" id="resp-p3-1" class="inline-input">;<br><br>
+        <code>segundo->proximo = </code><input type="text" id="resp-p3-2" class="inline-input">;<br><br>
+        <code>terceiro->proximo = </code><input type="text" id="resp-p3-3" class="inline-input">;<br><br>
+        <code>quarto->proximo = </code><input type="text" id="resp-p3-4" class="inline-input">;<br>
+    </div>
+
+    <!-- Parte 4 -->
+    <h2>Parte 4 - Navegando pelos ponteiros</h2>
+    <p>Considerando a lista encadeada formada na etapa anterior, qual será o resultado impresso na tela?</p>
+    
+    <div class="question-box">
+        <label>1. printf("%d\n", primeiro->dado);</label>
+        <input type="text" id="resp-p4-1" placeholder="Resultado..."><br><br>
+
+        <label>2. printf("%d\n", primeiro->proximo->dado);</label>
+        <input type="text" id="resp-p4-2" placeholder="Resultado..."><br><br>
+
+        <label>3. printf("%d\n", primeiro->proximo->proximo->dado);</label>
+        <input type="text" id="resp-p4-3" placeholder="Resultado..."><br><br>
+
+        <label>4. printf("%d\n", primeiro->proximo->proximo->proximo->dado);</label>
+        <input type="text" id="resp-p4-4" placeholder="Resultado..."><br><br>
+    </div>
+
+    <!-- Parte 5 -->
+    <h2>Parte 5 - Percorrendo a lista</h2>
+    <p>Modifique o algoritmo para imprimir todos os elementos da lista sem utilizar comandos <code>printf</code> estáticos em sequência. Utilize um laço de repetição (<code>while</code>).</p>
+    
+    <div class="question-box">
+        <label>Escreva o trecho de código utilizando o ponteiro `atual`:</label>
+        <textarea rows="8" placeholder="struct No *atual = primeiro;&#10;while(...) {&#10;...&#10;}"></textarea>
+    </div>
+
+    <!-- Parte 6 -->
+    <h2>Parte 6 - Inserindo Contador</h2>
+    <div class="question-box">
+        <label>Como você alteraria o laço de repetição da Parte 5 para CONTAR quantos elementos existem na lista?</label>
+        <textarea rows="6" placeholder="Escreva o laço de contagem aqui..."></textarea>
+    </div>
+
+    <!-- Parte 7 -->
+    <h2>Parte 7 - Busca na Memória</h2>
+    <div class="question-box">
+        <label>No arquivo <code>exemploAula7_5.2-ListaSimplesmenteEncadeada.c</code>, o trecho de busca já está implementado e pede para o usuário digitar o valor. <br><br>
+        Considerando a lista de 4 nós que você estruturou (10 → 20 → 30 → 40), <strong>rode o código no seu computador</strong> e cole abaixo a saída do console caso você digite o valor <b>30</b> na busca.<br><br>
+        <em>(<strong>Observação Importante:</strong> Após colar a sua resposta, execute o programa mais de uma vez. Você notou que os endereços impressos pelo <code>%p</code> mudam? Isso acontece porque o <code>malloc</code> realiza a alocação de forma dinâmica, buscando espaços livres diferentes na memória a cada execução!)</em></label>
+        <textarea rows="6" placeholder="Cole a saída do seu console aqui..."></textarea>
+    </div>
+
+    <button class="btn-print" onclick="prepararImpressao()">Salvar PDF e Entregar</button>
+
+</div>
+
+<!-- Scripts do Prism.js para o Syntax Highlighting de C -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+
+<script>
+    // Gabarito de Validação Atualizado (4 nós)
+    const respostasCorretas = {
+        'resp-p1': ['0', 'zero', 'nenhum'],
+        'resp-p3-1': ['segundo'],
+        'resp-p3-2': ['terceiro'],
+        'resp-p3-3': ['quarto'],
+        'resp-p3-4': ['null'],
+        'resp-p4-1': ['10'],
+        'resp-p4-2': ['20'],
+        'resp-p4-3': ['30'],
+        'resp-p4-4': ['40']
+    };
+
+    // Validação em tempo real
+    Object.keys(respostasCorretas).forEach(id => {
+        const campo = document.getElementById(id);
+        if (campo) {
+            campo.addEventListener('input', function() {
+                const valorDigitado = this.value.trim().toLowerCase();
+                if (valorDigitado === '') {
+                    this.classList.remove('is-correct', 'is-incorrect');
+                } else if (respostasCorretas[id].includes(valorDigitado)) {
+                    this.classList.remove('is-incorrect');
+                    this.classList.add('is-correct');
+                } else {
+                    this.classList.remove('is-correct');
+                    this.classList.add('is-incorrect');
+                }
+            });
+        }
+    });
+
+    // Função de Impressão
+    function prepararImpressao() {
+        const textareas = document.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+            textarea.style.height = 'auto'; 
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        });
+        window.print();
+    }
+
+    // Ajuste dinâmico dos textareas
+    document.querySelectorAll('textarea').forEach(textarea => {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    });
+</script>
+
+</body>
+</html>
