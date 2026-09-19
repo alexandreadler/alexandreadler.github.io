@@ -3,13 +3,13 @@
     "ano": "2026",
     "titulo": "Unveiling the Use of Ontologies in Adaptive User Interface Systems Development: A Systematic Mapping Study",
     "autores": "Alexandre Adler Cunha de Freitas, Simone Dornelas Costa, Murilo Borghardt Scalser, Monalessa Perini Barcellos",
-    "local": "Applied Ontology Journal (Accepted with minor revision)",
+    "local": "Applied Ontology Journal",
     "resumo": "This paper investigates how ontologies have been used to support the development of Adaptive User Interface (AUI) systems through a Systematic Mapping Study (SMS). A total of 165 publications were identified, from which 30 addressed AUI development with ontologies. After grouping complementary studies, 23 proposals were analyzed. Results indicate that ontologies are mainly used as a conceptual foundation to organize elements such as user profiles, devices, and context of use, supporting dynamic UI adaptations, especially in the implementation phase. The study also highlights gaps and opportunities for improving systematic ontology-based approaches in AUI systems development.",
     "links": {
-      "url": "https://doi.org/10.1177/15705838261472989",
+      "doi": "https://doi.org/10.1177/15705838261472989",
       "pdf": "paper-pdf/MS-AOJ-2026.pdf"
     },
-    "bibtex": "@article{Freitas_2025-AO,\n  title={Unveiling the Use of Ontologies in Adaptive User Interface Systems Development: A Systematic Mapping Study},\n  author={Freitas, Alexandre Adler Cunha de and Costa, Simone Dornelas and Scalser, Murilo Borghardt and Barcellos, Monalessa Perini},\n  journal={Applied Ontology},\n  url={},\n  DOI={},\n  year={2025},\n  note={Accepted with minor revision}\n}"
+    "bibtex": "@article{Freitas_2026-AOJ,\n  title={Unveiling the Use of Ontologies in Adaptive User Interface Systems Development: A Systematic Mapping Study},\n  author={Freitas, Alexandre Adler Cunha de and Costa, Simone Dornelas and Scalser, Murilo Borghardt and Barcellos, Monalessa Perini},\n  journal={Applied Ontology},\n  url={},\n  DOI={https://doi.org/10.1177/15705838261472989},\n  year={2026} \n}"
   },
     {
       "ano": "2024",
