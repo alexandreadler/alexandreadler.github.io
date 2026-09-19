@@ -21,7 +21,7 @@
         "url": "https://ceur-ws.org/Vol-3905/master1.pdf",
         "pdf": "paper-pdf/wtdo_2024_paper_8.pdf"
       },
-      "bibtex": "@inproceedings{Freitas2024-OADAPT-ONTOBRAS,\n  author = {Freitas, Alexandre A. C. de and Barcellos, Monalessa P.},\n  title = {An Ontology-Based Approach to Support the Development of Adaptive Interface Systems},\n  year = {2024},\n  booktitle = {Proceedings of the 17th Seminar on Ontology Research in Brazil (ONTOBRAS 2024) and 8th Doctoral and Masters Consortium on Ontologies (WTDO 2024)},\n  location = {Vitória, Brazil}\n}"
+      "bibtex": "@inproceedings{Freitas2024-OADAPT-ONTOBRAS,\n  author = {Freitas, Alexandre A. C. de and Barcellos, Monalessa P.},\n  title = {An Ontology-Based Approach to Support the Development of Adaptive Interface Systems},\n  year = {2024},\n  booktitle = {Proceedings of the 17th Seminar on Ontology Research in Brazil (ONTOBRAS 2024) and 8th Doctoral and Masters Consortium on Ontologies (WTDO 2024)},\n  location = {Vitória, Brazil},\n url = {https://ceur-ws.org/Vol-3905/master1.pdf} \n"
     },
     {
     "ano": "2023",
