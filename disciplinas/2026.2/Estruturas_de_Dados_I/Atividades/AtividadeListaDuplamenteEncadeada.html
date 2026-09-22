@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atividade - Lista Duplamente Encadeada</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=z6R3WD9ngTjJVX9qToSelyii0aoguGUXFWO1hoV42zdPUmVhqARQarwdTzi-J1HDnhgB7BE5LFgwPo7npheaVIAhaV53yYf_R-3ggtb32DU0_lyDjdzDAz77VBJqdYfGDxPkJpOmG4KXjfdKFSxuQA7VXG62voQDuyCFPcIIbUXvnJsxFibJltLnRIF5ZxJRlYE-Zc43-PifMXSxGs81O_nS2FrD-uJruWkbXQdeEA2oK26f-7UgGwRYBu8f_Wpwi0G7X0A0CUUPPyMjg451cUxBZVPhyyrtqwGuSxtavHCnCdKVP61W8NLHdSFxLXaYwhcwFEyS_ZoHsLA0ID8V6A" charset="UTF-8"></script><style>
+:root{--bg:#f4f7f6;--container:#fff;--text:#333;--primary:#0056b3;--border:#ccc}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;margin:0;padding:20px}
+.container{max-width:900px;margin:0 auto;background:var(--container);padding:30px 40px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.1)}
+h1{color:var(--primary);text-align:center;border-bottom:2px solid var(--primary);padding-bottom:10px}
+h2{color:var(--primary);margin-top:32px;border-bottom:1px solid #eee;padding-bottom:5px}
+h3{color:#444}
+.student-info{display:flex;gap:20px;margin-bottom:30px;background:#f9f9f9;padding:15px;border-radius:5px;border:1px solid #eee}
+.student-info div{flex:1} label{font-weight:bold;display:block;margin-bottom:5px}
+input[type=text],textarea{width:100%;padding:10px;border:2px solid var(--border);border-radius:4px;font-family:monospace;font-size:14px;box-sizing:border-box;transition:.2s}
+textarea{resize:vertical;min-height:80px}.inline-input{width:210px!important;display:inline-block;margin:0 5px}
+details{background:#f1f8ff;border:1px solid #c8e1ff;border-radius:6px;padding:10px;margin-bottom:25px}summary{font-weight:bold;color:var(--primary);cursor:pointer;padding:5px;font-size:16px}
+pre[class*=language-]{border-radius:5px;margin:15px 0;border:1px solid #e1e1e1;background:#fdfdfd;overflow:auto}
+.question-box{background:#eef5ff;border-left:4px solid var(--primary);padding:15px;margin:20px 0}
+.note{background:#fff8df;border-left:4px solid #e0ad00;padding:12px 15px;margin:15px 0}.diagram{font-family:monospace;text-align:center;font-size:18px;font-weight:bold;background:#fafafa;border:1px solid #ddd;border-radius:6px;padding:18px;overflow:auto}
+.btn-print{display:block;width:100%;padding:15px;background:var(--primary);color:white;border:none;border-radius:5px;font-size:18px;cursor:pointer;margin-top:40px}
+.btn-print:hover{background:#004494}.is-correct{border-color:#28a745!important;background:#f0fdf4;color:#155724}.is-incorrect{border-color:#dc3545!important;background:#fef2f2;color:#721c24}
+.small{font-size:.93em;color:#555}.code-answer{font-family:monospace}
+@media print{body{background:#fff;padding:0}.container{box-shadow:none;padding:0;max-width:100%}.btn-print{display:none}details{display:none}input[type=text],textarea{border:none;border-bottom:1px solid #000;background:transparent;border-radius:0;resize:none;overflow:hidden}.is-correct,.is-incorrect{background:transparent!important;color:#000!important}pre[class*=language-]{background:transparent!important;border:1px solid #000;page-break-inside:avoid}h2{page-break-after:avoid}.question-box,.note{page-break-inside:avoid;background:transparent}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Atividade - Lista Duplamente Encadeada</h1>
+
+<div class="student-info">
+  <div><label for="nome">Nome do Aluno:</label><input type="text" id="nome" placeholder="Digite seu nome completo"></div>
+  <div><label for="matricula">Matrícula:</label><input type="text" id="matricula" placeholder="Digite sua matrícula"></div>
+</div>
+
+<div class="note"><strong>Orientação:</strong> nesta atividade, continue utilizando o mesmo código de exemplo da aula (<code>exemploAula8_5.3-ListaDuplamenteEncadeada.c</code>): <strong>um único arquivo C, sem criar funções e com a inserção dos nós feita manualmente</strong>. O objetivo é entender os ponteiros <code>anterior</code> e <code>proximo</code>.</div>
+
+<details>
+<summary>📎 Ver código de referência da aula</summary>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main()
+{
+    // =========================================================
+    // 1. DEFININDO A ESTRUTURA DO NÓ
+    // =========================================================
+
+    /*
+     * Cada nó possui três informações:
+     *
+     * dado      -&gt; valor armazenado no nó
+     * anterior  -&gt; endereço do nó anterior
+     * proximo   -&gt; endereço do próximo nó
+     */
+    struct No {
+        int dado;
+        struct No *anterior;
+        struct No *proximo;
+    };
+
+
+    // =========================================================
+    // 2. CRIANDO OS PONTEIROS PARA OS NÓS
+    // =========================================================
+
+    /*
+     * Criamos quatro ponteiros para representar os nós.
+     * Inicialmente, eles não apontam para nenhum nó.
+     */
+    struct No *primeiro = NULL;
+    struct No *segundo = NULL;
+    struct No *terceiro = NULL;
+    struct No *quarto = NULL;
+
+
+    // =========================================================
+    // 3. ALOCANDO MEMÓRIA PARA OS NÓS
+    // =========================================================
+
+    /*
+     * malloc() reserva na memória o espaço necessário
+     * para armazenar um struct No.
+     */
+    primeiro = malloc(sizeof(struct No));
+    segundo = malloc(sizeof(struct No));
+    terceiro = malloc(sizeof(struct No));
+    quarto = malloc(sizeof(struct No));
+
+
+    // =========================================================
+    // 4. INSERINDO OS VALORES NOS NÓS
+    // =========================================================
+
+    /*
+     * O operador -&gt; permite acessar um campo da estrutura
+     * através de um ponteiro.
+     */
+    primeiro-&gt;dado = 10;
+    segundo-&gt;dado = 20;
+    terceiro-&gt;dado = 30;
+    quarto-&gt;dado = 40;
+
+
+    // =========================================================
+    // 5. FAZENDO AS LIGAÇÕES DA LISTA
+    // =========================================================
+
+    /*
+     * Queremos construir:
+     *
+     * NULL &lt;- [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40] -&gt; NULL
+     */
+
+    // O primeiro não possui nó anterior.
+    primeiro-&gt;anterior = NULL;
+
+    // O primeiro aponta para o segundo.
+    primeiro-&gt;proximo = segundo;
+
+    // O segundo aponta de volta para o primeiro.
+    segundo-&gt;anterior = primeiro;
+
+    // O segundo aponta para o terceiro.
+    segundo-&gt;proximo = terceiro;
+
+    // O terceiro aponta de volta para o segundo.
+    terceiro-&gt;anterior = segundo;
+
+    // O terceiro aponta para o quarto.
+    terceiro-&gt;proximo = quarto;
+
+    // O quarto aponta de volta para o terceiro.
+    quarto-&gt;anterior = terceiro;
+
+    // O quarto é o último, portanto não possui próximo.
+    quarto-&gt;proximo = NULL;
+
+
+    // =========================================================
+    // 6. PERCORRENDO A LISTA PARA FRENTE
+    // =========================================================
+
+    /*
+     * 'atual' é um ponteiro auxiliar.
+     * Ele começa apontando para o primeiro nó.
+     */
+    struct No *atual = primeiro;
+
+    while (atual != NULL) {
+
+        // Mostra o valor armazenado no nó atual.
+        printf("%d ", atual-&gt;dado);
+
+        // Avança para o próximo nó.
+        atual = atual-&gt;proximo;
+    }
+
+
+    // =========================================================
+    // 7. PERCORRENDO A LISTA PARA TRÁS
+    // =========================================================
+
+    // Começamos pelo último nó.
+    atual = quarto;
+
+    while (atual != NULL) {
+
+        // Mostra o valor do nó atual.
+        printf("%d ", atual-&gt;dado);
+
+        // Volta para o nó anterior.
+        atual = atual-&gt;anterior;
+    }
+
+
+    // =========================================================
+    // 8. BUSCA
+    // =========================================================
+
+    // Valor que queremos procurar.
+    int valor = 30;
+
+    // A busca começa no primeiro nó.
+    atual = primeiro;
+
+    /*
+     * 0 = não encontrado
+     * 1 = encontrado
+     */
+    int encontrado = 0;
+
+    while (atual != NULL) {
+
+        // Verifica se o valor do nó atual é o procurado.
+        if (atual-&gt;dado == valor) {
+
+            printf("Elemento %d encontrado no nó: %p!\n",
+                   valor, atual);
+
+            // Marca que encontramos o elemento.
+            encontrado = 1;
+        }
+
+        /*
+         * Continua a busca.
+         * Não usamos break porque podemos querer encontrar
+         * todas as ocorrências do valor.
+         */
+        atual = atual-&gt;proximo;
+    }
+
+    // Se percorremos toda a lista e não encontramos o valor...
+    if (encontrado == 0)
+        printf("Elemento %d não encontrado.\n", valor);
+
+
+    // =========================================================
+    // 9. INSERÇÃO NO INÍCIO
+    // =========================================================
+
+    /*
+     * Lista antes:
+     *
+     * [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40]
+     *
+     * Queremos inserir 5:
+     *
+     * [5] &lt;-&gt; [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40]
+     */
+
+    // Ponteiro que será usado para o novo nó.
+    struct No *quinto = NULL;
+
+    // Reserva memória para o novo nó.
+    quinto = malloc(sizeof(struct No));
+
+    // Insere 5 no novo nó.
+    quinto-&gt;dado = 5;
+
+    // Como será o primeiro, não possui anterior.
+    quinto-&gt;anterior = NULL;
+
+    // O novo nó aponta para o antigo primeiro.
+    quinto-&gt;proximo = primeiro;
+
+    // O antigo primeiro passa a apontar de volta para o novo.
+    primeiro-&gt;anterior = quinto;
+
+    /*
+     * A ligação já foi criada, mas 'primeiro' ainda apontava
+     * para o nó 10.
+     *
+     * Agora atualizamos o ponteiro que representa o início.
+     */
+    primeiro = quinto;
+
+
+    // =========================================================
+    // 10. INSERÇÃO NO FINAL
+    // =========================================================
+
+    /*
+     * Queremos inserir 50 depois do 40:
+     *
+     * [5] &lt;-&gt; [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40] &lt;-&gt; [50]
+     */
+
+    // Ponteiro que será usado para o novo último nó.
+    struct No *sexto = NULL;
+
+    // Reserva memória para o novo nó.
+    sexto = malloc(sizeof(struct No));
+
+    // Insere 50 no novo nó.
+    sexto-&gt;dado = 50;
+
+    // Como será o último, não possui próximo.
+    sexto-&gt;proximo = NULL;
+
+    // O nó anterior ao novo último é o nó 40.
+    sexto-&gt;anterior = quarto;
+
+    // O antigo último (40) passa a apontar para o novo (50).
+    quarto-&gt;proximo = sexto;
+
+
+    // =========================================================
+    // 11. REMOÇÃO DO NÓ 20
+    // =========================================================
+
+    /*
+     * Antes:
+     *
+     * [5] &lt;-&gt; [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40] &lt;-&gt; [50]
+     *                  ↑
+     *               remover
+     */
+
+    /*
+     * 'segundo' aponta para o nó 20.
+     *
+     * NÃO estamos fazendo uma cópia do nó.
+     * Estamos apenas criando outro ponteiro que aponta
+     * para o mesmo nó.
+     *
+     * segundo ----\
+     *              &gt; [20]
+     * remover ----/
+     */
+    struct No *remover = segundo;
+
+
+    /*
+     * O nó anterior ao 20 é o 10.
+     * O nó seguinte ao 20 é o 30.
+     *
+     * Esta linha faz:
+     *
+     *     10-&gt;proximo = 30
+     *
+     * O 10 passa a "pular" o 20.
+     */
+    remover-&gt;anterior-&gt;proximo = remover-&gt;proximo;
+
+
+    /*
+     * Agora corrigimos a ligação no sentido contrário.
+     *
+     * Esta linha faz:
+     *
+     *     30-&gt;anterior = 10
+     *
+     * Assim, 10 e 30 passam a estar ligados diretamente
+     * nos dois sentidos.
+     */
+    remover-&gt;proximo-&gt;anterior = remover-&gt;anterior;
+
+
+    /*
+     * As ligações já foram corrigidas.
+     * Agora podemos liberar a memória do nó 20.
+     */
+    free(remover);
+
+
+    /*
+     * Lista final:
+     *
+     * [5] &lt;-&gt; [10] &lt;-&gt; [30] &lt;-&gt; [40] &lt;-&gt; [50]
+     */
+
+
+    // =========================================================
+    // 12. FINALIZANDO O PROGRAMA
+    // =========================================================
+
+    return 0;
+}</code></pre>
+</details>
+
+<p><strong>Objetivo:</strong> praticar a criação de nós, alocação dinâmica, ligações nos dois sentidos, percurso para frente e para trás, busca, inserção e remoção em uma lista duplamente encadeada.</p>
+
+<h2>Parte 1 - Estrutura do nó</h2>
+<p>Complete a estrutura do nó utilizada na aula.</p>
+<pre><code class="language-c">struct No {
+    int dado;
+    struct No *__________;
+    struct No *__________;
+};</code></pre>
+<div class="question-box">
+<label>Qual campo aponta para o nó anterior?</label>
+<input type="text" id="p1a" placeholder="Nome do campo">
+<br><br>
+<label>Qual campo aponta para o próximo nó?</label>
+<input type="text" id="p1b" placeholder="Nome do campo">
+</div>
+
+<h2>Parte 2 - Ligando os quatro nós</h2>
+<p>Considere:</p>
+<div class="diagram">NULL &larr; [10] &harr; [20] &harr; [30] &harr; [40] &rarr; NULL</div>
+<p>Complete as ligações.</p>
+<div class="question-box">
+<code>primeiro-&gt;anterior = </code><input class="inline-input" id="p2a" type="text">;<br><br>
+<code>primeiro-&gt;proximo = </code><input class="inline-input" id="p2b" type="text">;<br><br>
+<code>segundo-&gt;anterior = </code><input class="inline-input" id="p2c" type="text">;<br><br>
+<code>segundo-&gt;proximo = </code><input class="inline-input" id="p2d" type="text">;<br><br>
+<code>terceiro-&gt;anterior = </code><input class="inline-input" id="p2e" type="text">;<br><br>
+<code>terceiro-&gt;proximo = </code><input class="inline-input" id="p2f" type="text">;<br><br>
+<code>quarto-&gt;anterior = </code><input class="inline-input" id="p2g" type="text">;<br><br>
+<code>quarto-&gt;proximo = </code><input class="inline-input" id="p2h" type="text">;
+</div>
+
+<h2>Parte 3 - Navegando para frente e para trás</h2>
+<p>Considere a lista:</p>
+<div class="diagram">[10] &harr; [20] &harr; [30] &harr; [40]</div>
+<div class="question-box">
+<label>1. Qual valor será obtido por <code>primeiro-&gt;proximo-&gt;dado</code>?</label>
+<input type="text" id="p3a"><br><br>
+<label>2. Qual valor será obtido por <code>quarto-&gt;anterior-&gt;dado</code>?</label>
+<input type="text" id="p3b"><br><br>
+<label>3. Qual valor será obtido por <code>quarto-&gt;anterior-&gt;anterior-&gt;dado</code>?</label>
+<input type="text" id="p3c"><br><br>
+<label>4. O que acontece quando fazemos <code>atual = atual-&gt;proximo</code>?</label>
+<textarea id="p3d" placeholder="Explique com suas palavras."></textarea>
+<label>5. O que acontece quando fazemos <code>atual = atual-&gt;anterior</code>?</label>
+<textarea id="p3e" placeholder="Explique com suas palavras."></textarea>
+</div>
+
+<h2>Parte 4 - Percorrendo a lista para frente</h2>
+<p>Complete o trecho para imprimir todos os nós do primeiro até o último.</p>
+<pre><code class="language-c">struct No *atual = primeiro;
+
+while (________________________) {
+    printf("%d ", ________________________);
+    ________________________________;
+}</code></pre>
+<div class="question-box">
+<label>Escreva o código completo do <code>while</code>:</label>
+<textarea rows="7" placeholder="while (...) { ... }"></textarea>
+</div>
+
+<h2>Parte 5 - Percorrendo a lista para trás</h2>
+<p>Agora comece no último nó (<code>quarto</code>) e percorra a lista utilizando o campo <code>anterior</code>.</p>
+<div class="question-box">
+<label>Escreva o trecho de código:</label>
+<textarea rows="7" placeholder="atual = quarto;&#10;while (...) {&#10;    ...&#10;}" ></textarea>
+</div>
+<p class="small">Pergunta: por que conseguimos percorrer a lista para trás na lista duplamente encadeada, mas não na lista simplesmente encadeada?</p>
+<textarea rows="4" placeholder="Resposta..."></textarea>
+
+<h2>Parte 6 - Busca</h2>
+<p>Queremos procurar o valor <strong>30</strong>. O código abaixo percorre a lista e continua a busca mesmo depois de encontrar o valor.</p>
+<pre><code class="language-c">int valor = 30;
+atual = primeiro;
+int encontrado = 0;
+
+while (atual != NULL) {
+    if (atual-&gt;dado == valor) {
+        printf("Elemento encontrado!\n");
+        encontrado = 1;
+    }
+
+    atual = atual-&gt;proximo;
+}
+
+if (encontrado == 0) {
+    printf("Elemento não encontrado.\n");
+}</code></pre>
+<div class="question-box">
+<label>Se a lista for <code>[10] &harr; [30] &harr; [20] &harr; [30]</code>, quantas vezes a mensagem "Elemento encontrado!" será exibida?</label>
+<input type="text" id="p6a">
+<br><br>
+<label>Por que não usamos <code>break</code> nesse exemplo?</label>
+<textarea id="p6b" rows="4"></textarea>
+</div>
+
+<h2>Parte 7 - Inserção no início</h2>
+<p>Queremos inserir o valor <strong>5</strong> antes do atual primeiro nó.</p>
+<div class="diagram">ANTES: &nbsp; [10] &harr; [20] &harr; [30] &harr; [40]<br><br>DEPOIS: [5] &harr; [10] &harr; [20] &harr; [30] &harr; [40]</div>
+<p>Complete as duas linhas que estabelecem as ligações e a linha que atualiza o ponteiro <code>primeiro</code>.</p>
+<pre><code class="language-c">struct No *novo = malloc(sizeof(struct No));
+novo-&gt;dado = 5;
+novo-&gt;anterior = NULL;
+
+novo-&gt;proximo = primeiro;
+_______________________________;
+_______________________________;</code></pre>
+<div class="question-box">
+<label>Linha 1:</label><input type="text" id="p7a" placeholder="Complete a instrução"><br><br>
+<label>Linha 2:</label><input type="text" id="p7b" placeholder="Complete a instrução">
+</div>
+<div class="note"><strong>Explique:</strong> por que <code>primeiro = novo;</code> é necessário se já fizemos <code>primeiro-&gt;anterior = novo;</code>?</div>
+<textarea rows="5" placeholder="Resposta..."></textarea>
+
+<h2>Parte 8 - Remoção do nó 20</h2>
+<p>Considere:</p>
+<div class="diagram">[5] &harr; [10] &harr; <strong>[20]</strong> &harr; [30] &harr; [40] &harr; [50]</div>
+<p>O ponteiro <code>remover</code> já aponta para o nó 20.</p>
+<pre><code class="language-c">struct No *remover = segundo;
+
+// O anterior passa a apontar para o próximo
+__________________________________________;
+
+// O próximo passa a apontar para o anterior
+__________________________________________;
+
+// Libera o nó removido
+__________________________________________;</code></pre>
+<div class="question-box">
+<label>Complete as três linhas:</label>
+<textarea id="p8" rows="6" placeholder="Escreva as três instruções..."></textarea>
+</div>
+
+<h3>Entendendo a remoção</h3>
+<div class="question-box">
+<label>Depois das alterações dos ponteiros, o que acontece com a ligação entre 10 e 30?</label>
+<textarea rows="4"></textarea>
+<label>O comando <code>struct No *remover = segundo;</code> cria uma cópia do nó 20?</label>
+<input type="text" id="p8b" placeholder="Sim ou não? Explique.">
+</div>
+
+<h2>Parte 9 - Implementando um novo <code>nó</code></h2>
+<p>Utilize o código da aula como base e faça as seguintes alterações, mantendo <strong>tudo dentro do <code>main()</code></strong>:</p>
+<ol>
+<li>Crie um quinto nó com valor <strong>50</strong>.</li>
+<li>Ligue os campos <code>anterior</code> e <code>proximo</code>.</li>
+<li>Faça um percurso para frente que mostre <code>5 10 20 30 40 50</code>.</li>
+<li>Faça um percurso para trás que mostre <code>50 40 30 20 10 5</code>.</li>
+<li>Remova o nó <strong>30</strong> usando um ponteiro chamado <code>remover</code>.</li>
+<li>Mostre novamente a lista para frente, obtendo <code>5 10 20 40 50</code>.</li>
+</ol>
+<div class="question-box">
+<label>Cole abaixo o trecho de código que você modificou:</label>
+<textarea rows="16" placeholder="Cole seu código aqui..."></textarea>
+</div>
+
+<button class="btn-print" onclick="prepararImpressao()">Salvar PDF</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+<script>
+const respostas={
+'p1a':['anterior'],'p1b':['proximo'],
+'p2a':['NULL','null'],'p2b':['segundo'],'p2c':['primeiro'],'p2d':['terceiro'],
+'p2e':['segundo'],'p2f':['quarto'],'p2g':['terceiro'],'p2h':['NULL','null'],
+'p3a':['20'],'p3b':['30'],'p3c':['20'],
+'p6a':['2'],
+'p7a':['primeiro->anterior = novo','primeiro -> anterior = novo;','primeiro->anterior=novo'],
+'p7b':['primeiro = novo','primeiro=novo'],
+'p8b':['não','nao']
+};
+Object.keys(respostas).forEach(id=>{const el=document.getElementById(id);if(!el)return;el.addEventListener('input',function(){const v=this.value.trim().toLowerCase().replace(/;$/,'');const ok=respostas[id].some(x=>x.toLowerCase().replace(/;$/,'')===v);this.classList.toggle('is-correct',v!==''&&ok);this.classList.toggle('is-incorrect',v!==''&&!ok);});});
+function prepararImpressao(){document.querySelectorAll('textarea').forEach(t=>{t.style.height='auto';t.style.height=t.scrollHeight+'px';});window.print();}
+document.querySelectorAll('textarea').forEach(t=>t.addEventListener('input',function(){this.style.height='auto';this.style.height=this.scrollHeight+'px';}));
+</script>
+</body>
+</html>
