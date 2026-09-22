@@ -39,20 +39,29 @@ pre[class*=language-]{border-radius:5px;margin:15px 0;border:1px solid #e1e1e1;b
 
 <details>
 <summary>📎 Ver código de referência da aula</summary>
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
+<pre><code class="language-c">/*
+ * LISTA DUPLAMENTE ENCADEADA
+ * Exemplo simples - sem uso de funções
+ *
+ * A lista será construída manualmente:
+ *
+ * NULL &lt;- [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40] -&gt; NULL
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt; //Necessário para usar malloc() e free()
 
 int main()
 {
-    // =========================================================
-    // 1. DEFININDO A ESTRUTURA DO NÓ
-    // =========================================================
+    //=========================================================
+    //1. DEFININDO A ESTRUTURA DO NÓ
+    //=========================================================
 
     /*
-     * Cada nó possui três informações:
+     * Cada nó possui três partes:
      *
-     * dado      -&gt; valor armazenado no nó
-     * anterior  -&gt; endereço do nó anterior
+     * anterior -&gt; endereço do nó anterior
+     * dado      -&gt; valor armazenado
      * proximo   -&gt; endereço do próximo nó
      */
     struct No {
@@ -62,303 +71,453 @@ int main()
     };
 
 
-    // =========================================================
-    // 2. CRIANDO OS PONTEIROS PARA OS NÓS
-    // =========================================================
+    //=========================================================
+    //2. CRIANDO OS PONTEIROS
+    //=========================================================
 
-    /*
-     * Criamos quatro ponteiros para representar os nós.
-     * Inicialmente, eles não apontam para nenhum nó.
-     */
+    //Ponteiro que representará o primeiro nó.
     struct No *primeiro = NULL;
+
+    //Ponteiro que representará o segundo nó.
     struct No *segundo = NULL;
+
+    //Ponteiro que representará o terceiro nó.
     struct No *terceiro = NULL;
+
+    //Ponteiro que representará o quarto nó.
     struct No *quarto = NULL;
 
-
-    // =========================================================
-    // 3. ALOCANDO MEMÓRIA PARA OS NÓS
-    // =========================================================
-
     /*
-     * malloc() reserva na memória o espaço necessário
-     * para armazenar um struct No.
+     * Neste momento:
+     *
+     * primeiro -&gt; NULL
+     * segundo  -&gt; NULL
+     * terceiro -&gt; NULL
+     * quarto   -&gt; NULL
+     *
+     * Ainda não criamos nenhum nó.
      */
+
+
+    //=========================================================
+    //3. ALOCANDO MEMÓRIA PARA OS NÓS
+    //=========================================================
+
+    //Reserva espaço na memória para o primeiro nó.
     primeiro = malloc(sizeof(struct No));
+
+    //Reserva espaço na memória para o segundo nó.
     segundo = malloc(sizeof(struct No));
+
+    //Reserva espaço na memória para o terceiro nó.
     terceiro = malloc(sizeof(struct No));
+
+    //Reserva espaço na memória para o quarto nó.
     quarto = malloc(sizeof(struct No));
 
 
-    // =========================================================
-    // 4. INSERINDO OS VALORES NOS NÓS
-    // =========================================================
+    //=========================================================
+    //4. INSERINDO OS DADOS NOS NÓS
+    //=========================================================
 
-    /*
-     * O operador -&gt; permite acessar um campo da estrutura
-     * através de um ponteiro.
-     */
+    //O primeiro nó armazenará o valor 10.
     primeiro-&gt;dado = 10;
+
+    //O segundo nó armazenará o valor 20.
     segundo-&gt;dado = 20;
+
+    //O terceiro nó armazenará o valor 30.
     terceiro-&gt;dado = 30;
+
+    //O quarto nó armazenará o valor 40.
     quarto-&gt;dado = 40;
 
 
-    // =========================================================
-    // 5. FAZENDO AS LIGAÇÕES DA LISTA
-    // =========================================================
+    //=========================================================
+    //5. FAZENDO AS LIGAÇÕES
+    //=========================================================
 
     /*
-     * Queremos construir:
+     * Vamos construir:
      *
      * NULL &lt;- [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40] -&gt; NULL
      */
 
-    // O primeiro não possui nó anterior.
+
+    //---------------------------------------------------------
+    //PRIMEIRO NÓ
+    //---------------------------------------------------------
+
+    //O primeiro nó não possui anterior.
     primeiro-&gt;anterior = NULL;
 
-    // O primeiro aponta para o segundo.
+    //O primeiro nó aponta para o segundo.
     primeiro-&gt;proximo = segundo;
 
-    // O segundo aponta de volta para o primeiro.
+
+    //---------------------------------------------------------
+    //SEGUNDO NÓ
+    //---------------------------------------------------------
+
+    //O segundo aponta de volta para o primeiro.
     segundo-&gt;anterior = primeiro;
 
-    // O segundo aponta para o terceiro.
+    //O segundo aponta para o terceiro.
     segundo-&gt;proximo = terceiro;
 
-    // O terceiro aponta de volta para o segundo.
+
+    //---------------------------------------------------------
+    //TERCEIRO NÓ
+    //---------------------------------------------------------
+
+    //O terceiro aponta de volta para o segundo.
     terceiro-&gt;anterior = segundo;
 
-    // O terceiro aponta para o quarto.
+    //O terceiro aponta para o quarto.
     terceiro-&gt;proximo = quarto;
 
-    // O quarto aponta de volta para o terceiro.
+
+    //---------------------------------------------------------
+    //QUARTO NÓ
+    //---------------------------------------------------------
+
+    //O quarto aponta de volta para o terceiro.
     quarto-&gt;anterior = terceiro;
 
-    // O quarto é o último, portanto não possui próximo.
+    //O quarto é o último nó, portanto seu próximo é NULL.
     quarto-&gt;proximo = NULL;
 
 
-    // =========================================================
-    // 6. PERCORRENDO A LISTA PARA FRENTE
-    // =========================================================
+    //=========================================================
+    //6. MOSTRANDO A LISTA 'Manualmente'
+    //=========================================================
+
+    printf("Lista duplamente encadeada:\n");
+
+    printf("NULL &lt;- %d &lt;-&gt; %d &lt;-&gt; %d &lt;-&gt; %d -&gt; NULL\n",
+           primeiro-&gt;dado,
+           segundo-&gt;dado,
+           terceiro-&gt;dado,
+           quarto-&gt;dado);
+
+
+    //=========================================================
+    //7. PERCORRENDO A LISTA PARA FRENTE
+    //=========================================================
 
     /*
-     * 'atual' é um ponteiro auxiliar.
-     * Ele começa apontando para o primeiro nó.
+     * Criamos um ponteiro auxiliar.
+     *
+     * Ele começará no primeiro nó e irá avançando
+     * utilizando o campo proximo.
      */
     struct No *atual = primeiro;
 
+    printf("\nPercorrendo para frente:\n");
+
+    //Continua enquanto atual não for NULL.
     while (atual != NULL) {
 
-        // Mostra o valor armazenado no nó atual.
+        //Mostra o valor do nó atual.
         printf("%d ", atual-&gt;dado);
 
-        // Avança para o próximo nó.
+        //Avança para o próximo nó.
         atual = atual-&gt;proximo;
     }
 
+    printf("\n");
 
-    // =========================================================
-    // 7. PERCORRENDO A LISTA PARA TRÁS
-    // =========================================================
 
-    // Começamos pelo último nó.
+    //=========================================================
+    //8. PERCORRENDO A LISTA PARA TRÁS
+    //=========================================================
+
+    /*
+     * Agora começamos no último nó.
+     *
+     * O quarto é o último nó da nossa lista.
+     */
     atual = quarto;
 
-    while (atual != NULL) {
+    printf("\nPercorrendo para tras:\n");
 
-        // Mostra o valor do nó atual.
+    //Continua enquanto atual não for NULL.
+    while (quarto != NULL) {
+
+        //Mostra o valor do nó atual.
         printf("%d ", atual-&gt;dado);
 
-        // Volta para o nó anterior.
+        //Volta para o nó anterior.
         atual = atual-&gt;anterior;
     }
 
+    printf("\n");
 
-    // =========================================================
-    // 8. BUSCA
-    // =========================================================
 
-    // Valor que queremos procurar.
+    //=========================================================
+    //9. ACESSANDO UM NÓ A PARTIR DO PRIMEIRO.
+    //=========================================================
+
+    printf("\nAcessando os nos a partir do primeiro:\n");
+
+    //Acessa o valor do primeiro nó.
+    printf("Primeiro: %d\n", primeiro-&gt;dado);
+
+    //Vai do primeiro para o segundo.
+    printf("Segundo: %d\n", primeiro-&gt;proximo-&gt;dado);
+
+    //Vai do primeiro para o segundo e depois para o terceiro.
+    printf("Terceiro: %d\n",
+           primeiro-&gt;proximo-&gt;proximo-&gt;dado);
+
+    //Vai do primeiro até o quarto.
+    printf("Quarto: %d\n",
+           primeiro-&gt;proximo-&gt;proximo-&gt;proximo-&gt;dado);
+
+
+    //=========================================================
+    //10. ACESSANDO PARA TRÁS
+    //=========================================================
+
+    printf("\nAcessando os nos a partir do ultimo:\n");
+
+    //Acessa o valor do quarto nó.
+    printf("Quarto: %d\n", quarto-&gt;dado);
+
+    //Vai do quarto para o terceiro.
+    printf("Terceiro: %d\n", quarto-&gt;anterior-&gt;dado);
+
+    //Vai do quarto para o terceiro e depois para o segundo.
+    printf("Segundo: %d\n",
+           quarto-&gt;anterior-&gt;anterior-&gt;dado);
+
+    //Vai do quarto até o primeiro.
+    printf("Primeiro: %d\n",
+           quarto-&gt;anterior-&gt;anterior-&gt;anterior-&gt;dado);
+
+
+    //=========================================================
+    //11. BUSCA MANUAL
+    //=========================================================
+
+    /*
+     * Vamos procurar o valor 30.
+     *
+     * O ponteiro atual começa no primeiro nó.
+     */
     int valor = 30;
 
-    // A busca começa no primeiro nó.
     atual = primeiro;
 
-    /*
-     * 0 = não encontrado
-     * 1 = encontrado
-     */
     int encontrado = 0;
 
+    printf("\nBuscando o valor %d...\n", valor);
+
+    //Percorre a lista enquanto houver nós.
     while (atual != NULL) {
 
-        // Verifica se o valor do nó atual é o procurado.
+        //Verifica se o valor atual é o procurado.
         if (atual-&gt;dado == valor) {
 
-            printf("Elemento %d encontrado no nó: %p!\n",
-                   valor, atual);
+            printf("Elemento %d encontrado no nó: %p!\n", valor, atual);
 
-            // Marca que encontramos o elemento.
             encontrado = 1;
+
         }
 
-        /*
-         * Continua a busca.
-         * Não usamos break porque podemos querer encontrar
-         * todas as ocorrências do valor.
-         */
+        //Avança para o próximo nó.
         atual = atual-&gt;proximo;
     }
+        if (encontrado == 0) {
+            
+            printf("Elemento %d não encontrado.\n", valor);
+    }
 
-    // Se percorremos toda a lista e não encontramos o valor...
-    if (encontrado == 0)
-        printf("Elemento %d não encontrado.\n", valor);
 
-
-    // =========================================================
-    // 9. INSERÇÃO NO INÍCIO
-    // =========================================================
+    //=========================================================
+    //12. INSERÇÃO NO INÍCIO - EXEMPLO
+    //=========================================================
 
     /*
-     * Lista antes:
+     * Lista original:
      *
-     * [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40]
+     * NULL &lt;- [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40] -&gt; NULL
      *
      * Queremos inserir 5:
      *
-     * [5] &lt;-&gt; [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40]
+     * NULL &lt;- [5] &lt;-&gt; [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40] -&gt; NULL
      */
 
-    // Ponteiro que será usado para o novo nó.
-    struct No *quinto = NULL;
+    //Cria um ponteiro para o novo nó.
+    struct No *novo = NULL;
 
-    // Reserva memória para o novo nó.
-    quinto = malloc(sizeof(struct No));
+    //Reserva memória para o novo nó.
+    novo = malloc(sizeof(struct No));
 
-    // Insere 5 no novo nó.
-    quinto-&gt;dado = 5;
+    //Insere o valor 5 no novo nó.
+    novo-&gt;dado = 5;
 
-    // Como será o primeiro, não possui anterior.
-    quinto-&gt;anterior = NULL;
+    //O novo nó será o primeiro.
+    //Portanto, não possui anterior.
+    novo-&gt;anterior = NULL;
 
-    // O novo nó aponta para o antigo primeiro.
-    quinto-&gt;proximo = primeiro;
+    //O novo nó aponta para o antigo primeiro. O próximo do nó '5' será o nó que atualmente está em primeiro
+    //Como primeiro aponta para 10. Agora 5 'conhece' 10.
+    novo-&gt;proximo = primeiro;
 
-    // O antigo primeiro passa a apontar de volta para o novo.
-    primeiro-&gt;anterior = quinto;
+    //O antigo primeiro passa a apontar de volta para o novo. O nó 10 agora sabe que antes dele está o nó 5.
+    //Ou seja, no nó que atualmente é apontado por 'primeiro', insira 'novo' no campo 'anterior'.
+    primeiro-&gt;anterior = novo;
+
+    //O novo nó passa a ser o primeiro. Variável que representa o primeiro nó da lista agora aponta para o nó 5
+    //Essa instrução não cria uma nova ligação entre os nós. Ela muda para onde a variável primeiro aponta.
+    primeiro = novo;
+
+
+    //Mostra a lista depois da inserção.
+    atual = primeiro;
+
+    printf("\nDepois de inserir 5 no inicio:\n");
+
+    while (atual != NULL) {
+
+        printf("%d ", atual-&gt;dado);
+
+        atual = atual-&gt;proximo;
+    }
+
+    printf("\n");
+
+
+    //=========================================================
+    //13. INSERÇÃO NO FINAL - EXEMPLO
+    //=========================================================
 
     /*
-     * A ligação já foi criada, mas 'primeiro' ainda apontava
-     * para o nó 10.
+     * Agora queremos inserir 50 no final.
      *
-     * Agora atualizamos o ponteiro que representa o início.
-     */
-    primeiro = quinto;
-
-
-    // =========================================================
-    // 10. INSERÇÃO NO FINAL
-    // =========================================================
-
-    /*
-     * Queremos inserir 50 depois do 40:
+     * Lista:
+     *
+     * [5] &lt;-&gt; [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40]
+     *
+     * Resultado:
      *
      * [5] &lt;-&gt; [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40] &lt;-&gt; [50]
      */
 
-    // Ponteiro que será usado para o novo último nó.
-    struct No *sexto = NULL;
+    //Cria um novo nó.
+    struct No *ultimo = NULL;
 
-    // Reserva memória para o novo nó.
-    sexto = malloc(sizeof(struct No));
+    //Reserva memória para o novo nó.
+    ultimo = malloc(sizeof(struct No));
 
-    // Insere 50 no novo nó.
-    sexto-&gt;dado = 50;
+    //Insere o valor 50 no novo nó.
+    ultimo-&gt;dado = 50;
 
-    // Como será o último, não possui próximo.
-    sexto-&gt;proximo = NULL;
+    //O novo nó será o último.
+    //Portanto, não possui próximo.
+    ultimo-&gt;proximo = NULL;
 
-    // O nó anterior ao novo último é o nó 40.
-    sexto-&gt;anterior = quarto;
+    /*
+     * O antigo último é o quarto nó.
+     *
+     * O novo nó precisa apontar para ele.
+     */
+    ultimo-&gt;anterior = quarto;
 
-    // O antigo último (40) passa a apontar para o novo (50).
-    quarto-&gt;proximo = sexto;
+    /*
+     * O antigo último precisa apontar para o novo.
+     */
+    quarto-&gt;proximo = ultimo;
 
 
-    // =========================================================
-    // 11. REMOÇÃO DO NÓ 20
-    // =========================================================
+    //Mostra a lista depois da inserção.
+    atual = primeiro;
+
+    printf("\nDepois de inserir 50 no final:\n");
+
+    while (atual != NULL) {
+
+        printf("%d ", atual-&gt;dado);
+
+        atual = atual-&gt;proximo;
+    }
+
+    printf("\n");
+
+
+    //=========================================================
+    //14. REMOÇÃO DO NÓ 20 - EXEMPLO
+    //=========================================================
 
     /*
      * Antes:
      *
      * [5] &lt;-&gt; [10] &lt;-&gt; [20] &lt;-&gt; [30] &lt;-&gt; [40] &lt;-&gt; [50]
-     *                  ↑
-     *               remover
+     *
+     * Queremos remover o nó 20.
+     *
+     * O nó 10 precisa apontar para o 30.
+     *
+     * O nó 30 precisa apontar de volta para o 10.
      */
 
-    /*
-     * 'segundo' aponta para o nó 20.
-     *
-     * NÃO estamos fazendo uma cópia do nó.
-     * Estamos apenas criando outro ponteiro que aponta
-     * para o mesmo nó.
-     *
-     * segundo ----\
-     *              &gt; [20]
-     * remover ----/
-     */
+    //O nó que será removido é o segundo nó.
+    //'remover' aponta para o 20.
     struct No *remover = segundo;
 
-
-    /*
-     * O nó anterior ao 20 é o 10.
-     * O nó seguinte ao 20 é o 30.
-     *
-     * Esta linha faz:
-     *
-     *     10-&gt;proximo = 30
-     *
-     * O 10 passa a "pular" o 20.
-     */
+    //O nó anterior ao removido passa a apontar para o próximo.
+    //Ou seja, o anterior do nó que vou remover deve apontar para o próximo.
     remover-&gt;anterior-&gt;proximo = remover-&gt;proximo;
 
-
-    /*
-     * Agora corrigimos a ligação no sentido contrário.
-     *
-     * Esta linha faz:
-     *
-     *     30-&gt;anterior = 10
-     *
-     * Assim, 10 e 30 passam a estar ligados diretamente
-     * nos dois sentidos.
-     */
+    //O nó seguinte ao removido passa a apontar para o anterior.
+    //Ou seja, o próximo do nó que vou remover deve apontar para o anterior.
     remover-&gt;proximo-&gt;anterior = remover-&gt;anterior;
 
-
-    /*
-     * As ligações já foram corrigidas.
-     * Agora podemos liberar a memória do nó 20.
-     */
+    //Libera a memória do nó removido.
     free(remover);
 
 
+    //Mostra a lista depois da remoção.
+    atual = primeiro;
+
+    printf("\nDepois de remover 20:\n");
+
+    while (atual != NULL) {
+
+        printf("%d ", atual-&gt;dado);
+
+        atual = atual-&gt;proximo;
+    }
+
+    printf("\n");
+
+
+    //=========================================================
+    //15. LIBERANDO A MEMÓRIA
+    //=========================================================
+
     /*
-     * Lista final:
+     * Ainda temos os nós:
      *
-     * [5] &lt;-&gt; [10] &lt;-&gt; [30] &lt;-&gt; [40] &lt;-&gt; [50]
+     * 5, 10, 30, 40 e 50
+     *
+     * Precisamos liberar a memória de cada um.
      */
 
+    free(primeiro);  //Libera o nó 5
 
-    // =========================================================
-    // 12. FINALIZANDO O PROGRAMA
-    // =========================================================
+    free(terceiro);  //Libera o nó 30
 
+    free(quarto);    //Libera o nó 40
+
+    free(ultimo);    //Libera o nó 50
+
+
+    //Finaliza o programa.
     return 0;
-}</code></pre>
+}
+</code></pre>
 </details>
 
 <p><strong>Objetivo:</strong> praticar a criação de nós, alocação dinâmica, ligações nos dois sentidos, percurso para frente e para trás, busca, inserção e remoção em uma lista duplamente encadeada.</p>
