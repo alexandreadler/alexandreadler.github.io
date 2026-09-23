@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade - Lista Circular</title>
+
+    <!-- Biblioteca Prism.js para Syntax Highlighting (Tema Claro) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --container-bg: #ffffff;
+            --text-color: #333333;
+            --primary-color: #0056b3;
+            --border-color: #cccccc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-top: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .student-info {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+
+        .student-info div {
+            flex: 1;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .inline-input {
+            width: 200px !important;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        /* Estilos do Bloco Expansível (Código de Referência) */
+        details {
+            background-color: #f1f8ff;
+            border: 1px solid #c8e1ff;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 25px;
+        }
+
+        summary {
+            font-weight: bold;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        summary:hover {
+            text-decoration: underline;
+        }
+
+        pre[class*="language-"] {
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #e1e1e1;
+            background-color: #fdfdfd;
+        }
+
+        .question-box {
+            background: #eef5ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .btn-print {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background 0.3s;
+        }
+
+        .btn-print:hover {
+            background-color: #004494;
+        }
+
+        /* Classes de Validação Visual */
+        .is-correct {
+            border-color: #28a745 !important;
+            background-color: #f0fdf4;
+            color: #155724;
+        }
+
+        .is-incorrect {
+            border-color: #dc3545 !important;
+            background-color: #fef2f2;
+            color: #721c24;
+        }
+
+        /* Estilos para PDF / Impressão */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            .btn-print {
+                display: none;
+            }
+            details {
+                display: none;
+            }
+            input[type="text"], textarea {
+                border: none;
+                border-bottom: 1px solid #000;
+                background: transparent;
+                border-radius: 0;
+                resize: none;
+                overflow: hidden;
+            }
+            .is-correct, .is-incorrect {
+                background-color: transparent !important;
+                color: #000 !important;
+            }
+            pre[class*="language-"] {
+                background-color: transparent !important;
+                border: 1px solid #000;
+                page-break-inside: avoid;
+            }
+            h2 {
+                page-break-after: avoid;
+            }
+            .question-box {
+                page-break-inside: avoid;
+                border-left-color: #000;
+                background: transparent;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Atividade - Lista Circular</h1>
+
+    <div class="student-info">
+        <div>
+            <label for="nome">Nome do Aluno:</label>
+            <input type="text" id="nome" placeholder="Digite seu nome completo">
+        </div>
+        <div>
+            <label for="matricula">Matrícula:</label>
+            <input type="text" id="matricula" placeholder="Digite sua matrícula">
+        </div>
+    </div>
+
+    <!-- Bloco de Referência Expansível -->
+    <details>
+        <summary>📎 Ver Código de Referência (Lista Circular)</summary>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main()
+{
+    //=========================================================
+    //1. DEFININDO A ESTRUTURA DO NÓ
+    //=========================================================
+
+    /*
+     * Cada nó possui:
+     *
+     * dado    -&gt; valor armazenado
+     * proximo -&gt; endereço do próximo nó
+     *
+     * Na lista circular, o último nó aponta
+     * novamente para o primeiro.
+     */
+    struct No {
+        int dado;
+        struct No *proximo;
+    };
+
+
+    //=========================================================
+    //2. CRIANDO OS PONTEIROS PARA OS NÓS
+    //=========================================================
+
+    struct No *primeiro = NULL;
+    struct No *segundo = NULL;
+    struct No *terceiro = NULL;
+    struct No *quarto = NULL;
+
+
+    //=========================================================
+    //3. ALOCANDO MEMÓRIA
+    //=========================================================
+
+    primeiro = malloc(sizeof(struct No));
+    segundo = malloc(sizeof(struct No));
+    terceiro = malloc(sizeof(struct No));
+    quarto = malloc(sizeof(struct No));
+
+
+    //=========================================================
+    //4. INSERINDO OS VALORES
+    //=========================================================
+
+    primeiro-&gt;dado = 10;
+    segundo-&gt;dado = 20;
+    terceiro-&gt;dado = 30;
+    quarto-&gt;dado = 40;
+
+
+    //=========================================================
+    //5. FAZENDO AS LIGAÇÕES
+    //=========================================================
+
+    primeiro-&gt;proximo = segundo;
+    segundo-&gt;proximo = terceiro;
+    terceiro-&gt;proximo = quarto;
+
+    /*
+     * Aqui está a principal característica
+     * da lista circular:
+     *
+     * o último aponta novamente para o primeiro.
+     */
+    quarto-&gt;proximo = primeiro;
+
+
+    //=========================================================
+    //6. PERCORRENDO A LISTA
+    //=========================================================
+
+    struct No *atual = primeiro;
+
+    /*
+     * Não podemos usar:
+     *
+     * while (atual != NULL)
+     *
+     * porque nunca chegaremos a NULL.
+     *
+     * Paramos quando voltarmos ao primeiro nó.
+     */
+
+    printf("Lista inicial: ");
+
+    do {
+
+        printf("%d ", atual-&gt;dado);
+
+        atual = atual-&gt;proximo;
+
+    } while (atual != primeiro);
+
+
+    //=========================================================
+    //7. BUSCA
+    //=========================================================
+
+    int valor = 30;
+
+    // Fazemos o ponteiro atual voltar para o primeiro nó.
+    atual = primeiro;
+
+    int encontrado = 0;
+
+    do {
+
+        if (atual-&gt;dado == valor) {
+
+            printf("\nElemento %d encontrado!\n", valor);
+
+            encontrado = 1;
+
+            break;
+        }
+
+        atual = atual-&gt;proximo;
+
+    } while (atual != primeiro);
+
+
+    if (encontrado == 0) {
+
+        printf("\nElemento %d nao encontrado.\n", valor);
+    }
+
+
+    //=========================================================
+    //8. INSERÇÃO NO INÍCIO
+    //=========================================================
+
+    /*
+     * Antes:
+     *
+     * [10] -&gt; [20] -&gt; [30] -&gt; [40]
+     *  ↑                         │
+     *  └─────────────────────────┘
+     *
+     * Queremos inserir 5.
+     */
+
+    struct No *novo = NULL;
+
+    novo = malloc(sizeof(struct No));
+
+    novo-&gt;dado = 5;
+
+    /*
+     * O novo nó aponta para o antigo primeiro.
+     */
+    novo-&gt;proximo = primeiro;
+
+    /*
+     * O antigo último precisa apontar
+     * para o novo primeiro.
+     */
+    quarto-&gt;proximo = novo;
+
+    /*
+     * Agora o novo nó passa a ser o primeiro.
+     */
+    primeiro = novo;
+
+    printf("\nDepois de inserir 5 no inicio: ");
+
+    atual = primeiro;
+
+    do {
+
+        printf("%d ", atual-&gt;dado);
+
+        atual = atual-&gt;proximo;
+
+    } while (atual != primeiro);
+
+    printf("\n");
+
+
+    //=========================================================
+    //9. INSERÇÃO NO FINAL
+    //=========================================================
+
+    /*
+     * Vamos inserir 50 depois do 40.
+     */
+
+    struct No *ultimo = NULL;
+
+    ultimo = malloc(sizeof(struct No));
+
+    ultimo-&gt;dado = 50;
+
+    /*
+     * O novo nó aponta para o primeiro,
+     * pois ele será o último da lista circular.
+     */
+    ultimo-&gt;proximo = primeiro;
+
+    /*
+     * O antigo último (40) passa a apontar
+     * para o novo último (50).
+     */
+    quarto-&gt;proximo = ultimo;
+
+    printf("Depois de inserir 50 no final: ");
+
+    // Fazemos o ponteiro atual voltar para o primeiro nó.
+    atual = primeiro;
+
+    do {
+
+        printf("%d ", atual-&gt;dado);
+
+        atual = atual-&gt;proximo;
+
+    } while (atual != primeiro);
+
+    printf("\n");
+
+
+    //=========================================================
+    //10. REMOÇÃO DO NÓ 20
+    //=========================================================
+
+    /*
+     * Queremos remover o nó 20.
+     */
+
+    struct No *remover = segundo;
+
+    /*
+     * Como esta é uma lista simplesmente encadeada,
+     * o nó 20 não possui um campo 'anterior'.
+     *
+     * Precisamos encontrar quem aponta para ele.
+     */
+    struct No *anterior = primeiro;
+
+    /*
+     * Percorremos a lista até encontrar
+     * o nó cujo próximo é o nó que queremos remover.
+     */
+    while (anterior-&gt;proximo != remover) {
+
+        anterior = anterior-&gt;proximo;
+    }
+
+    /*
+     * Agora:
+     *
+     * anterior -&gt; [10]
+     * remover  -&gt; [20]
+     *
+     * Fazemos o 10 apontar para o próximo do 20.
+     */
+    anterior-&gt;proximo = remover-&gt;proximo;
+
+    /*
+     * Agora o 20 não faz mais parte da lista.
+     *
+     * Liberamos sua memória.
+     */
+    free(remover);
+
+    printf("Depois de remover 20: ");
+
+    // Fazemos o ponteiro atual voltar para o primeiro nó.
+    atual = primeiro;
+
+    do {
+
+        printf("%d ", atual-&gt;dado);
+
+        atual = atual-&gt;proximo;
+
+    } while (atual != primeiro);
+
+    printf("\n");
+
+
+    //=========================================================
+    //11. FINALIZANDO
+    //=========================================================
+
+    return 0;
+}</code></pre>
+    </details>
+
+    <p><strong>Objetivo:</strong> Praticar a criação de uma lista circular simples, suas ligações entre os nós, o percurso, a busca, a inserção no início e no final e a remoção de um nó.</p>
+
+    <!-- Parte 1 -->
+    <h2>Parte 1 - Entendendo a lista circular</h2>
+    <p>Observe a ligação responsável por transformar a lista em circular:</p>
+<pre><code class="language-c">primeiro->proximo = segundo;
+segundo->proximo = terceiro;
+terceiro->proximo = quarto;
+
+quarto->proximo = primeiro;</code></pre>
+
+    <div class="question-box">
+        <label>Qual é a principal diferença entre a última ligação de uma lista simplesmente encadeada e a última ligação de uma lista circular?</label>
+        <textarea id="resp-p1" rows="4" placeholder="Explique com suas palavras..."></textarea>
+    </div>
+
+    <!-- Parte 2 -->
+    <h2>Parte 2 - Por que não usamos NULL?</h2>
+    <p>Na lista circular, o percurso é feito com:</p>
+<pre><code class="language-c">do {
+    printf("%d ", atual->dado);
+    atual = atual->proximo;
+} while (atual != primeiro);</code></pre>
+
+    <div class="question-box">
+        <label>Por que não podemos usar <code>while (atual != NULL)</code> nesse percurso?</label>
+        <textarea id="resp-p2" rows="4" placeholder="Explique..."></textarea>
+    </div>
+
+    <!-- Parte 3 -->
+    <h2>Parte 3 - Percorrendo a lista</h2>
+    <p>Considerando a lista inicial:</p>
+    <pre style="text-align: center; font-weight: bold; font-size: 16px; background: transparent; border: none;">[10] → [20] → [30] → [40]
+ ↑                         ↓
+ └─────────────────────────┘</pre>
+
+    <div class="question-box">
+        <p>Qual será a saída do percurso?</p>
+        <input type="text" id="resp-p3-1" placeholder="Resultado...">
+        <p>Qual é o valor de <code>atual</code> quando o laço termina?</p>
+        <input type="text" id="resp-p3-2" placeholder="Explique...">
+    </div>
+
+    <!-- Parte 4 -->
+    <h2>Parte 4 - Busca</h2>
+    <p>No código da aula, o programa procura o valor <code>30</code>:</p>
+<pre><code class="language-c">int valor = 30;
+atual = primeiro;
+
+do {
+    if (atual->dado == valor) {
+        printf("\nElemento %d encontrado!\n", valor);
+        encontrado = 1;
+        break;
+    }
+
+    atual = atual->proximo;
+
+} while (atual != primeiro);</code></pre>
+
+    <div class="question-box">
+        <label>1. Altere o código para procurar o valor <strong>40</strong>. Qual será o resultado?</label>
+        <input type="text" id="resp-p4-1" placeholder="Resultado..."><br><br>
+
+        <label>2. Altere o código para procurar o valor <strong>100</strong>. Qual será o resultado?</label>
+        <input type="text" id="resp-p4-2" placeholder="Resultado...">
+    </div>
+
+    <!-- Parte 5 -->
+    <h2>Parte 5 - Inserção no início</h2>
+    <p>Observe o trecho utilizado na aula:</p>
+<pre><code class="language-c">novo->dado = 5;
+novo->proximo = primeiro;
+quarto->proximo = novo;
+primeiro = novo;</code></pre>
+
+    <div class="question-box">
+        <label>Explique por que precisamos alterar <code>quarto->proximo</code> antes de fazer <code>primeiro = novo</code>.</label>
+        <textarea id="resp-p5-1" rows="4" placeholder="Explique..."></textarea>
+
+        <label>Depois da inserção do 5, qual será a sequência percorrida?</label>
+        <input type="text" id="resp-p5-2" placeholder="Exemplo: 5 10 ...">
+    </div>
+
+    <!-- Parte 6 -->
+    <h2>Parte 6 - Inserção no final</h2>
+    <p>Complete o código abaixo para inserir o valor <strong>60</strong> no final da lista:</p>
+
+    <div class="question-box">
+        <code>ultimo->dado = 60;</code><br><br>
+        <code>ultimo->proximo = </code><input type="text" id="resp-p6-1" class="inline-input">;<br><br>
+        <code>quarto->proximo = </code><input type="text" id="resp-p6-2" class="inline-input">;
+    </div>
+
+    <div class="question-box">
+        <label>Por que o novo último nó aponta para <code>primeiro</code>?</label>
+        <textarea id="resp-p6-3" rows="4" placeholder="Explique..."></textarea>
+    </div>
+
+    <!-- Parte 7 -->
+    <h2>Parte 7 - Remoção do nó 20</h2>
+    <p>Observe o trecho da aula:</p>
+<pre><code class="language-c">struct No *remover = segundo;
+
+struct No *anterior = primeiro;
+
+while (anterior->proximo != remover) {
+    anterior = anterior->proximo;
+}
+
+anterior->proximo = remover->proximo;
+
+free(remover);</code></pre>
+
+    <div class="question-box">
+        <label>1. O comando <code>struct No *remover = segundo;</code> cria uma cópia do nó 20?</label>
+        <input type="text" id="resp-p7-1" placeholder="Sim ou não. Explique..."><br><br>
+
+        <label>2. Para que serve o ponteiro <code>anterior</code>?</label>
+        <textarea id="resp-p7-2" rows="4" placeholder="Explique..."></textarea><br><br>
+
+        <label>3. O que acontece com o nó 10 quando executamos <code>anterior->proximo = remover->proximo;</code>?</label>
+        <textarea id="resp-p7-3" rows="4" placeholder="Explique..."></textarea>
+    </div>
+
+    <!-- Parte 8 -->
+    <h2>Parte 8 - Implementação</h2>
+    <p>Faça as seguintes alterações no código da aula:</p>
+
+    <ol>
+        <li>Insira o valor <strong>1</strong> no início da lista.</li>
+        <li>Insira o valor <strong>50</strong> no final da lista.</li>
+        <li>Imprima todos os elementos atuais da lista.</li>
+        <li>Remova o nó <strong>30</strong>.</li>
+        <li>Imprima novamente os elementos atuais da lista.</li>
+    </ol>
+
+    <div class="question-box">
+        <label>Cole abaixo o trecho de código que você modificou:</label>
+        <textarea id="resp-p8" rows="16" placeholder="Cole seu código aqui..."></textarea>
+    </div>
+
+    <button class="btn-print" onclick="prepararImpressao()">Salvar PDF</button>
+
+</div>
+
+<!-- Scripts do Prism.js para o Syntax Highlighting de C -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+
+<script>
+    // Gabarito apenas para as questões objetivas de código.
+    const respostasCorretas = {
+        'resp-p3-1': ['10 20 30 40', '10, 20, 30, 40'],
+        'resp-p3-2': ['primeiro'],
+        'resp-p6-1': ['primeiro'],
+        'resp-p6-2': ['ultimo'],
+        'resp-p7-1': ['nao', 'não', 'nao.'],
+    };
+
+    // Validação em tempo real.
+    Object.keys(respostasCorretas).forEach(id => {
+        const campo = document.getElementById(id);
+        if (campo) {
+            campo.addEventListener('input', function() {
+                const valorDigitado = this.value.trim().toLowerCase();
+
+                if (valorDigitado === '') {
+                    this.classList.remove('is-correct', 'is-incorrect');
+                } else if (respostasCorretas[id].includes(valorDigitado)) {
+                    this.classList.remove('is-incorrect');
+                    this.classList.add('is-correct');
+                } else {
+                    this.classList.remove('is-correct');
+                    this.classList.add('is-incorrect');
+                }
+            });
+        }
+    });
+
+    // Função de Impressão.
+    function prepararImpressao() {
+        const textareas = document.querySelectorAll('textarea');
+
+        textareas.forEach(textarea => {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        });
+
+        window.print();
+    }
+
+    // Ajuste dinâmico dos textareas.
+    document.querySelectorAll('textarea').forEach(textarea => {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    });
+</script>
+
+</body>
+</html>
