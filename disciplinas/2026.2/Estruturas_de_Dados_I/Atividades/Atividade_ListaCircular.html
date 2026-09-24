@@ -445,65 +445,67 @@ int main()
     printf("\n");
 
 
-    //=========================================================
-    //10. REMOÇÃO DO NÓ 20
-    //=========================================================
+//=========================================================
+// 10. REMOÇÃO DO NÓ 20
+//=========================================================
 
-    /*
-     * Queremos remover o nó 20.
-     */
+/*
+ * Queremos remover o nó 20.
+ */
 
-    struct No *remover = segundo;
+struct No *remover = segundo;
 
-    /*
-     * Como esta é uma lista simplesmente encadeada,
-     * o nó 20 não possui um campo 'anterior'.
-     *
-     * Precisamos encontrar quem aponta para ele.
-     */
-    struct No *anterior = primeiro;
+/*
+ * Começamos no primeiro nó.
+ *
+ * 'atual' já foi declarado anteriormente.
+ * Aqui, apenas fazemos 'atual' apontar para o primeiro nó.
+ */
+atual = primeiro;
 
-    /*
-     * Percorremos a lista até encontrar
-     * o nó cujo próximo é o nó que queremos remover.
-     */
-    while (anterior-&gt;proximo != remover) {
+/*
+ * Percorremos a lista até encontrar
+ * o nó cujo próximo é o nó que queremos remover.
+ */
+while (atual-&gt;proximo != remover) {
 
-        anterior = anterior-&gt;proximo;
-    }
+    atual = atual-&gt;proximo;
+}
 
-    /*
-     * Agora:
-     *
-     * anterior -&gt; [10]
-     * remover  -&gt; [20]
-     *
-     * Fazemos o 10 apontar para o próximo do 20.
-     */
-    anterior-&gt;proximo = remover-&gt;proximo;
+/*
+ * Agora:
+ *
+ * atual   -&gt; [10]
+ * remover -&gt; [20]
+ *
+ * Fazemos o 10 apontar para o próximo do 20.
+ */
+atual-&gt;proximo = remover-&gt;proximo;
 
-    /*
-     * Agora o 20 não faz mais parte da lista.
-     *
-     * Liberamos sua memória.
-     */
-    free(remover);
+/*
+ * Agora o 20 não faz mais parte da lista.
+ *
+ * Liberamos sua memória.
+ */
+free(remover);
 
-    printf("Depois de remover 20: ");
+printf("Depois de remover 20: ");
 
-    // Fazemos o ponteiro atual voltar para o primeiro nó.
-    atual = primeiro;
+/*
+ * Fazemos o ponteiro atual voltar
+ * para o primeiro nó.
+ */
+atual = primeiro;
 
-    do {
+do {
 
-        printf("%d ", atual-&gt;dado);
+    printf("%d ", atual-&gt;dado);
 
-        atual = atual-&gt;proximo;
+    atual = atual-&gt;proximo;
 
-    } while (atual != primeiro);
+} while (atual != primeiro);
 
-    printf("\n");
-
+printf("\n");
 
     //=========================================================
     //11. FINALIZANDO
