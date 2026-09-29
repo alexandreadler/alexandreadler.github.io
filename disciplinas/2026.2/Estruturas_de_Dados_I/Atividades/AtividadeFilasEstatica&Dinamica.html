@@ -605,7 +605,7 @@ int main()
 <p><strong>Objetivo:</strong> praticar as operações de uma fila, compreender a diferença entre a implementação estática e dinâmica e acompanhar as alterações em <code>inicio</code>, <code>final</code> e <code>quantidade</code>.</p>
 
 <h2>Parte 1 - Conceito de fila</h2>
-<div class="diagram">ENTRADA → [10] → [20] → [30] → SAÍDA<br>            ↑                  ↑<br>          início              final</div>
+<div class="diagram">ENTRADA → [10] → [20] → [30] → SAÍDA<br>         ↑                  ↑<br>       início              final</div>
 <div class="question-box">
 <label>1. Em uma fila, em qual extremidade um novo elemento é inserido?</label>
 <input type="text" id="p1a" placeholder="Resposta...">
@@ -625,18 +625,16 @@ int main()
 <tr><td style="border:1px solid #ccc;padding:8px"><code>isEmpty()</code></td><td style="border:1px solid #ccc;padding:8px">?</td><td style="border:1px solid #ccc;padding:8px">?</td></tr>
 <tr><td style="border:1px solid #ccc;padding:8px"><code>isFull()</code></td><td style="border:1px solid #ccc;padding:8px">?</td><td style="border:1px solid #ccc;padding:8px">?</td></tr>
 </table>
-<div class="question-box"><label>Explique, com suas palavras, a diferença entre <code>dequeue()</code> e <code>peek()</code>.</label><textarea rows="4"></textarea></div>
+<div class="question-box"><label>Explique, brevemente, a diferença entre <code>dequeue()</code> e <code>peek()</code>.</label><textarea rows="4"></textarea></div>
 
 <h2>Parte 3 - Acompanhando a fila estática</h2>
 <p>Considere <code>MAX = 5</code> e a fila inicialmente vazia:</p>
-<div class="diagram">índice:   0     1     2     3     4<br>        [ ]   [ ]   [ ]   [ ]   [ ]</div>
+<div class="diagram">índice:   0     1     2     3     4<br>          [ ]   [ ]   [ ]   [ ]   [ ]</div>
 <p>Execute:</p>
 <pre><code class="language-c">enqueue(&fila, 10);
 enqueue(&fila, 20);
 enqueue(&fila, 30);
-enqueue(&fila, 40);
-enqueue(&fila, 50);
-enqueue(&fila, 60);</code></pre>
+enqueue(&fila, 40);</code></pre>
 <div class="question-box">
 <label>1. Qual será o valor de <code>inicio</code>?</label><input type="text" id="p3a">
 <label>2. Qual será o valor de <code>final</code>?</label><input type="text" id="p3b">
@@ -645,11 +643,13 @@ enqueue(&fila, 60);</code></pre>
 </div>
 
 <h2>Parte 4 - Dequeue na fila estática</h2>
-<div class="diagram">[10] → [20] → [30]<br> ↑<br>início</div>
-<pre><code class="language-c">int valor = fila.dados[fila.inicio];
-fila.inicio = (fila.inicio + 1) % MAX;
-fila.quantidade--;
-return valor;</code></pre>
+<div class="diagram">            [10] → [20] → [30]<br>↑<br>início</div>
+<pre><code class="language-c">fila-&gt;inicio = fila-&gt;inicio + 1;
+        if (fila-&gt;inicio == MAX) {
+            fila-&gt;inicio = 0;
+            }
+    fila-&gt;quantidade--;
+    return valor;</code></pre>
 <div class="question-box">
 <label>1. Qual valor será removido?</label><input type="text" id="p5a">
 <label>2. Depois da remoção, qual será o novo valor de <code>inicio</code>?</label><input type="text" id="p5b">
@@ -657,38 +657,9 @@ return valor;</code></pre>
 <label>4. A função <code>dequeue()</code> modifica a fila?</label><input type="text" id="p5d">
 </div>
 
-<h2>Parte 5 - Implementando operações da fila estática</h2>
-<div class="question-box">
-<label><strong>6.1 - enqueue()</strong></label>
-<pre><code class="language-c">void enqueue(struct Fila *fila, int valor)
-{
-    if (fila->quantidade == MAX) {
-        printf("Fila cheia!\n");
-        return;
-    }
 
-    fila->dados[________________] = valor;
-    fila->final = (fila->final + 1) % MAX;
-    fila->________________++;
-}</code></pre>
-<label>Explique por que a função verifica se a fila está cheia antes da inserção.</label><textarea rows="4"></textarea>
-</div>
-<div class="question-box">
-<label><strong>6.2 - peek()</strong></label>
-<pre><code class="language-c">int peek(struct Fila *fila)
-{
-    if (fila->quantidade == 0) {
-        printf("Fila vazia!\n");
-        return -1;
-    }
-
-    return fila->dados[________________];
-}</code></pre>
-<label>Por que <code>peek()</code> não altera <code>inicio</code>?</label><textarea rows="4"></textarea>
-</div>
-
-<h2>Parte 6 - Fila dinâmica</h2>
-<div class="diagram">inicio<br> ↓<br>[10] → [20] → [30] → NULL<br>                    ↑<br>                   final</div>
+<h2>Parte 5 - Fila dinâmica</h2>
+<div class="diagram">inicio<br>↓<br>                    [10] → [20] → [30] → NULL<br>                                        ↑<br>                                       final</div>
 <div class="question-box">
 <label>1. Na fila dinâmica, <code>inicio</code> aponta para quê?</label><input type="text" id="p7a">
 <label>2. Na fila dinâmica, <code>final</code> aponta para quê?</label><input type="text" id="p7b">
@@ -696,7 +667,7 @@ return valor;</code></pre>
 <label>4. Qual função é usada para reservar memória para um novo nó?</label><input type="text" id="p7d">
 </div>
 
-<h2>Parte 7 - Enqueue na fila dinâmica</h2>
+<h2>Parte 6 - Enqueue na fila dinâmica</h2>
 <div class="diagram">ANTES: [10] → [20] → [30] → NULL<br><br>NOVO:  [40] → NULL</div>
 <pre><code class="language-c">struct No *novo = malloc(sizeof(struct No));
 novo->dado = 40;
@@ -709,7 +680,7 @@ fila->final = novo;</code></pre>
 <label>3. Por que precisamos fazer <code>fila->final = novo</code>?</label><textarea rows="4"></textarea>
 </div>
 
-<h2>Parte 8 - Dequeue na fila dinâmica</h2>
+<h2>Parte 7 - Dequeue na fila dinâmica</h2>
 <div class="diagram">inicio<br> ↓<br>[10] → [20] → [30] → NULL</div>
 <pre><code class="language-c">struct No *remover = fila->inicio;
 int valor = remover->dado;
@@ -721,8 +692,8 @@ free(remover);</code></pre>
 <label>3. Por que usamos <code>free(remover)</code>?</label><textarea rows="4"></textarea>
 </div>
 
-<h2>Parte 9 - Uso do NULL na fila dinâmica</h2>
-<div class="diagram">inicio e final<br>     ↓<br>   [10] → NULL</div>
+<h2>Parte 8 - Uso do NULL na fila dinâmica</h2>
+<div class="diagram">inicio e final<br>     ↓<br>            [10] → NULL</div>
 <pre><code class="language-c">fila->inicio = fila->inicio->proximo;
 
 if (fila->inicio == NULL) {
@@ -731,12 +702,12 @@ if (fila->inicio == NULL) {
 <div class="question-box"><label>Por que precisamos atualizar <code>final</code> para <code>NULL</code>?</label><textarea rows="5"></textarea></div>
 
 
-<h2>Parte 10 - Desafio - Implementação</h2>
-<h3>10.1 - Fila estática</h3>
+<h2>Parte 9 - Desafio - Implementação</h2>
+<h3>9.1 - Fila estática</h3>
 <ol><li>Insira os valores <strong>10, 20, 30, 40 e 50</strong> usando <code>enqueue()</code>.</li><li>Verifique se a fila está cheia usando <code>isFull()</code>.</li><li>Consulte o primeiro elemento usando <code>peek()</code>.</li><li>Remova dois elementos usando <code>dequeue()</code>.</li><li>Insira novamente os valores <strong>60 e 70</strong>.</li><li>Mostre a fila final.</li></ol>
 <div class="question-box"><label>Antes de executar o programa, qual você espera que seja a fila final?</label><input type="text" placeholder="Resposta..."><label>Agora cole o trecho de código que você acrescentou ou modificou:</label><textarea rows="12" placeholder="Cole seu código aqui..."></textarea></div>
 
-<h3>10.2 - Fila dinâmica</h3>
+<h3>9.2 - Fila dinâmica</h3>
 <ol><li>Insira os valores <strong>10, 20, 30, 40 e 50</strong>.</li><li>Mostre o primeiro elemento usando <code>peek()</code>.</li><li>Remova três elementos usando <code>dequeue()</code>.</li><li>Insira os valores <strong>60 e 70</strong>.</li><li>Mostre a fila final.</li><li>Mostre a quantidade de elementos usando <code>size()</code>.</li></ol>
 <div class="question-box"><label>Qual deverá ser a fila final?</label><input type="text" placeholder="Resposta..."><label>Qual deverá ser o resultado de <code>size()</code>?</label><input type="text" placeholder="Resposta..."><label>Cole o código que você modificou:</label><textarea rows="14" placeholder="Cole seu código aqui..."></textarea></div>
 
@@ -749,7 +720,7 @@ if (fila->inicio == NULL) {
 <script>
 const respostas={
 'p1a':['final','fim'],'p1b':['inicio','início'],'p1c':['fifo'],
-'p3a':['0'],'p3b':['3'],'p3c':['3'],'p4a':['0'],
+'p3a':['0'],'p3b':['4'],'p3c':['5'],'p4a':['[10] [20] [30] [40] [  ]'],
 'p5a':['10'],'p5b':['1'],'p5c':['2'],'p5d':['sim'],
 'p7a':['primeiro nó','primeiro no','primeiro elemento'],
 'p7b':['último nó','ultimo no','último elemento','ultimo elemento'],
