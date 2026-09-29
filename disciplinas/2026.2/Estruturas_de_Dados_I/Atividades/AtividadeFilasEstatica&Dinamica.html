@@ -38,7 +38,7 @@ pre[class*=language-]{border-radius:5px;margin:15px 0;border:1px solid #e1e1e1;b
 <div class="note"><strong>Orientação:</strong> utilize os exemplos da aula como referência. Nesta atividade, trabalhe com <strong>funções simples</strong> para as operações da fila. Na fila estática, utilize vetor e <code>MAX = 5</code>. Na fila dinâmica, utilize nós e <code>malloc()</code>.</div>
 
 <details>
-<summary>📎 Ver código de referência — Fila Estática</summary>
+<summary>📎 Ver código de referência - Fila Estática</summary>
 <pre><code class="language-c">#include &lt;stdio.h&gt;
 
 #define MAX 5
@@ -85,7 +85,7 @@ void enqueue(struct Fila *fila, int valor)
     //Avança para a próxima posição do vetor.
     //Quando chegar ao final do vetor, faz o índice
     //voltar para 0.
-    fila->final = fila-&gt;final + 1;
+    fila-&gt;final = fila-&gt;final + 1;
         if (fila-&gt;final == MAX) {
             fila-&gt;final = 0; // Volta para o início
             }
@@ -107,7 +107,9 @@ int dequeue(struct Fila *fila)
 
         printf(&quot;Fila vazia!\n&quot;);
 
-        return -1;
+        return -1; //O retorno de -1 em funções como essa é uma convenção padrão na programação (principamente em C) 
+        //para indicar que ocorreu um erro ou uma condição excepcional - no caso deste código, 
+        //a tentativa de remover um elemento de uma fila vazia.
     }
 
     // Guarda o valor que será removido.
@@ -115,7 +117,7 @@ int dequeue(struct Fila *fila)
 
     //Avança para a próxima posição do vetor.
     //Quando chegar ao final do vetor, faz o índice voltar para 0.
-    fila->inicio = fila-&gt;inicio + 1;
+    fila-&gt;inicio = fila-&gt;inicio + 1;
         if (fila-&gt;inicio == MAX) {
             fila-&gt;inicio = 0; // Volta para o início
             }
@@ -185,6 +187,37 @@ int isFull(struct Fila *fila)
     return fila-&gt;quantidade == MAX;
 }
 
+//=========================================================
+// EXIBIR FILA
+// Imprime todos os elementos do início ao fim.
+//=========================================================
+void exibirFila(struct Fila *fila) {
+    //1. Verifica se a fila está vazia
+    if (fila-&gt;quantidade == 0) {
+        printf("Fila vazia!\n");
+        return;
+    }
+
+    printf("Elementos da fila: ");
+    
+    //2. Começa no índice onde está o primeiro elemento
+    int atual = fila-&gt;inicio;
+
+    //3. Repete o ciclo com base na quantidade de elementos
+    for (int i = 0; i < fila-&gt;quantidade; i++) {
+        printf("[%d] ", fila-&gt;dados[atual]); // Imprime o elemento atual
+        
+        //4. Avança para a próxima posição. 
+        //Se chegar no fim do vetor (MAX), volta para o zero.
+        atual = atual + 1;
+        if (atual == MAX) {
+            atual = 0;
+        }
+    }
+    
+    printf("\n");
+}
+
 
 //=========================================================
 // MAIN
@@ -216,7 +249,7 @@ int main()
 
 
     //=====================================================
-    // CONSULTANDO O PRIMEIRO ELEMENTO
+    // PEAK - CONSULTANDO O PRIMEIRO ELEMENTO
     //=====================================================
 
     // Consulta o primeiro elemento sem removê-lo.
@@ -225,29 +258,57 @@ int main()
 
 
     //=====================================================
-    // CONSULTANDO A QUANTIDADE
+    // SIZE - CONSULTANDO A QUANTIDADE
     //=====================================================
 
     // Mostra quantos elementos existem na fila.
     printf(&quot;Quantidade de elementos: %d\n&quot;,
            size(&amp;fila));
 
+    //=====================================================
+    //ISEMPTY - Verifica se a fila está vazia
+    //=====================================================
+
+    if (isEmpty(&fila)) {
+
+        printf("A fila esta vazia.\n");
+
+    } else {
+
+        printf("A fila nao esta vazia.\n");
+    }
+
 
     //=====================================================
-    // REMOVENDO UM ELEMENTO
+    //ISFULL - Verifica se a fila está cheia
+    //=====================================================
+
+    if (isFull(&fila)) {
+
+        printf("A fila esta cheia.\n");
+
+    } else {
+
+        printf("A fila nao esta cheia.\n");
+    }
+
+    //=====================================================
+    // REMOVENDO UM ELEMENTO - DEQUEUE
     //=====================================================
 
     // Remove o primeiro elemento da fila.
     printf(&quot;Removido: %d\n&quot;,
            dequeue(&amp;fila));
-
+    
+    //Exibe os elementos da fila após a remoção
+    exibirFila(&fila); 
 
     return 0;
 }</code></pre>
 </details>
 
 <details>
-<summary>📎 Ver código de referência — Fila Dinâmica</summary>
+<summary>📎 Ver código de referência - Fila Dinâmica</summary>
 <pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
@@ -476,15 +537,35 @@ int main()
 
 
     //=====================================================
-    // CONSULTANDO O PRIMEIRO ELEMENTO
+    // PEEK - CONSULTANDO O PRIMEIRO ELEMENTO
     //=====================================================
 
     printf(&quot;Primeiro elemento: %d\n&quot;,
            peek(&amp;fila));
 
+    //=====================================================
+    //SIZE - CONSULTANDO A QUANTIDADE
+    //=====================================================
+
+    printf("Quantidade de elementos: %d\n",
+           size(&fila));
+
 
     //=====================================================
-    // REMOVENDO O PRIMEIRO ELEMENTO
+    //ISEMPTY - Verifica se a fila está vazia
+    //=====================================================
+
+    if (isEmpty(&fila)) {
+
+        printf("A fila esta vazia.\n");
+
+    } else {
+
+        printf("A fila nao esta vazia.\n");
+    }
+
+    //=====================================================
+    // dequeue - REMOVENDO O PRIMEIRO ELEMENTO
     //=====================================================
 
     printf(&quot;Removido: %d\n&quot;,
@@ -497,9 +578,16 @@ int main()
 
     imprimir(&amp;fila);
 
+    //=====================================================
+    //PEEK - MOSTRANDO O NOVO PRIMEIRO
+    //=====================================================
+
+    printf("Primeiro elemento agora: %d\n",
+           peek(&fila));
+
 
     //=====================================================
-    // MOSTRANDO A QUANTIDADE
+    //SIZE - MOSTRANDO A NOVA QUANTIDADE
     //=====================================================
 
     printf(&quot;Quantidade agora: %d\n&quot;,
