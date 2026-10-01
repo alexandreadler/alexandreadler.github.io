@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atividade - Pilha Estática e Pilha Dinâmica</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+<style>
+:root{--bg:#f4f7f6;--container:#fff;--text:#333;--primary:#0056b3;--border:#ccc}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;margin:0;padding:20px}
+.container{max-width:900px;margin:0 auto;background:var(--container);padding:30px 40px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.1)}
+h1{color:var(--primary);text-align:center;border-bottom:2px solid var(--primary);padding-bottom:10px}
+h2{color:var(--primary);margin-top:32px;border-bottom:1px solid #eee;padding-bottom:5px}
+h3{color:#444}
+.student-info{display:flex;gap:20px;margin-bottom:30px;background:#f9f9f9;padding:15px;border-radius:5px;border:1px solid #eee}
+.student-info div{flex:1} label{font-weight:bold;display:block;margin-bottom:5px}
+input[type=text],textarea{width:100%;padding:10px;border:2px solid var(--border);border-radius:4px;font-family:monospace;font-size:14px;box-sizing:border-box;transition:.2s}
+textarea{resize:vertical;min-height:80px}.inline-input{width:210px!important;display:inline-block;margin:0 5px}
+details{background:#f1f8ff;border:1px solid #c8e1ff;border-radius:6px;padding:10px;margin-bottom:25px}summary{font-weight:bold;color:var(--primary);cursor:pointer;padding:5px;font-size:16px}
+pre[class*=language-]{border-radius:5px;margin:15px 0;border:1px solid #e1e1e1;background:#fdfdfd;overflow:auto}
+.question-box{background:#eef5ff;border-left:4px solid var(--primary);padding:15px;margin:20px 0}
+.note{background:#fff8df;border-left:4px solid #e0ad00;padding:12px 15px;margin:15px 0}.diagram{font-family:monospace;text-align:center;font-size:18px;font-weight:bold;background:#fafafa;border:1px solid #ddd;border-radius:6px;padding:18px;overflow:auto}
+.btn-print{display:block;width:100%;padding:15px;background:var(--primary);color:white;border:none;border-radius:5px;font-size:18px;cursor:pointer;margin-top:40px}
+.btn-print:hover{background:#004494}.is-correct{border-color:#28a745!important;background:#f0fdf4;color:#155724}.is-incorrect{border-color:#dc3545!important;background:#fef2f2;color:#721c24}
+.small{font-size:.93em;color:#555}.code-answer{font-family:monospace}
+@media print{body{background:#fff;padding:0}.container{box-shadow:none;padding:0;max-width:100%}.btn-print{display:none}details{display:none}input[type=text],textarea{border:none;border-bottom:1px solid #000;background:transparent;border-radius:0;resize:none;overflow:hidden}.is-correct,.is-incorrect{background:transparent!important;color:#000!important}pre[class*=language-]{background:transparent!important;border:1px solid #000;page-break-inside:avoid}h2{page-break-after:avoid}.question-box,.note{page-break-inside:avoid;background:transparent}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Atividade - Pilha Estática e Pilha Dinâmica</h1>
+<div class="student-info"><div><label for="nome">Nome do Aluno:</label><input type="text" id="nome" placeholder="Digite seu nome completo"></div><div><label for="matricula">Matrícula:</label><input type="text" id="matricula" placeholder="Digite sua matrícula"></div></div>
+<div class="note"><strong>Orientação:</strong> utilize os mesmos conceitos e códigos trabalhados na aula. A pilha segue a regra <strong>LIFO (Last In, First Out)</strong>: o último elemento inserido é o primeiro a ser removido. Nas questões de programação, mantenha a organização dos exemplos da aula e utilize funções simples.</div>
+
+<details><summary>📎 Ver código de referência - Pilha Estática</summary>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define MAX 5
+
+//=========================================================
+//ESTRUTURA DA PILHA
+//=========================================================
+
+struct Pilha {
+
+    //Vetor que armazena os elementos.
+    int dados[MAX];
+
+    //Indica a posição do elemento que está no topo.
+    int topo;
+};
+
+
+//=========================================================
+//PUSH - INSERE UM ELEMENTO NO TOPO
+//=========================================================
+
+void push(struct Pilha *pilha, int valor)
+{
+    //Verifica se a pilha está cheia.
+    if (pilha-&gt;topo == MAX - 1) {
+
+        printf(&quot;Pilha cheia!\n&quot;);
+
+        return;
+    }
+
+    //Avança o topo para a próxima posição.
+    pilha-&gt;topo++;
+
+    //Insere o valor na posição indicada pelo topo.
+    pilha-&gt;dados[pilha-&gt;topo] = valor;
+}
+
+
+//=========================================================
+//POP - REMOVE E RETORNA O ELEMENTO DO TOPO
+//=========================================================
+
+int pop(struct Pilha *pilha)
+{
+    //Verifica se a pilha está vazia.
+    if (pilha-&gt;topo == -1) {
+
+        printf(&quot;Pilha vazia!\n&quot;);
+
+        return -1;
+    }
+
+    //Guarda o valor que será removido.
+    int valor = pilha-&gt;dados[pilha-&gt;topo];
+
+    //Move o topo para a posição anterior.
+    pilha-&gt;topo--;
+
+    //Retorna o valor removido.
+    return valor;
+}
+
+
+//=========================================================
+//PEEK - CONSULTA O ELEMENTO DO TOPO
+//=========================================================
+
+int peek(struct Pilha *pilha)
+{
+    //Verifica se a pilha está vazia.
+    if (pilha-&gt;topo == -1) {
+
+        printf(&quot;Pilha vazia!\n&quot;);
+
+        return -1;
+    }
+
+    //Retorna o elemento que está no topo.
+    return pilha-&gt;dados[pilha-&gt;topo];
+}
+
+
+//=========================================================
+//SIZE - RETORNA A QUANTIDADE DE ELEMENTOS
+//=========================================================
+
+int size(struct Pilha *pilha)
+{
+    //Como o índice começa em 0,
+    //a quantidade é topo + 1.
+    return pilha-&gt;topo + 1;
+}
+
+
+//=========================================================
+//ISEMPTY - VERIFICA SE A PILHA ESTÁ VAZIA
+//=========================================================
+
+int isEmpty(struct Pilha *pilha)
+{
+    //Retorna 1 se o topo for -1.
+    return pilha-&gt;topo == -1;
+}
+
+
+//=========================================================
+//ISFULL - VERIFICA SE A PILHA ESTÁ CHEIA
+//=========================================================
+
+int isFull(struct Pilha *pilha)
+{
+    //Retorna 1 se o topo estiver na última posição.
+    return pilha-&gt;topo == MAX - 1;
+}
+
+
+//=========================================================
+//MAIN
+//=========================================================
+
+int main()
+{
+    //Cria uma pilha.
+    struct Pilha pilha;
+
+    //Inicialmente, a pilha está vazia.
+    pilha.topo = -1;
+
+    //PUSH - Insere elementos.
+    push(&amp;pilha, 10);
+    push(&amp;pilha, 20);
+    push(&amp;pilha, 30);
+
+    //=====================================================
+    //PEEK - Consulta o elemento do topo.
+    //=====================================================
+
+    printf("Topo: %d\n", peek(&amp;pilha));
+    
+    
+    //Verificando se a pilha está vazia e/ou cheia.
+    printf("A pilha está vazia?\n");
+
+    // isEmpty() retorna 1 se a pilha estiver vazia.
+        if (isEmpty(&amp;pilha)) {
+            printf("Pilha vazia! Valor lógico: %d\n", isEmpty(&amp;pilha));
+        } else {
+            printf("Pilha não está vazia. Valor lógico: %d\n", isEmpty(&amp;pilha));
+        }
+    
+    // isFull() retorna 1 se a pilha estiver cheia.
+    printf("A pilha está cheia?\n");
+    
+        if (isFull(&amp;pilha)) {
+            printf("Pilha cheia! Valor lógico: %d\n", isFull(&amp;pilha));
+        } else {
+            printf("Pilha não está cheia. Valor lógico: %d\n", isFull(&amp;pilha));
+        }
+        
+    
+    //=====================================================
+    //SIZE - Retorna a quantidade de elementos.
+    //=====================================================
+
+    printf("Quantidade: %d\n", size(&amp;pilha));
+
+    //=====================================================
+    //POP - Remove e retorna o elemento do topo.
+    //=====================================================
+
+    printf("Removido: %d\n", pop(&amp;pilha));
+
+    //PEEK - Mostra o novo topo.
+    printf("Novo topo: %d\n", peek(&amp;pilha));
+
+    return 0;
+}</code></pre></details>
+
+<details><summary>📎 Ver código de referência - Pilha Dinâmica</summary>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+//=========================================================
+//ESTRUTURA DO NÓ
+//=========================================================
+
+struct No {
+
+    //Valor armazenado no nó.
+    int dado;
+
+    //Endereço do próximo nó.
+    struct No *proximo;
+};
+
+
+//=========================================================
+//ESTRUTURA DA PILHA
+//=========================================================
+
+struct Pilha {
+
+    //Aponta para o nó que está no topo.
+    struct No *topo;
+
+    //Quantidade de elementos da pilha.
+    int quantidade;
+};
+
+
+//=========================================================
+//PUSH - INSERE UM ELEMENTO NO TOPO
+//=========================================================
+
+void push(struct Pilha *pilha, int valor)
+{
+    //Cria um ponteiro para o novo nó.
+    struct No *novo = NULL;
+
+    //Reserva memória para o novo nó.
+    novo = malloc(sizeof(struct No));
+
+    //Insere o valor no novo nó.
+    novo-&gt;dado = valor;
+
+    //O novo nó aponta para o antigo topo.
+    novo-&gt;proximo = pilha-&gt;topo;
+
+    //O novo nó passa a ser o topo.
+    pilha-&gt;topo = novo;
+
+    //Aumenta a quantidade de elementos.
+    pilha-&gt;quantidade++;
+}
+
+
+//=========================================================
+//POP - REMOVE E RETORNA O ELEMENTO DO TOPO
+//=========================================================
+
+int pop(struct Pilha *pilha)
+{
+    //Verifica se a pilha está vazia.
+    if (pilha-&gt;topo == NULL) {
+
+        printf(&quot;Pilha vazia!\n&quot;);
+
+        return -1;
+    }
+
+    //Guarda o endereço do nó que será removido.
+    struct No *remover = pilha-&gt;topo;
+
+    //Guarda o valor que será removido.
+    int valor = remover-&gt;dado;
+
+    //O próximo nó passa a ser o topo.
+    pilha-&gt;topo = pilha-&gt;topo-&gt;proximo;
+
+    //Libera a memória do nó removido.
+    free(remover);
+
+    //Diminui a quantidade de elementos.
+    pilha-&gt;quantidade--;
+
+    //Retorna o valor removido.
+    return valor;
+}
+
+
+//=========================================================
+//PEEK - CONSULTA O ELEMENTO DO TOPO
+//=========================================================
+
+int peek(struct Pilha *pilha)
+{
+    //Verifica se a pilha está vazia.
+    if (pilha-&gt;topo == NULL) {
+
+        printf(&quot;Pilha vazia!\n&quot;);
+
+        return -1;
+    }
+
+    //Retorna o valor do topo.
+    return pilha-&gt;topo-&gt;dado;
+}
+
+
+//=========================================================
+//SIZE - RETORNA A QUANTIDADE DE ELEMENTOS
+//=========================================================
+
+int size(struct Pilha *pilha)
+{
+    //Retorna a quantidade armazenada.
+    return pilha-&gt;quantidade;
+}
+
+
+//=========================================================
+//ISEMPTY - VERIFICA SE A PILHA ESTÁ VAZIA
+//=========================================================
+
+int isEmpty(struct Pilha *pilha)
+{
+    //Retorna 1 se não houver nenhum nó.
+    return pilha-&gt;topo == NULL;
+}
+
+
+//=========================================================
+//IMPRIMIR - MOSTRA OS ELEMENTOS DA PILHA
+//=========================================================
+
+void imprimir(struct Pilha *pilha)
+{
+    //Começa pelo topo.
+    struct No *atual = pilha-&gt;topo;
+
+    //Percorre a pilha até encontrar NULL.
+    while (atual != NULL) {
+
+        printf(&quot;[%d] &quot;, atual-&gt;dado);
+
+        atual = atual-&gt;proximo;
+    }
+
+    printf(&quot;\n&quot;);
+}
+
+
+//=========================================================
+//MAIN
+//=========================================================
+
+int main()
+{
+    //Cria uma pilha.
+    struct Pilha pilha;
+
+    //Inicialmente, não existe nenhum nó.
+    pilha.topo = NULL;
+
+    //Inicialmente, a quantidade é zero.
+    pilha.quantidade = 0;
+
+    //PUSH - Insere elementos.
+    push(&amp;pilha, 10);
+    push(&amp;pilha, 20);
+    push(&amp;pilha, 30);
+
+     //isEmpty - Verifica se a pilha está vazia.
+    printf("A pilha está vazia?\n");
+    
+    if (isEmpty(&amp;pilha)){
+        printf("A pilha está vazia!Valor lógico: %d ('True')\n", isEmpty(&amp;pilha));
+    } else {
+        printf("A pilha não está vazia!\nEla contém: %d elementos.\nValor lógico retornado da função ('isEmpty()'): %d ('False')\n", size(&amp;pilha), isEmpty(&amp;pilha));
+    }
+    
+    //PEEK - Consulta o elemento do topo.
+    printf("Topo: %d\n", peek(&amp;pilha));
+    
+    //IMPRIMIR - Mostra os elementos da pilha.
+    printf("Elementos da pilha: ");
+    imprimir(&amp;pilha);
+
+    //POP - Remove e retorna o elemento do topo que foi removido.
+    printf("Removido: %d\n", pop(&amp;pilha));
+
+    //PEEK - Consulta o elemento do topo. Mostra o novo topo.
+    printf("Novo topo: %d\n", peek(&amp;pilha));
+    
+    //SIZE - Retorna a quantidade de elementos atuais.
+    printf("Quantidade atual: %d\n", size(&amp;pilha));
+    
+    //IMPRIMIR - Mostra os elementos da pilha após remoção.
+    printf("Elementos da pilha atual: ");
+    imprimir(&amp;pilha);
+
+    return 0;
+}</code></pre></details>
+
+<p><strong>Objetivo:</strong> praticar LIFO e compreender <code>push()</code>, <code>pop()</code>, <code>peek()</code>, <code>size()</code>, <code>isEmpty()</code> e <code>isFull()</code>, comparando as implementações estática e dinâmica.</p>
+
+<h2>Parte 1 - Entendendo LIFO</h2>
+<p>Considere: <code>push(10)</code> → <code>push(20)</code> → <code>push(30)</code> → <code>push(40)</code>.</p>
+<div class="question-box">
+<label>1. Qual elemento ficará no topo?</label><input type="text" id="p1a"><br><br>
+<label>2. Qual elemento será removido primeiro por <code>pop()</code>?</label><input type="text" id="p1b"><br><br>
+<label>3. Qual será o próximo elemento do topo depois do <code>pop()</code>?</label><input type="text" id="p1c">
+</div>
+
+<h2>Parte 2 - Pilha estática: topo</h2>
+<pre><code class="language-c">pilha->topo = -1;</code></pre>
+<div class="question-box">
+<label>1. Por que o valor inicial de <code>topo</code> é <code>-1</code>?</label><textarea rows="4"></textarea>
+<label>2. Depois de <code>push(10)</code>, qual será o valor de <code>topo</code>?</label><input type="text" id="p2b">
+<label>3. Depois de <code>push(20)</code>, qual será o valor de <code>topo</code>?</label><input type="text" id="p2c">
+<label>4. Depois de <code>push(30)</code>, qual será o valor de <code>topo</code>?</label><input type="text" id="p2d">
+</div>
+
+<h2>Parte 3 - push()</h2>
+<pre><code class="language-c">pilha-&gt;topo++;
+pilha-&gt;dados[pilha-&gt;topo] = valor;</code></pre>
+<div class="question-box">
+<label>1. O que acontece na primeira linha?</label><textarea rows="4"></textarea>
+<label>2. O que acontece na segunda linha?</label><textarea rows="4"></textarea>
+<label>3. Se <code>topo = 1</code> e executarmos <code>push(30)</code>, em qual índice o 30 será inserido?</label><input type="text" id="p3c">
+</div>
+
+<h2>Parte 4 - Pilha cheia e pilha vazia</h2>
+<div class="diagram">Índices válidos: 0 | 1 | 2 | 3 | 4</div>
+<div class="question-box">
+<label>1. Qual valor de <code>topo</code> indica que a pilha está cheia?</label><input type="text" id="p4a">
+<label>2. Qual valor de <code>topo</code> indica que a pilha está vazia?</label><input type="text" id="p4b">
+<label>3. Complete <code>isFull()</code>: <code>return pilha-&gt;topo == ______;</code></label><input type="text" id="p4c">
+<label>4. Complete <code>isEmpty()</code>: <code>return pilha-&gt;topo == ______;</code></label><input type="text" id="p4d">
+</div>
+
+<h2>Parte 5 - Pop - pilha estática</h2>
+<div class="diagram">[10] [20] [30]<br>                     ↑<br>                    topo</div>
+<pre><code class="language-c">int valor = pilha-&gt;dados[pilha-&gt;topo];
+pilha-&gt;topo--;
+return valor;</code></pre>
+<div class="question-box">
+<label>1. Qual valor será armazenado em <code>valor</code>?</label><input type="text" id="p5a">
+<label>2. Depois de <code>pilha-&gt;topo--</code>, qual será o valor de <code>topo</code>?</label><input type="text" id="p5b">
+<label>3. Qual elemento ficará no topo depois do <code>pop()</code>?</label><input type="text" id="p5c">
+<label>4. O comando <code>pop()</code> retorna o elemento removido?</label><input type="text" id="p5d">
+</div>
+
+<h2>Parte 6 - size() - pilha estática</h2>
+<pre><code class="language-c">return pilha-&gt;topo + 1;</code></pre>
+<div class="question-box">
+<label>1. Por que usamos <code>topo + 1</code> para descobrir a quantidade?</label><textarea rows="4"></textarea>
+<label>2. Se <code>topo = 3</code>, qual será o resultado de <code>size()</code>?</label><input type="text" id="p6b">
+<label>3. Se <code>topo = -1</code>, qual será o resultado de <code>size()</code>?</label><input type="text" id="p6c">
+</div>
+
+<h2>Parte 7 - Pilha dinâmica: entendendo os nós</h2>
+<div class="diagram">TOPO<br> ↓<br>                    [30] → [20] → [10] → NULL</div>
+<div class="question-box">
+<label>1. Qual ponteiro aponta para o nó 30?</label><input type="text" id="p7a">
+<label>2. O campo <code>proximo</code> do nó 30 aponta para qual nó?</label><input type="text" id="p7b">
+<label>3. O campo <code>proximo</code> do nó 10 contém qual valor?</label><input type="text" id="p7c">
+</div>
+
+<h2>Parte 8 - Push - pilha dinâmica</h2>
+<pre><code class="language-c">struct No *novo = NULL;
+novo = malloc(sizeof(struct No));
+novo-&gt;dado = valor;
+novo-&gt;proximo = pilha-&gt;topo;
+pilha-&gt;topo = novo;</code></pre>
+<div class="question-box">
+<label>1. O que <code>malloc()</code> faz nesse trecho?</label><textarea rows="4"></textarea>
+<label>2. Para qual nó <code>novo-&gt;proximo</code> passa a apontar?</label><input type="text" id="p8b">
+<label>3. Depois de <code>pilha-&gt;topo = novo</code>, para qual nó <code>topo</code> aponta?</label><input type="text" id="p8c">
+<label>4. Como ficará a pilha depois de <code>push(40)</code>?</label><textarea rows="4" placeholder="Desenhe ou escreva a sequência."></textarea>
+</div>
+
+<h2>Parte 9 - Pop - pilha dinâmica</h2>
+<div class="diagram">topo<br> ↓<br>                    [30] → [20] → [10] → NULL</div>
+<pre><code class="language-c">struct No *remover = pilha-&gt;topo;
+int valor = remover-&gt;dado;
+pilha-&gt;topo = pilha-&gt;topo-&gt;proximo;
+free(remover);
+pilha-&gt;quantidade--;</code></pre>
+<div class="question-box">
+<label>1. <code>remover</code> é uma cópia do nó 30?</label><input type="text" id="p9a">
+<label>2. Para qual nó <code>pilha-&gt;topo</code> passará a apontar?</label><input type="text" id="p9b">
+<label>3. Qual valor será armazenado em <code>valor</code>?</label><input type="text" id="p9c">
+<label>4. Qual é a finalidade de <code>free(remover)</code>?</label><textarea rows="4"></textarea>
+</div>
+
+<h2>Parte 10 - Implementação</h2>
+<ol><li>Na <strong>pilha estática</strong>, insira 10, 20, 30, 40 e 50.</li><li>Verifique se a pilha está cheia usando <code>isFull()</code>.</li><li>Consulte o topo usando <code>peek()</code>.</li><li>Remova dois elementos usando <code>pop()</code>.</li><li>Mostre a quantidade restante usando <code>size()</code>.</li><li>Na <strong>pilha dinâmica</strong>, insira os mesmos cinco valores.</li><li>Mostre a pilha utilizando <code>imprimir()</code>.</li><li>Remova dois elementos usando <code>pop()</code>.</li><li>Mostre novamente a pilha.</li></ol>
+<div class="question-box"><label>Cole abaixo o código que você modificou ou a saída obtida no console:</label><textarea rows="18" placeholder="Cole seu código ou a saída do programa aqui..."></textarea></div>
+
+<button class="btn-print" onclick="prepararImpressao()">Salvar PDF</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+<script>
+const respostas={
+'p1a':['40'],'p1b':['40'],'p1c':['30'],
+'p2b':['0'],'p2c':['1'],'p2d':['2'],'p3c':['2'],
+'p4a':['4'],'p4b':['-1'],'p4c':['MAX - 1','MAX-1'],'p4d':['-1'],
+'p5a':['30'],'p5b':['1'],'p5c':['20'],'p5d':['sim'],
+'p6b':['4'],'p6c':['0'],
+'p7a':['topo'],'p7b':['20'],'p7c':['NULL','null'],
+'p8b':['30','antigo topo'],'p8c':['40','novo'],
+'p9a':['não','nao'],'p9b':['20'],'p9c':['30'],
+'p10a':['vetor'],'p10b':['nós','nos'],'p10c':['dinâmica','dinamica'],'p10d':['estática','estatica'],
+'p13a':['30'],'p13b':['40'],'p13c':['60'],'p13d':['50 20 10','50, 20, 10'],'p13e':['3']};
+Object.keys(respostas).forEach(id=>{const el=document.getElementById(id);if(!el)return;el.addEventListener('input',function(){const v=this.value.trim().toLowerCase().replace(/;$/,'');const ok=respostas[id].some(x=>x.toLowerCase().replace(/;$/,'')===v);this.classList.toggle('is-correct',v!==''&&ok);this.classList.toggle('is-incorrect',v!==''&&!ok);});});
+function prepararImpressao(){document.querySelectorAll('textarea').forEach(t=>{t.style.height='auto';t.style.height=t.scrollHeight+'px';});window.print();}
+document.querySelectorAll('textarea').forEach(t=>t.addEventListener('input',function(){this.style.height='auto';this.style.height=this.scrollHeight+'px';}));
+</script>
+</body>
+</html>
