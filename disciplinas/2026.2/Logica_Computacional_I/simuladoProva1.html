@@ -82,6 +82,20 @@
             margin-bottom: 20px;
             z-index: 100;
         }
+        .campo-nome {
+        margin-top: 20px;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        }
+        .input-nome {
+        flex-grow: 1;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        }
         /* Regras específicas para impressão */
         @media print {
             .no-print {
@@ -102,6 +116,12 @@
                 border: 1px solid #000;
                 background: transparent;
             }
+            .input-nome {
+            border: none;
+            border-bottom: 1px solid #000;
+            border-radius: 0;
+            background: transparent;
+            }
         }
     </style>
 </head>
@@ -121,8 +141,10 @@
             <span>SIMULADO - PROVA 1</span>
             <span>Duração: 2 horas</span>
         </div>
-        <div style="margin-top: 15px; text-align: left;">
-            <strong>Nome do Aluno:</strong> ___________________________________________________________
+    <!-- Caixa de texto para o nome do aluno inserida -->
+        <div class="campo-nome">
+            <label for="nome"><strong>Nome do Aluno:</strong></label>
+            <input type="text" id="nome" class="input-nome" placeholder="Digite seu nome completo">
         </div>
     </div>
 
