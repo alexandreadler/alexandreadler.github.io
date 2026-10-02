@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado - Prova 1- Lógica Computacional I</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .cabecalho {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .cabecalho h1, .cabecalho h2, .cabecalho h3 {
+            margin: 5px 0;
+        }
+        .info-prova {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .questao {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .alternativas label {
+            display: block;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+        .tabela-verdade {
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: #fff;
+        }
+        .tabela-verdade th, .tabela-verdade td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: center;
+        }
+        .tabela-verdade th {
+            background-color: #eee;
+        }
+        .input-tv {
+            width: 40px;
+            text-align: center;
+            font-size: 16px;
+            text-transform: uppercase;
+            padding: 5px;
+        }
+        .btn {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .btn:hover {
+            background-color: #004494;
+        }
+        .controles {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
+            z-index: 100;
+        }
+        /* Regras específicas para impressão */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background-color: white;
+                margin: 0;
+                padding: 0;
+            }
+            .questao {
+                background-color: transparent;
+                border: none;
+                border-bottom: 1px dashed #ccc;
+                page-break-inside: avoid;
+            }
+            .input-tv {
+                border: 1px solid #000;
+                background: transparent;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controles no-print">
+        <button class="btn" onclick="window.print()">🖨️ Imprimir Simulado</button>
+        <button class="btn" onclick="corrigirSimulado()">✅ Corrigir Respostas</button>
+    </div>
+
+    <div class="cabecalho">
+        <div class="info-prova">
+            <span>Disciplina: Lógica Computacional I</span>
+            <span>Professor: Alexandre Freitas</span>
+        </div>
+        <div class="info-prova">
+            <span>SIMULADO - PROVA 1</span>
+            <span>Duração: 2 horas</span>
+        </div>
+        <div style="margin-top: 15px; text-align: left;">
+            <strong>Nome do Aluno:</strong> ___________________________________________________________
+        </div>
+    </div>
+
+    <form id="form-simulado">
+        <!-- Questão 01 -->
+        <div class="questao" id="q1">
+            <p><strong>Questão 01</strong><br>
+            Considere as proposições simples:<br>
+            p: "O servidor está online"<br>
+            q: "O banco de dados responde"<br><br>
+            A tradução para a linguagem simbólica da frase "O servidor não está online e o banco de dados não responde" é:</p>
+            <div class="alternativas">
+                <label><input type="radio" name="q1" value="a"> a) ~p ∧ ~q</label>
+                <label><input type="radio" name="q1" value="b"> b) ~(p ∧ ~q)</label>
+                <label><input type="radio" name="q1" value="c"> c) ~p ∨ q</label>
+                <label><input type="radio" name="q1" value="d"> d) p → ~q</label>
+            </div>
+        </div>
+
+        <!-- Questão 02 -->
+        <div class="questao" id="q2">
+            <p><strong>Questão 02</strong><br>
+            Assinale a alternativa que apresenta uma proposição composta que possui valor lógico VERDADEIRO, sabendo que a proposição p é Verdadeira (V) e a proposição q é Falsa (F):</p>
+            <div class="alternativas">
+                <label><input type="radio" name="q2" value="a"> a) p ∧ q</label>
+                <label><input type="radio" name="q2" value="b"> b) p → q</label>
+                <label><input type="radio" name="q2" value="c"> c) p ↔ q</label>
+                <label><input type="radio" name="q2" value="d"> d) ~p ∨ ~q</label>
+            </div>
+        </div>
+
+        <!-- Questão 03 -->
+        <div class="questao" id="q3">
+            <p><strong>Questão 03</strong><br>
+            Sabendo que o número de linhas de uma tabela-verdade depende diretamente da quantidade de proposições simples que compõem a expressão, analise a fórmula lógica P(a, b, c, d) = (a ∨ b) ↔ (c ∧ d). Quantas linhas possui a tabela-verdade correspondente?</p>
+            <div class="alternativas">
+                <label><input type="radio" name="q3" value="a"> a) 4</label>
+                <label><input type="radio" name="q3" value="b"> b) 8</label>
+                <label><input type="radio" name="q3" value="c"> c) 16</label>
+                <label><input type="radio" name="q3" value="d"> d) 32</label>
+            </div>
+        </div>
+
+        <!-- Questão 04 com Tabela Interativa -->
+        <div class="questao" id="q4">
+            <p><strong>Questão 04</strong><br>
+            Considere a tabela-verdade da proposição composta P(p, q) = (p ↔ q) → ~p. Preencha os valores lógicos na tabela abaixo e assinale a sequência correta da última coluna (de cima para baixo):</p>
+            
+            <table class="tabela-verdade">
+                <tr>
+                    <th>p</th>
+                    <th>q</th>
+                    <th>~p</th>
+                    <th>p ↔ q</th>
+                    <th>(p ↔ q) → ~p</th>
+                </tr>
+                <tr>
+                    <td>V</td>
+                    <td>V</td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td>V</td>
+                    <td>F</td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td>F</td>
+                    <td>V</td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td>F</td>
+                    <td>F</td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                    <td><input type="text" class="input-tv" maxlength="1"></td>
+                </tr>
+            </table>
+
+            <div class="alternativas">
+                <label><input type="radio" name="q4" value="a"> a) F, V, V, V</label>
+                <label><input type="radio" name="q4" value="b"> b) F, V, V, F</label>
+                <label><input type="radio" name="q4" value="c"> c) V, F, F, V</label>
+                <label><input type="radio" name="q4" value="d"> d) V, V, F, F</label>
+            </div>
+        </div>
+
+        <!-- Questão 05 -->
+        <div class="questao" id="q5">
+            <p><strong>Questão 05</strong><br>
+            Sabendo que uma proposição composta pode ser classificada de acordo com os valores lógicos da sua coluna final em uma tabela-verdade e das relações de equivalência entre os operadores lógicos. A fórmula proposicional P(p, q) = (~p ∨ q) ↔ (p → q) é classificada como:</p>
+            <div class="alternativas">
+                <label><input type="radio" name="q5" value="a"> a) Contradição</label>
+                <label><input type="radio" name="q5" value="b"> b) Contingência</label>
+                <label><input type="radio" name="q5" value="c"> c) Tautologia</label>
+                <label><input type="radio" name="q5" value="d"> d) Equivalência Simples</label>
+            </div>
+        </div>
+
+        <!-- Questão 06 -->
+        <div class="questao" id="q6">
+            <p><strong>Questão 06</strong><br>
+            Sabendo que a contrapositiva de uma proposição condicional é obtida invertendo a ordem entre o antecedente e o consequente e aplicando a negação a ambos, determine a contrapositiva logicamente equivalente à proposição: “Se o código for otimizado, o programa executará rapidamente”.</p>
+            <div class="alternativas">
+                <label><input type="radio" name="q6" value="a"> a) Se o programa não executar rapidamente, então o código não foi otimizado.</label>
+                <label><input type="radio" name="q6" value="b"> b) Se o código não for otimizado, então o programa não executará rapidamente.</label>
+                <label><input type="radio" name="q6" value="c"> c) Se o programa executar rapidamente, então o código foi otimizado.</label>
+                <label><input type="radio" name="q6" value="d"> d) O código é otimizado se e somente se o programa executar rapidamente.</label>
+            </div>
+        </div>
+
+        <!-- Questão 07 -->
+        <div class="questao" id="q7">
+            <p><strong>Questão 07</strong><br>
+            Sabendo que duas proposições são logicamente equivalentes quando possuem a mesma tabela-verdade em todas as interpretações, e aplicando as regras das Leis de De Morgan para equivalência, assinale a alternativa que apresenta uma proposição logicamente equivalente à negação de “O sistema é seguro ou a rede é instável”, representada formalmente ~(p ∨ q):</p>
+            <div class="alternativas">
+                <label><input type="radio" name="q7" value="a"> a) O sistema não é seguro ou a rede não é instável (~p ∨ ~q).</label>
+                <label><input type="radio" name="q7" value="b"> b) O sistema não é seguro e a rede não é instável (~ p ∧ ~ q).</label>
+                <label><input type="radio" name="q7" value="c"> c) Se o sistema for seguro, a rede não é instável (p → ~ q).</label>
+                <label><input type="radio" name="q7" value="d"> d) O sistema é seguro e a rede é instável (p ∧ q).</label>
+            </div>
+        </div>
+
+        <!-- Questão 08 -->
+        <div class="questao" id="q8">
+            <p><strong>Questão 08</strong><br>
+            Sabendo que as regras de inferência permitem validar argumentos dedutivos a partir de premissas conhecidas e que algumas regras operam negando o consequente para concluir a negação do antecedente, analise o seguinte argumento:<br><br>
+            Premissa 1: “Se o arquivo for corrompido, o sistema emitirá um alerta.”<br>
+            Premissa 2: “O sistema não emitiu um alerta.”<br>
+            Conclusão: “Logo, o arquivo não foi corrompido.”<br><br>
+            Essa dedução é válida e baseia-se na regra de inferência chamada:</p>
+            <div class="alternativas">
+                <label><input type="radio" name="q8" value="a"> a) Modus Ponens</label>
+                <label><input type="radio" name="q8" value="b"> b) Modus Tollens</label>
+                <label><input type="radio" name="q8" value="c"> c) Silogismo Hipotético</label>
+                <label><input type="radio" name="q8" value="d"> d) Silogismo Disjuntivo</label>
+            </div>
+        </div>
+
+        <!-- Questão 09 -->
+        <div class="questao" id="q9">
+            <p><strong>Questão 09</strong><br>
+            Sabendo que a implicação lógica entre fórmulas proposicionais estabelece uma garantia estrutural onde a verdade de uma premissa assegura necessariamente a verdade da conclusão em todas as interpretações possíveis, analise a relação entre as fórmulas P e Q, dizemos que P ⇒ Q quando:</p>
+            <div class="alternativas">
+                <label><input type="radio" name="q9" value="a"> a) A tabela-verdade de P ∧ Q resulta em todas as linhas Verdadeiras.</label>
+                <label><input type="radio" name="q9" value="b"> b) O condicional P → Q é uma Tautologia.</label>
+                <label><input type="radio" name="q9" value="c"> c) O bicondicional P ↔ Q é uma Contingência.</label>
+                <label><input type="radio" name="q9" value="d"> d) A proposição P é falsa e Q é verdadeira em todas as interpretações.</label>
+            </div>
+        </div>
+
+        <!-- Questão 10 -->
+        <div class="questao" id="q10">
+            <p><strong>Questão 10</strong><br>
+            Sabendo que o Silogismo Disjuntivo é uma regra de inferência válida que permite deduzir uma conclusão quando temos uma proposição disjuntiva (envolvendo o conectivo “ou”) acompanhada da negação de uma das suas alternativas, analise as premissas abaixo:<br><br>
+            P1: "O aluno estuda Lógica ou reprova na matéria."<br>
+            P2: "O aluno não reprovou na matéria."<br><br>
+            Pela aplicação do Silogismo Disjuntivo, conclui-se que:</p>
+            <div class="alternativas">
+                <label><input type="radio" name="q10" value="a"> a) O aluno estuda Lógica.</label>
+                <label><input type="radio" name="q10" value="b"> b) O aluno não estuda Lógica.</label>
+                <label><input type="radio" name="q10" value="c"> c) Se o aluno estuda Lógica, ele reprova.</label>
+                <label><input type="radio" name="q10" value="d"> d) O aluno não estuda Lógica e não reprova.</label>
+            </div>
+        </div>
+
+        <!-- Questão 11 -->
+        <div class="questao" id="q11">
+            <p><strong>Questão 11</strong><br>
+            Sabendo que o Silogismo Hipotético é uma regra de inferência que permite encadear duas proposições condicionais quando o consequente da primeira é o antecedente da segunda, considere as premissas:<br><br>
+            P1: p → q ("Se o usuário logar, ele acessa o painel")<br>
+            P2: q → r ("Se ele acessar o painel, ele visualiza os relatórios")<br><br>
+            Pela regra do Silogismo Hipotético, conclui-se validamente:</p>
+            <div class="alternativas">
+                <label><input type="radio" name="q11" value="a"> a) p ∧ r</label>
+                <label><input type="radio" name="q11" value="b"> b) p → r</label>
+                <label><input type="radio" name="q11" value="c"> c) ~r → p</label>
+                <label><input type="radio" name="q11" value="d"> d) q → p</label>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        // Lógica simples para corrigir as respostas de múltipla escolha se o aluno fizer no ecrã
+        const gabarito = {
+            q1: 'a', q2: 'd', q3: 'c', q4: 'a', q5: 'c',
+            q6: 'a', q7: 'b', q8: 'b', q9: 'b', q10: 'a', q11: 'b'
+        };
+
+        function corrigirSimulado() {
+            let acertos = 0;
+            for (let questao in gabarito) {
+                let selecionada = document.querySelector(`input[name="${questao}"]:checked`);
+                let divQuestao = document.getElementById(questao);
+                
+                // Limpa cores anteriores
+                divQuestao.style.backgroundColor = "#f9f9f9";
+                
+                if (selecionada) {
+                    if (selecionada.value === gabarito[questao]) {
+                        acertos++;
+                        divQuestao.style.backgroundColor = "#d4edda"; // Verde claro para acerto
+                    } else {
+                        divQuestao.style.backgroundColor = "#f8d7da"; // Vermelho claro para erro
+                    }
+                }
+            }
+            alert(`Acertou ${acertos} de 11 questões!`);
+        }
+    </script>
+</body>
+</html>
