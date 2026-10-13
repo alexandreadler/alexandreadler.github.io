@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árvores - Conceitos Iniciais - Exercício de fixação</title>
+    <!-- Carregando Tailwind CSS para estilização responsiva e moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* Estilo base para as opções de resposta */
+        .option-label {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+        }
+
+        /* Hover nas opções não selecionadas */
+        .option-label:hover:not(.correct):not(.incorrect) {
+            border-color: #cbd5e1;
+            background-color: #f1f5f9;
+        }
+
+        /* Estilo quando o input radio está checado (estado padrão antes da verificação) */
+        .option-label:has(input:checked):not(.correct):not(.incorrect) {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Estilos aplicados via JavaScript ao verificar a resposta */
+        .option-label.correct {
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+            color: #166534 !important;
+            pointer-events: none;
+        }
+
+        .option-label.incorrect {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #991b1b !important;
+            pointer-events: none;
+        }
+
+        /* Ocultar input radio padrão mantendo acessibilidade */
+        .radio-input {
+            width: 1.2rem;
+            height: 1.2rem;
+            accent-color: #3b82f6;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        /* SVG Node Styling */
+        .node-circle {
+            fill: #ffffff;
+            stroke: #3b82f6;
+            stroke-width: 3px;
+            filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07));
+        }
+        
+        .node-text {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            fill: #1e293b;
+        }
+
+        .edge-line {
+            stroke: #94a3b8;
+            stroke-width: 3px;
+        }
+
+        /* Estilos para impressão (Salvar PDF) */
+        @media print {
+            body {
+                background-color: #ffffff;
+                padding: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            main {
+                box-shadow: none !important;
+                max-width: 100% !important;
+                border: none !important;
+            }
+            .question-block {
+                page-break-inside: avoid;
+            }
+            .option-label {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen py-8 px-4 sm:px-6">
+
+    <main class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        
+        <!-- Header -->
+        <header class="bg-slate-900 text-white p-6 sm:p-8 text-center relative">
+            <span class="inline-block py-1 px-3 rounded-full bg-blue-500/20 text-blue-300 text-sm font-semibold tracking-wider mb-3">ESTRUTURAS DE DADOS I</span>
+            <h1 class="text-2xl sm:text-3xl font-bold">Exercício de Fixação: Árvores - Conceitos Iniciais</h1>
+            <p class="text-slate-300 mt-2 text-sm sm:text-base">Analise a árvore abaixo e responda às questões.</p>
+            
+            <!-- Botão de Salvar PDF no Header -->
+            <button onclick="window.print()" class="no-print absolute top-6 right-6 bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors flex items-center gap-2 text-sm font-medium border border-white/20">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-40-64a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16h48A8,8,0,0,1,160,152Zm0,32a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16h48A8,8,0,0,1,160,184Z"></path></svg>
+                Salvar PDF
+            </button>
+        </header>
+
+        <!-- Container da Árvore Visual (SVG) -->
+        <div class="p-6 bg-slate-50 border-b border-slate-200 flex justify-center overflow-x-auto">
+            <svg width="400" height="280" viewBox="0 0 400 280" class="min-w-[300px]">
+                <!-- Arestas (Linhas) desenhadas primeiro para ficarem atrás dos nós -->
+                <line x1="200" y1="40" x2="100" y2="130" class="edge-line" />
+                <line x1="200" y1="40" x2="300" y2="130" class="edge-line" />
+                <line x1="100" y1="130" x2="50" y2="220" class="edge-line" />
+                <line x1="100" y1="130" x2="150" y2="220" class="edge-line" />
+                <line x1="300" y1="130" x2="250" y2="220" class="edge-line" />
+                <line x1="300" y1="130" x2="350" y2="220" class="edge-line" />
+
+                <!-- Nós (Círculos e Texto) -->
+                <!-- Nível 1: Raiz -->
+                <circle cx="200" cy="40" r="24" class="node-circle" style="stroke: #f59e0b;" />
+                <text x="200" y="46" text-anchor="middle" class="node-text">A</text>
+
+                <!-- Nível 2 -->
+                <circle cx="100" cy="130" r="24" class="node-circle" />
+                <text x="100" y="136" text-anchor="middle" class="node-text">B</text>
+
+                <circle cx="300" cy="130" r="24" class="node-circle" />
+                <text x="300" y="136" text-anchor="middle" class="node-text">C</text>
+
+                <!-- Nível 3: Folhas -->
+                <circle cx="50" cy="220" r="24" class="node-circle" style="stroke: #22c55e;" />
+                <text x="50" y="226" text-anchor="middle" class="node-text">D</text>
+
+                <circle cx="150" cy="220" r="24" class="node-circle" style="stroke: #22c55e;" />
+                <text x="150" y="226" text-anchor="middle" class="node-text">E</text>
+
+                <circle cx="250" cy="220" r="24" class="node-circle" style="stroke: #22c55e;" />
+                <text x="250" y="226" text-anchor="middle" class="node-text">F</text>
+
+                <circle cx="350" cy="220" r="24" class="node-circle" style="stroke: #22c55e;" />
+                <text x="350" y="226" text-anchor="middle" class="node-text">G</text>
+            </svg>
+        </div>
+
+        <!-- Formulário do Quiz -->
+        <div class="p-6 sm:p-8">
+            <form id="quiz-form" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Coluna Esquerda -->
+                <div class="space-y-8">
+                    <div class="question-block">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-4">1. Qual é a raiz da árvore?</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q1" value="a" class="radio-input">
+                                <span class="font-medium text-slate-700">a) A</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q1" value="b" class="radio-input">
+                                <span class="font-medium text-slate-700">b) B</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q1" value="c" class="radio-input">
+                                <span class="font-medium text-slate-700">c) E</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q1" value="d" class="radio-input">
+                                <span class="font-medium text-slate-700">d) F</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-4">2. Qual é o grau do nó A?</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q2" value="a" class="radio-input">
+                                <span class="font-medium text-slate-700">a) 1</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q2" value="b" class="radio-input">
+                                <span class="font-medium text-slate-700">b) 2</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q2" value="c" class="radio-input">
+                                <span class="font-medium text-slate-700">c) 3</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q2" value="d" class="radio-input">
+                                <span class="font-medium text-slate-700">d) 4</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-4">3. Quais são as folhas?</h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q3" value="a" class="radio-input">
+                                <span class="font-medium text-slate-700">a) A, B e C</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q3" value="b" class="radio-input">
+                                <span class="font-medium text-slate-700">b) D, E, F e G</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q3" value="c" class="radio-input">
+                                <span class="font-medium text-slate-700">c) B, C e D</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q3" value="d" class="radio-input">
+                                <span class="font-medium text-slate-700">d) A e E</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-4">4. Qual o comprimento do caminho A → B → D?</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q4" value="a" class="radio-input">
+                                <span class="font-medium text-slate-700">a) 1 aresta</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q4" value="b" class="radio-input">
+                                <span class="font-medium text-slate-700">b) 2 arestas</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q4" value="c" class="radio-input">
+                                <span class="font-medium text-slate-700">c) 3 arestas</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q4" value="d" class="radio-input">
+                                <span class="font-medium text-slate-700">d) 4 arestas</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita (Novas Questões) -->
+                <div class="space-y-8">
+                    <div class="question-block">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-4">5. Quais nós são irmãos do nó C?</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q5" value="a" class="radio-input">
+                                <span class="font-medium text-slate-700">a) D e E</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q5" value="b" class="radio-input">
+                                <span class="font-medium text-slate-700">b) Apenas B</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q5" value="c" class="radio-input">
+                                <span class="font-medium text-slate-700">c) F e G</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q5" value="d" class="radio-input">
+                                <span class="font-medium text-slate-700">d) Não tem irmãos</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-4">6. Qual é a <span style="color: #02a783;">profundidade do nó E</span> e a <span style="color: #ea580c;">altura da árvore</span>?</h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q6" value="a" class="radio-input">
+                                <span class="font-medium text-slate-700">a) Profundidade 2, Altura 2</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q6" value="b" class="radio-input">
+                                <span class="font-medium text-slate-700">b) Profundidade 3, Altura 3</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q6" value="c" class="radio-input">
+                                <span class="font-medium text-slate-700">c) Profundidade 1, Altura 2</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q6" value="d" class="radio-input">
+                                <span class="font-medium text-slate-700">d) Profundidade 2, Altura 3</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-4">7. Quais são os nós internos desta árvore?</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q7" value="a" class="radio-input">
+                                <span class="font-medium text-slate-700">a) A, B e C</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q7" value="b" class="radio-input">
+                                <span class="font-medium text-slate-700">b) D, E, F e G</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q7" value="c" class="radio-input">
+                                <span class="font-medium text-slate-700">c) Apenas A</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q7" value="d" class="radio-input">
+                                <span class="font-medium text-slate-700">d) Todos os nós</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-4">8. Qual é o grau desta árvore?</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q8" value="a" class="radio-input">
+                                <span class="font-medium text-slate-700">a) 1</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q8" value="b" class="radio-input">
+                                <span class="font-medium text-slate-700">b) 2</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q8" value="c" class="radio-input">
+                                <span class="font-medium text-slate-700">c) 3</span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-xl bg-white">
+                                <input type="radio" name="q8" value="d" class="radio-input">
+                                <span class="font-medium text-slate-700">d) 4</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botões e Resultado (Ocupa as duas colunas em telas grandes) -->
+                <div class="lg:col-span-2 pt-6 border-t border-slate-200">
+                    <div id="result-message" class="hidden mb-6 p-5 rounded-xl font-bold text-center text-lg transition-all shadow-sm">
+                        <!-- Mensagem de resultado aparecerá aqui -->
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 no-print">
+                        <button type="button" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg py-4 px-6 rounded-xl transition-colors shadow-lg hover:shadow-xl active:transform active:scale-[0.99] flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
+                            Verificar Respostas
+                        </button>
+
+                        <button type="button" onclick="window.print()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold text-lg py-4 px-6 rounded-xl transition-colors shadow-lg hover:shadow-xl active:transform active:scale-[0.99] flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-40-64a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16h48A8,8,0,0,1,160,152Zm0,32a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16h48A8,8,0,0,1,160,184Z"></path></svg>
+                            Salvar como PDF
+                        </button>
+                    </div>
+                    
+                    <button type="button" id="retry-btn" class="hidden w-full mt-4 no-print bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold text-lg py-4 px-6 rounded-xl transition-colors">
+                        Tentar Novamente
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Gabarito oficial atualizado para as 8 questões
+            const correctAnswers = {
+                q1: 'a', // a) A
+                q2: 'b', // b) 2
+                q3: 'b', // b) D, E, F e G
+                q4: 'b', // b) 2 arestas
+                q5: 'b', // b) Apenas B
+                q6: 'a', // a) Profundidade 2, Altura 2
+                q7: 'a', // a) A, B e C
+                q8: 'b'  // b) 2
+            };
+
+            const submitBtn = document.getElementById('submit-btn');
+            const retryBtn = document.getElementById('retry-btn');
+            const resultMessage = document.getElementById('result-message');
+            const form = document.getElementById('quiz-form');
+
+            submitBtn.addEventListener('click', () => {
+                let score = 0;
+                const totalQuestions = Object.keys(correctAnswers).length;
+                let answeredCount = 0;
+
+                // Remover classes de verificações anteriores
+                document.querySelectorAll('.option-label').forEach(label => {
+                    label.classList.remove('correct', 'incorrect');
+                });
+
+                // Analisar cada pergunta
+                for (let [questionName, correctAnswer] of Object.entries(correctAnswers)) {
+                    const selectedInput = document.querySelector(`input[name="${questionName}"]:checked`);
+                    const allInputsForQuestion = document.querySelectorAll(`input[name="${questionName}"]`);
+                    
+                    if (selectedInput) {
+                        answeredCount++;
+                        const selectedValue = selectedInput.value;
+                        const parentLabel = selectedInput.closest('.option-label');
+
+                        if (selectedValue === correctAnswer) {
+                            score++;
+                            parentLabel.classList.add('correct');
+                        } else {
+                            parentLabel.classList.add('incorrect');
+                        }
+                    }
+
+                    // Destacar a resposta certa (modo de aprendizado)
+                    allInputsForQuestion.forEach(input => {
+                        if (input.value === correctAnswer) {
+                            input.closest('.option-label').classList.add('correct');
+                        }
+                        // Desabilitar as opções após o envio para evitar mudanças
+                        input.disabled = true;
+                    });
+                }
+
+                resultMessage.style.display = 'block';
+                resultMessage.classList.remove('hidden');
+                
+                if (answeredCount < totalQuestions) {
+                    resultMessage.innerHTML = `⚠️ Você respondeu ${answeredCount} de ${totalQuestions} questões. Selecione todas as opções antes de verificar!`;
+                    resultMessage.className = "mb-6 p-5 rounded-xl font-bold text-center text-lg bg-orange-100 text-orange-800 border border-orange-200 no-print";
+                    // Reabilitar campos pois faltaram respostas
+                    document.querySelectorAll('.radio-input').forEach(input => input.disabled = false);
+                    document.querySelectorAll('.option-label').forEach(label => label.classList.remove('correct', 'incorrect'));
+                    return;
+                }
+
+                // Feedback final
+                if (score === totalQuestions) {
+                    resultMessage.innerHTML = `🎉 Excelente! Você acertou todas as ${totalQuestions} questões!`;
+                    resultMessage.className = "mb-6 p-5 rounded-xl font-bold text-center text-lg bg-green-100 text-green-800 border border-green-200";
+                } else if (score >= totalQuestions / 2) {
+                    resultMessage.innerHTML = `👍 Bom trabalho! Você acertou ${score} de ${totalQuestions} questões.`;
+                    resultMessage.className = "mb-6 p-5 rounded-xl font-bold text-center text-lg bg-blue-100 text-blue-800 border border-blue-200";
+                } else {
+                    resultMessage.innerHTML = `📚 Continue estudando! Você acertou ${score} de ${totalQuestions} questões.`;
+                    resultMessage.className = "mb-6 p-5 rounded-xl font-bold text-center text-lg bg-slate-200 text-slate-800 border border-slate-300";
+                }
+
+                submitBtn.classList.add('hidden');
+                retryBtn.classList.remove('hidden');
+                retryBtn.classList.add('block');
+            });
+
+            // Lógica para tentar novamente
+            retryBtn.addEventListener('click', () => {
+                form.reset();
+                document.querySelectorAll('.option-label').forEach(label => {
+                    label.classList.remove('correct', 'incorrect');
+                });
+                document.querySelectorAll('.radio-input').forEach(input => {
+                    input.disabled = false;
+                });
+                
+                resultMessage.style.display = 'none';
+                submitBtn.classList.remove('hidden');
+                retryBtn.classList.add('hidden');
+                retryBtn.classList.remove('block');
+            });
+        });
+    </script>
+</body>
+</html>
