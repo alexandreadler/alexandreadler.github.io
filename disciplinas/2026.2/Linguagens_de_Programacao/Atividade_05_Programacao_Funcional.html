@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atividade 05 - Laboratório de Programação Funcional</title>
+<style>
+:root{--blue:#3157c8;--ink:#182230;--muted:#596579;--line:#dfe5ee;--pale:#eef3ff;--green:#e8f7ee;--green-ink:#155d3d;--orange:#fff3df;--purple:#f3edff}
+*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:var(--ink);font:16px/1.58 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:linear-gradient(135deg,#203574,#4169df);color:white;padding:35px 18px}.hero,main{max-width:980px;margin:auto}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;font-weight:800;opacity:.88}h1{font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.1;margin:.5rem 0 1rem}header p{max-width:750px;color:#edf1ff;margin:0}
+main{padding:20px 15px 50px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin:16px 0;box-shadow:0 5px 20px #1a2a4a08}h2{font-size:1.3rem;margin:0 0 9px}h3{font-size:1.05rem;margin:8px 0}.muted{color:var(--muted)}.pill{display:inline-block;background:var(--pale);color:#2647a6;border-radius:999px;padding:3px 10px;font-size:.8rem;font-weight:800}
+.grades,.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.grade{background:#f0f3f8;border:1px solid #e0e6ef;padding:7px 11px;border-radius:9px;font-weight:750}.chips .chip{background:var(--green);color:var(--green-ink);padding:6px 10px;border-radius:9px;font-weight:750}
+button{font:inherit;font-weight:750;border:0;border-radius:10px;padding:10px 14px;cursor:pointer;background:var(--blue);color:white}button.secondary{background:#e9eef8;color:#263b75}button.light{background:#f1f4fa;color:#26334b}button:hover{filter:brightness(.97)}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #91adff;outline-offset:2px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.output{background:#f7f9fc;border:1px dashed #cbd5e1;border-radius:12px;padding:14px;margin-top:14px;min-height:48px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:14px}.step{background:#fafbfe;border:1px solid var(--line);border-radius:13px;padding:15px}.step p{font-size:.94rem;color:var(--muted);margin:5px 0 12px}
+.flow{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:15px 0}.flowbox{background:var(--pale);color:#2647a6;border:1px solid #d8e2ff;border-radius:12px;padding:10px 13px;font-weight:750}.arrow{font-weight:900;color:#71809a}
+.question{padding:14px 0;border-top:1px solid var(--line)}.question:first-of-type{border-top:0}label{display:flex;align-items:flex-start;gap:9px;margin:8px 0;cursor:pointer}input[type=radio],input[type=checkbox]{margin-top:5px;accent-color:var(--blue)}.feedback{display:none;padding:10px 12px;border-radius:10px;margin:10px 0}.good{display:block;background:var(--green);color:var(--green-ink)}.try{display:block;background:var(--orange);color:#77400d}
+details{border:1px solid var(--line);border-radius:11px;padding:12px;margin-top:12px}summary{font-weight:800;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin:12px 0}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#f4f6fb}
+textarea{width:100%;font:inherit;padding:10px;border:1px solid #cbd5e1;border-radius:10px;margin-top:7px}.tag{font-size:.83rem;background:#f3edff;color:#5933a0;padding:4px 8px;border-radius:7px;font-weight:750}
+.progress{height:9px;background:#e8edf5;border-radius:99px;overflow:hidden;margin:12px 0}.bar{height:100%;width:0;background:#3157c8;transition:width .25s}.small{font-size:.92rem}.footer{text-align:center;color:var(--muted);font-size:.88rem;padding:14px}
+@media(max-width:700px){.steps{grid-template-columns:1fr}.card{padding:16px}table{font-size:.9rem}th,td{padding:7px}}
+</style>
+</head>
+<body>
+<header><div class="hero">
+<div class="eyebrow">Atividade 05 - Linguagens de Programação · Laboratório interativo</div>
+<h1>Programação funcional</h1>
+<p>Aprenda passo a passo. Primeiro observe os dados; depois experimente operações; por fim, conecte o que viu aos conceitos do paradigma funcional. Não é necessário saber uma linguagem específica para começar.</p>
+<button type="button" onclick="window.print()" style="margin-top:18px;background:#ffffff;color:#243b83">Salvar como PDF</button>
+</div></header>
+<main>
+<section class="card">
+<span class="pill">O problema</span><h2>Contexto: Uma professora quer entender o desempenho da turma</h2>
+<p>Ela possui estas notas e quer responder perguntas simples: quem atingiu 7,0? Qual seria o dobro de cada nota? Qual é a média?</p>
+<div class="grades" id="original"></div>
+<p class="muted small">A coleção de partida será chamada de <code>notas</code>. Vamos preservar seus valores originais durante as demonstrações.</p>
+</section>
+
+<section class="card">
+<h2>1. Três operações, três objetivos</h2>
+<p>Cada operação resolve um tipo diferente de problema.</p>
+<div class="steps">
+<div class="step"><span class="pill">FILTRAR</span><h3>Selecionar</h3><p>Queremos apenas as notas maiores ou iguais a 7,0. A pergunta é: “este valor atende à condição?”</p><button onclick="showFilter()">Experimentar filtro</button></div>
+<div class="step"><span class="pill">MAPEAR</span><h3>Transformar</h3><p>Queremos o dobro de cada nota. A regra será aplicada a cada elemento.</p><button onclick="showMap()">Experimentar mapa</button></div>
+<div class="step"><span class="pill">AGREGAR</span><h3>Resumir</h3><p>Queremos um único valor que resuma a coleção: soma e média.</p><button onclick="showStats()">Calcular soma e média</button></div>
+</div>
+<div class="output" id="output" aria-live="polite">Clique em uma operação para ver o resultado.</div>
+<details><summary>Como lembrar a diferença?</summary>
+<table><tr><th>Operação</th><th>Pergunta</th><th>Resultado</th></tr>
+<tr><td><strong>Filtragem</strong></td><td>Quais elementos atendem a uma condição?</td><td>Uma coleção menor ou igual à original.</td></tr>
+<tr><td><strong>Mapeamento</strong></td><td>O que resulta ao transformar cada elemento?</td><td>Uma coleção com um resultado para cada elemento original.</td></tr>
+<tr><td><strong>Agregação</strong></td><td>Qual é o total ou resumo dos valores?</td><td>Um valor, como soma ou média.</td></tr></table>
+</details>
+</section>
+
+<section class="card">
+<h2>2. Visualizando o caminho dos dados</h2>
+<p>Na programação funcional, podemos pensar em uma coleção passando por uma operação, que produz um resultado.</p>
+<div class="flow"><div class="flowbox">Coleção original<br><small>[4,0; 7,5; 8,0; …]</small></div><span class="arrow">→</span><div class="flowbox">Operação<br><small>filtrar ou transformar</small></div><span class="arrow">→</span><div class="flowbox">Nova coleção<br><small>resultado</small></div></div>
+<p><strong>Importante:</strong> esse é um modelo mental. Nem toda operação funcional retorna uma coleção; uma soma, por exemplo, retorna um único número.</p>
+</section>
+
+<section class="card">
+<h2>3. O que significa "função como argumento"?</h2>
+<p>Uma função de ordem superior é uma função que recebe outra função como argumento ou retorna uma função. Neste exemplo, vamos focar na primeira ideia.</p>
+<div class="flow"><div class="flowbox">Operação <code>map</code></div><span class="arrow">+</span><div class="flowbox">Regra: “multiplicar por 2”</div><span class="arrow">→</span><div class="flowbox">Dobro de cada nota</div></div>
+<p>O <code>map</code> não precisa saber por que escolhemos multiplicar por 2. Ele aplica a regra recebida a cada elemento.</p>
+<div class="output"><strong>Exemplo sem sintaxe de linguagem:</strong><br>Dados: 4,0; 7,5; 8,0<br>Regra fornecida: multiplicar por 2<br>Resultado: 8,0; 15,0; 16,0</div>
+<details><summary>E no caso de filtragem?</summary><p>A operação de filtragem recebe uma regra que responde “sim” ou “não” para cada elemento. Por exemplo: “a nota é maior ou igual a 7,0?”. Se a resposta for sim, o valor é mantido no resultado.</p></details>
+</section>
+
+<section class="card">
+<h2>4. Imutabilidade: preservar os dados originais</h2>
+<p>Imagine que você precise da lista original para calcular a média e, ao mesmo tempo, de uma lista com notas dobradas. Se alterar a lista original, poderá perder os valores necessários para outras análises.</p>
+<div class="steps">
+<div class="step"><span class="tag">Antes</span><h3>Notas originais</h3><div class="chips"><span class="chip">4,0</span><span class="chip">7,5</span><span class="chip">8,0</span></div></div>
+<div class="step"><span class="tag">Transformação</span><h3>Aplicar a regra</h3><p>Multiplicar cada nota por 2.</p></div>
+<div class="step"><span class="tag">Depois</span><h3>Dois conjuntos de dados</h3><p>Os valores originais continuam disponíveis; os dobrados formam um resultado separado.</p></div>
+</div>
+<p><strong>Imutabilidade</strong> é a ideia de não alterar um dado depois de criado. Em uma abordagem funcional, preferimos produzir novos resultados a modificar os dados de partida.</p>
+</section>
+
+<section class="card">
+<h2>5. Funções puras: mesma entrada, mesmo resultado</h2>
+<p>Considere a função <strong>dobro</strong>, que recebe um número e retorna o número multiplicado por 2.</p>
+<div class="flow"><div class="flowbox">Entrada: 8</div><span class="arrow">→</span><div class="flowbox">dobro</div><span class="arrow">→</span><div class="flowbox">Saída: 16</div></div>
+<p>Se chamarmos a função novamente com a entrada 8, o resultado será 16 outra vez. A função não precisa ler ou alterar uma variável externa.</p>
+<p>Chamamos essa função de <strong>pura</strong> quando, além de retornar sempre o mesmo resultado para a mesma entrada, ela não produz efeitos colaterais observáveis.</p>
+<details><summary>Qual seria um exemplo de efeito colateral?</summary><p>Uma função que, além de calcular, altera uma variável global, grava um arquivo ou exibe uma mensagem na tela produz um efeito além de simplesmente retornar um valor. A entrada/saída é útil, mas é diferente de uma função pura.</p></details>
+</section>
+
+<section class="card">
+<h2>6. Veja os mesmos conceitos em linguagens diferentes</h2>
+<p>As ideias da programação funcional podem aparecer em linguagens com sintaxes distintas. Compare os exemplos: </p>
+<div class="question">
+<span class="pill">Python</span><h3>Filtragem e mapeamento</h3>
+<pre style="overflow:auto;background:#182230;color:#f2f5fb;padding:16px;border-radius:12px;font:14px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace"><code>notas = [4.0, 7.5, 8.0, 5.5, 9.0, 6.0, 3.5]
+
+aprovacao = list(filter(lambda n: n >= 7.0, notas))
+dobradas = list(map(lambda n: n * 2, notas))
+
+print(aprovacao)  #[7.5, 8.0, 9.0]
+print(dobradas)   #[8.0, 15.0, 16.0, 11.0, 18.0, 12.0, 7.0]</code></pre>
+<p class="small"><strong>Como ler:</strong> <code>filter</code> recebe a condição <code>n &gt;= 7.0</code>. <code>map</code> recebe a transformação <code>n * 2</code>. Em ambos, a regra é passada como argumento.</p>
+<details><summary>Existe uma forma mais legível em Python?</summary>
+<pre style="overflow:auto;background:#182230;color:#f2f5fb;padding:14px;border-radius:10px"><code>aprovacao = [n for n in notas if n >= 7.0]
+dobradas = [n * 2 for n in notas]</code></pre>
+<p>Sim. As compreensões de lista são uma forma comum e clara de expressar essas operações em Python. Elas não alteram a lista original neste exemplo.</p>
+</details>
+</div>
+<div class="question">
+<span class="pill">Haskell</span><h3>Filtragem e mapeamento</h3>
+<pre style="overflow:auto;background:#182230;color:#f2f5fb;padding:16px;border-radius:12px;font:14px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace"><code>notas = [4.0, 7.5, 8.0, 5.5, 9.0, 6.0, 3.5]
+
+aprovacao = filter (\\n -> n >= 7.0) notas
+dobradas = map (\\n -> n * 2) notas
+
+main = do
+  print aprovacao
+  print dobradas</code></pre>
+<p class="small"><strong>Como ler:</strong> <code>\\n -&gt; n * 2</code> descreve uma função anônima: recebe um valor chamado <code>n</code> e retorna o dobro. Em Haskell, listas e expressões funcionais são parte central da linguagem.</p>
+</div>
+<div class="question">
+<span class="pill">Pseudocódigo</span><h3>A ideia sem depender da sintaxe</h3>
+<pre style="overflow:auto;background:#182230;color:#f2f5fb;padding:16px;border-radius:12px;font:14px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace"><code>aprovacao ← FILTRAR(notas, nota ≥ 7,0)
+dobradas  ← MAPEAR(notas, nota × 2)
+total     ← SOMAR(notas)
+media     ← total / quantidade(notas)</code></pre>
+<p class="small">O pseudocódigo destaca o raciocínio. A linguagem escolhida determina a sintaxe concreta.</p>
+</div>
+<details><summary>O que os exemplos têm em comum?</summary>
+<ul>
+<li>Filtragem seleciona elementos conforme uma condição.</li>
+<li>Mapeamento aplica uma transformação a cada elemento.</li>
+<li>A regra é fornecida à operação como uma função ou expressão funcional.</li>
+<li>Os exemplos criam resultados separados e preservam a coleção original.</li>
+</ul>
+</details>
+</section>
+
+<section class="card">
+<h2>7. Explore uma função pura com código</h2>
+<p>Compare a regra matemática com sua expressão em linguagens diferentes.</p>
+<div class="steps">
+<div class="step"><span class="pill">Ideia</span><h3>Dobro de um número</h3><p>Entrada: 8. Regra: multiplicar por 2. Saída: 16.</p></div>
+<div class="step"><span class="pill">Python</span><pre style="white-space:pre-wrap"><code>def dobro(n):
+    return n * 2</code></pre></div>
+<div class="step"><span class="pill">Haskell</span><pre style="white-space:pre-wrap"><code>dobro n = n * 2</code></pre></div>
+</div>
+<p>Essas funções são puras nos exemplos apresentados: não alteram dados externos e retornam o mesmo resultado para a mesma entrada.</p>
+</section>
+
+<section class="card">
+<h2>8. Teste o que aprendeu</h2>
+<p>Marque uma alternativa em cada questão e clique em “Corrigir”.</p>
+<div class="progress"><div class="bar" id="quizBar"></div></div><p class="muted small" id="progressText">0 de 4 respondidas</p>
+<div class="question"><strong>1. Para selecionar apenas notas ≥ 7,0, usamos a ideia de…</strong>
+<label><input type="radio" name="q1" value="a"> mapeamento</label><label><input type="radio" name="q1" value="b"> filtragem</label><label><input type="radio" name="q1" value="c"> composição</label></div>
+<div class="question"><strong>2. Para multiplicar cada nota por 2, usamos a ideia de…</strong>
+<label><input type="radio" name="q2" value="a"> mapeamento</label><label><input type="radio" name="q2" value="b"> filtragem</label><label><input type="radio" name="q2" value="c"> entrada/saída</label></div>
+<div class="question"><strong>3. Uma função pura…</strong>
+<label><input type="radio" name="q3" value="a"> sempre altera a coleção original</label><label><input type="radio" name="q3" value="b"> retorna resultados aleatórios</label><label><input type="radio" name="q3" value="c"> retorna o mesmo resultado para a mesma entrada e não causa efeitos colaterais</label></div>
+<div class="question"><strong>4. Uma função de ordem superior pode…</strong>
+<label><input type="radio" name="q4" value="a"> receber outra função como argumento</label><label><input type="radio" name="q4" value="b"> trabalhar apenas com números inteiros</label><label><input type="radio" name="q4" value="c"> impedir qualquer transformação de dados</label></div>
+<button onclick="checkQuiz()">Corrigir respostas</button> <button class="secondary" onclick="resetQuiz()">Tentar novamente</button>
+<div id="quizFeedback" class="feedback" aria-live="polite"></div>
+</section>
+
+<section class="card">
+<h2>9. Atividade</h2>
+<p>Explique com suas palavras. O objetivo é mostrar que você entendeu a ideia, não decorar uma sintaxe.</p>
+<div class="question"><strong>A. Qual é a diferença entre filtrar e mapear?</strong><textarea id="ansA" rows="2" placeholder="Filtrar serve para… Mapear serve para…"></textarea></div>
+<div class="question"><strong>B. Por que é útil preservar a coleção original?</strong><textarea id="ansB" rows="2" placeholder="Preservar os dados ajuda porque…"></textarea></div>
+<div class="question"><strong>C. Dê um exemplo de outra situação em que você usaria filtragem ou mapeamento.</strong><textarea id="ansC" rows="2" placeholder="Por exemplo, em uma lista de…"></textarea></div>
+<button onclick="showGuidance()">Ver dicas para revisar minhas respostas</button>
+<div id="guidance" class="feedback"></div>
+</section>
+
+<section class="card">
+<h2>10. Resumo para guardar</h2>
+<table><tr><th>Conceito</th><th>Em linguagem simples</th><th>Exemplo na atividade</th></tr>
+<tr><td><strong>Filtragem</strong></td><td>Selecionar os elementos que atendem a uma condição.</td><td>Notas ≥ 7,0.</td></tr>
+<tr><td><strong>Mapeamento</strong></td><td>Aplicar uma transformação a cada elemento.</td><td>Dobrar cada nota.</td></tr>
+<tr><td><strong>Função pura</strong></td><td>Mesma entrada, mesmo resultado, sem efeitos colaterais.</td><td>Dobro de 8 é sempre 16.</td></tr>
+<tr><td><strong>Imutabilidade</strong></td><td>Preservar os dados originais e produzir novos resultados.</td><td>Manter as notas originais ao gerar a lista dobrada.</td></tr>
+<tr><td><strong>Função de ordem superior</strong></td><td>Recebe uma função como argumento ou retorna uma função.</td><td>Uma operação que recebe a regra de filtragem ou transformação.</td></tr></table>
+<p class="muted small">Observação: essas ideias aparecem em muitas linguagens, mas a sintaxe e o grau de suporte à imutabilidade variam. A programação funcional não é apenas “usar map e filter”; envolve também como organizamos as computações e tratamos os efeitos.</p>
+</section>
+<div class="footer">Material didático interativo · Linguagens de Programação</div>
+</main>
+<script>
+const notas=[4,7.5,8,5.5,9,6,3.5], fmt=n=>n.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:2});
+document.getElementById('original').innerHTML=notas.map(n=>`<span class="grade">${fmt(n)}</span>`).join('');
+function chips(a){return `<div class="chips">${a.map(n=>`<span class="chip">${fmt(n)}</span>`).join('')}</div>`}
+function showFilter(){let r=notas.filter(n=>n>=7);document.getElementById('output').innerHTML=`<strong>Filtragem — notas maiores ou iguais a 7,0</strong><p>A condição é <code>nota ≥ 7,0</code>. Mantemos apenas os valores que satisfazem essa condição.</p>${chips(r)}<p class="muted">A coleção original não foi alterada.</p>`}
+function showMap(){let r=notas.map(n=>n*2);document.getElementById('output').innerHTML=`<strong>Mapeamento — dobrar cada nota</strong><p>A mesma regra, <code>nota × 2</code>, é aplicada a cada elemento.</p>${chips(r)}<p class="muted">Cada nota de entrada gera um valor no resultado.</p>`}
+function showStats(){let total=notas.reduce((a,n)=>a+n,0);document.getElementById('output').innerHTML=`<strong>Soma e média</strong><p>Soma: <b>${fmt(total)}</b></p><p>Quantidade de notas: <b>${notas.length}</b></p><p>Média = soma ÷ quantidade = <b>${fmt(total/notas.length)}</b>.</p><p class="muted">Para uma soma simples, muitas linguagens oferecem uma operação pronta. O importante aqui é compreender o resultado agregado.</p>`}
+const correct={q1:'b',q2:'a',q3:'c',q4:'a'};
+function updateProgress(){let count=Object.keys(correct).filter(q=>document.querySelector(`input[name="${q}"]:checked`)).length;document.getElementById('quizBar').style.width=(count/4*100)+'%';document.getElementById('progressText').textContent=`${count} de 4 respondidas`}
+document.querySelectorAll('input[type=radio]').forEach(x=>x.addEventListener('change',updateProgress));
+function checkQuiz(){let score=0;Object.entries(correct).forEach(([q,a])=>{let c=document.querySelector(`input[name="${q}"]:checked`);if(c&&c.value===a)score++});let el=document.getElementById('quizFeedback');el.className='feedback '+(score===4?'good':'try');el.textContent=`Resultado: ${score}/4. `+(score===4?'Excelente! Você reconheceu os conceitos centrais.':'Revise o resumo e tente novamente. Lembre-se: filtrar seleciona; mapear transforma; função pura evita efeitos colaterais.')}
+function resetQuiz(){document.querySelectorAll('input[name^="q"]').forEach(x=>x.checked=false);document.getElementById('quizFeedback').className='feedback';updateProgress()}
+function showGuidance(){let vals=['ansA','ansB','ansC'].map(id=>document.getElementById(id).value.trim());let filled=vals.filter(x=>x.length>5).length;let el=document.getElementById('guidance');el.className='feedback '+(filled===3?'good':'try');el.textContent=filled===3?'Você respondeu às três perguntas. Revise se explicou que filtrar seleciona, mapear transforma e preservar dados evita alterações indesejadas.':'Você preencheu '+filled+' de 3 respostas. Tente responder todas. Dica: use os exemplos das notas para explicar cada conceito com suas palavras.'}
+</script>
+</body></html>
