@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercício de Fixação: Árvores Binárias de Busca</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .option-label {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+        }
+
+        .option-label:hover:not(.correct):not(.incorrect) {
+            border-color: #cbd5e1;
+            background-color: #f8fafc;
+        }
+
+        .option-label:has(input:checked):not(.correct):not(.incorrect) {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .option-label.correct {
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+            color: #166534 !important;
+            pointer-events: none;
+        }
+
+        .option-label.incorrect {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #991b1b !important;
+            pointer-events: none;
+        }
+
+        .radio-input {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: #3b82f6;
+            margin-right: 12px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .node-circle {
+            fill: #ffffff;
+            stroke-width: 3px;
+            filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07));
+        }
+        
+        .node-text {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            fill: #1e293b;
+        }
+
+        .edge-line {
+            stroke: #94a3b8;
+            stroke-width: 2.5px;
+        }
+
+        .print-circle {
+            display: none;
+        }
+
+        @media print {
+            body {
+                background-color: #ffffff;
+                padding: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            main {
+                box-shadow: none !important;
+                border: none !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .question-block {
+                break-inside: avoid;
+                margin-bottom: 24px;
+                padding: 0 !important;
+                background: transparent !important;
+                border: none !important;
+            }
+            .option-label {
+                break-inside: avoid;
+                border: none !important;
+                padding: 6px 0 !important;
+                background: transparent !important;
+            }
+            .radio-input {
+                display: none !important;
+            }
+            .print-circle {
+                display: inline-block !important;
+                width: 16px;
+                height: 16px;
+                border: 2px solid #64748b;
+                border-radius: 50%;
+                margin-right: 12px;
+                vertical-align: middle;
+            }
+            header {
+                background: transparent !important;
+                color: #000 !important;
+                padding: 0 0 20px 0 !important;
+                border-bottom: 2px solid #e2e8f0;
+                margin-bottom: 24px;
+            }
+            header span, header p { color: #475569 !important; }
+            .svg-container {
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                padding: 10px 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen py-8 px-4 sm:px-6">
+
+    <main class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+        
+        <!-- Cabeçalho -->
+        <header class="bg-slate-800 text-white p-6 sm:p-10 text-center relative">
+            <span class="inline-block py-1 px-3 rounded-full bg-blue-500/20 text-blue-300 text-sm font-semibold tracking-wider mb-4">ESTRUTURAS DE DADOS I</span>
+            <h1 class="text-2xl sm:text-4xl font-bold mb-2">Exercício de Fixação: Árvores Binárias de Busca (ABB)</h1>
+            <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">Pratique os conceitos de ordenação, busca, inserção e remoção em Árvores Binárias de Busca.</p>
+            
+            <button onclick="window.print()" class="no-print absolute top-6 right-6 bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-colors flex items-center gap-2 text-sm font-medium border border-white/20">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-40-64a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16h48A8,8,0,0,1,160,152Zm0,32a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16h48A8,8,0,0,1,160,184Z"></path></svg>
+                <span class="hidden sm:inline">Salvar PDF</span>
+            </button>
+        </header>
+
+        <div class="p-6 sm:p-10">
+            <form id="quiz-form">
+
+                <div class="space-y-6 mb-12">
+                    
+                    <!-- Questão 1 -->
+                    <div class="question-block bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-lg font-semibold mb-2">1. Regra Fundamental da Árvore Binária de Busca</h3>
+                        <p class="text-slate-600 text-sm mb-4">Qual das opções a seguir define corretamente a propriedade principal que toda Árvore Binária de Busca deve respeitar para qualquer nó N?</p>
+                        <div class="space-y-3">
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q1" value="a" class="radio-input"> a) Todos os nós da subárvore esquerda de N devem ter chaves menores que N, e todos os nós da subárvore direita devem ter chaves maiores que N.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q1" value="b" class="radio-input"> b) A subárvore esquerda precisa ter exatamente a mesma quantidade de nós que a subárvore direita.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q1" value="c" class="radio-input"> c) O nó filho esquerdo é sempre maior que o pai, enquanto o nó filho direito é sempre menor.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q1" value="d" class="radio-input"> d) Chaves pares devem ser obrigatoriamente inseridas no lado esquerdo e chaves ímpares no lado direito.</label>
+                        </div>
+                    </div>
+
+                    <!-- Questão 2 -->
+                    <div class="question-block bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-lg font-semibold mb-2">2. Inserção em Árvore Vazia</h3>
+                        <p class="text-slate-600 text-sm mb-4">Ao realizar a inserção de uma nova chave em uma Árvore Binária de Busca que se encontra completamente vazia (<code class="bg-slate-200 px-1.5 py-0.5 rounded text-xs font-mono">raiz == NULL</code>), qual procedimento deve ser adotado?</p>
+                        <div class="space-y-3">
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q2" value="a" class="radio-input"> a) O elemento não pode ser inserido até que a estrutura inicial de níveis seja alocada.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q2" value="b" class="radio-input"> b) O nó é inserido como filho esquerdo de um nó auxiliar nulo.</label>
+                            <label class="option-label flex items-start gap-3 p-4 rounded-lg bg-white w-full cursor-pointer">
+                            <!-- Elementos de seleção fixados perfeitamente à esquerda -->
+                            <div class="flex items-center gap-2 shrink-0 mt-0.5">
+                                <span class="print-circle"></span>
+                                <input type="radio" name="q2" value="c" class="radio-input h-4 w-4">
+                            </div>
+
+                            <!-- Texto alinhado à esquerda que começa logo após o radio -->
+                            <span class="text-left flex-1 text-slate-800">
+                                c) Cria-se um novo nó com a chave e faz-se o ponteiro da raiz apontar diretamente para ele (<code class="bg-slate-100 px-1 py-0.5 rounded text-xs">raiz = novo</code>).
+                            </span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q2" value="d" class="radio-input"> d) Deve-se obrigatoriamente inserir dois elementos simultaneamente para manter o equilíbrio da raiz.</label>
+                        </div>
+                    </div>
+
+                    <!-- Questão 3 -->
+                    <div class="question-block bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-lg font-semibold mb-2">3. Influência da Ordem de Inserção</h3>
+                        <p class="text-slate-600 text-sm mb-4">Se inserirmos os mesmos 12 valores em uma Árvore Binária de Busca, porém em ordens totalmente opostas (por exemplo, na ordem original e depois na ordem inversa), o que ocorre com o formato final da árvore?</p>
+                        <div class="space-y-3">
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q3" value="a" class="radio-input"> a) A estrutura gerada será exatamente idêntica nas duas tentativas.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q3" value="b" class="radio-input"> b) A estrutura resultante é diferente, pois a ordem de inserção determina qual chave será a raiz e a posição dos descendentes.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q3" value="c" class="radio-input"> c) A inserção na ordem inversa fará com que a árvore se torne automaticamente balanceada.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q3" value="d" class="radio-input"> d) O compilador rejeitará a ordem inversa por violar as regras de busca.</label>
+                        </div>
+                    </div>
+
+                    <!-- Questão 4 com Figura da Busca de 45 -->
+                    <div class="question-block bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-lg font-semibold mb-2">4. Algoritmo de Busca de Chave</h3>
+                        <p class="text-slate-600 text-sm mb-4">Observe a Árvore Binária de Busca a seguir. Se executarmos o algoritmo para buscar o valor <strong>45</strong>, qual será o caminho exato de nós visitados desde a raiz até encontrá-lo?</p>
+                        
+                        <div class="svg-container bg-white border border-slate-200 rounded-lg p-4 mb-4 flex justify-center overflow-x-auto">
+                            <svg width="360" height="220" viewBox="0 0 360 200">
+                                <!-- Arestas -->
+                                <line x1="180" y1="30" x2="100" y2="80" class="edge-line" />
+                                <line x1="180" y1="30" x2="260" y2="80" class="edge-line" />
+                                <line x1="100" y1="80" x2="60" y2="140" class="edge-line" />
+                                <line x1="100" y1="80" x2="140" y2="140" class="edge-line" />
+                                <line x1="140" y1="140" x2="160" y2="185" class="edge-line" />
+
+                                <!-- Nós -->
+                                <circle cx="180" cy="30" r="18" class="node-circle" style="stroke: #3b82f6;" />
+                                <text x="180" y="35" text-anchor="middle" class="node-text">50</text>
+
+                                <circle cx="100" cy="80" r="18" class="node-circle" style="stroke: #3b82f6;" />
+                                <text x="100" y="85" text-anchor="middle" class="node-text">30</text>
+
+                                <circle cx="260" cy="80" r="18" class="node-circle" style="stroke: #94a3b8;" />
+                                <text x="260" y="85" text-anchor="middle" class="node-text">70</text>
+
+                                <circle cx="60" cy="140" r="18" class="node-circle" style="stroke: #94a3b8;" />
+                                <text x="60" y="145" text-anchor="middle" class="node-text">20</text>
+
+                                <circle cx="140" cy="140" r="18" class="node-circle" style="stroke: #3b82f6;" />
+                                <text x="140" y="145" text-anchor="middle" class="node-text">40</text>
+
+                                <circle cx="160" cy="185" r="18" class="node-circle" style="stroke: #ef4444; fill: #fef2f2;" />
+                                <text x="160" y="190" text-anchor="middle" class="node-text" style="fill: #991b1b;">45</text>
+                            </svg>
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q4" value="a" class="radio-input"> a) 50 → 70 → 40 → 45</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q4" value="b" class="radio-input"> b) 50 → 30 → 40 → 45</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q4" value="c" class="radio-input"> c) 30 → 40 → 45</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q4" value="d" class="radio-input"> d) 50 → 30 → 20 → 40 → 45</label>
+                        </div>
+                    </div>
+
+                    <!-- Questão 5 -->
+                    <div class="question-block bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-lg font-semibold mb-2">5. Remoção de Nó Folha</h3>
+                        <p class="text-slate-600 text-sm mb-4">Ao efetuar a operação de remoção sobre um nó que <strong>não possui nenhum filho</strong> (nó folha, grau zero), qual é o procedimento correto?</p>
+                        <div class="space-y-3">
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q5" value="a" class="radio-input"> a) Promover a raiz da subárvore para o seu lugar.</label>
+                            <label class="option-label flex items-start gap-3 p-4 rounded-lg bg-white w-full cursor-pointer">
+                            <!-- Elementos de seleção fixados perfeitamente à esquerda -->
+                            <div class="flex items-center gap-2 shrink-0 mt-0.5">
+                                <span class="print-circle"></span>
+                                <input type="radio" name="q5" value="b" class="radio-input h-4 w-4">
+                            </div>
+
+                            <!-- Texto alinhado à esquerda que começa logo após o radio -->
+                            <span class="text-left flex-1 text-slate-800">
+                                b) Ajustar o ponteiro correspondente do nó pai para <code class="bg-slate-100 px-1 py-0.5 rounded text-xs">NULL</code> e liberar a memória do nó imediatamente.
+                            </span>
+                            </label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q5" value="c" class="radio-input"> c) Encontrar o menor elemento da subárvore direita para substituí-lo.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q5" value="d" class="radio-input"> d) Transformar o nó em uma árvore vazia preservando seus ponteiros anteriores.</label>
+                        </div>
+                    </div>
+
+                    <!-- Questão 6 -->
+                    <div class="question-block bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-lg font-semibold mb-2">6. Remoção de Nó com Apenas Um Filho</h3>
+                        <p class="text-slate-600 text-sm mb-4">Deseja-se remover um nó N que possui <strong>exatamente um único filho</strong> (seja ele esquerdo ou direito). Como deve ser feita a reorganização dos ponteiros?</p>
+                        <div class="space-y-3">
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q6" value="a" class="radio-input"> a) O nó pai de N deve passar a apontar diretamente para o único filho de N, ignorando o nó N na cadeia.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q6" value="b" class="radio-input"> b) O único filho de N deve ser removido primeiro antes que N possa ser apagado.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q6" value="c" class="radio-input"> c) O nó N deve trocar de posição com a raiz principal da árvore.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q6" value="d" class="radio-input"> d) É necessário rotacionar toda a subárvore atingida para a esquerda.</label>
+                        </div>
+                    </div>
+
+                    <!-- Questão 7 -->
+                    <div class="question-block bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-lg font-semibold mb-2">7. Remoção de Nó com Dois Filhos</h3>
+                        <p class="text-slate-600 text-sm mb-4">De acordo com a estratégia apresentada na disciplina para remover um nó com <strong>dois filhos</strong>, qual valor deve ser encontrado para substituir o nó removido e garantir a propriedade da ABB?</p>
+                        <div class="space-y-3">
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q7" value="a" class="radio-input"> a) O menor valor presente na subárvore esquerda.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q7" value="b" class="radio-input"> b) O maior valor da subárvore esquerda (ou alternativamente, o menor valor da subárvore direita).</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q7" value="c" class="radio-input"> c) O valor médio da soma de todas as folhas do nível inferior.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q7" value="d" class="radio-input"> d) O valor contido no nó pai do nó que está sendo removido.</label>
+                        </div>
+                    </div>
+
+                    <!-- Questão 8 com Diagrama de Remoção -->
+                    <div class="question-block bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-lg font-semibold mb-2">8. Análise de Remoção Completa</h3>
+                        <p class="text-slate-600 text-sm mb-4">Considere a remoção do nó <strong>40</strong> (que possui dois filhos: 10 e 45). Seguindo a regra descrita na disciplina, encontramos o maior valor da sua subárvore esquerda para substituição. Observe o diagrama:</p>
+                        
+                        <div class="svg-container bg-white border border-slate-200 rounded-lg p-4 mb-4 flex justify-center overflow-x-auto">
+                            <svg width="340" height="210" viewBox="0 0 340 210">
+                                <line x1="170" y1="25" x2="100" y2="75" class="edge-line" />
+                                <line x1="170" y1="25" x2="240" y2="75" class="edge-line" />
+                                <line x1="100" y1="75" x2="60" y2="125" class="edge-line" />
+                                <line x1="100" y1="75" x2="140" y2="125" class="edge-line" />
+                                <line x1="60" y1="125" x2="80" y2="175" class="edge-line" />
+
+                                <circle cx="170" cy="25" r="18" class="node-circle" style="stroke: #94a3b8;" />
+                                <text x="170" y="30" text-anchor="middle" class="node-text">50</text>
+
+                                <circle cx="100" cy="75" r="18" class="node-circle" style="stroke: #ef4444; fill: #fef2f2;" />
+                                <text x="100" y="80" text-anchor="middle" class="node-text" style="fill: #991b1b;">40</text>
+
+                                <circle cx="240" cy="75" r="18" class="node-circle" style="stroke: #94a3b8;" />
+                                <text x="240" y="80" text-anchor="middle" class="node-text">99</text>
+
+                                <circle cx="60" cy="125" r="18" class="node-circle" style="stroke: #3b82f6;" />
+                                <text x="60" y="130" text-anchor="middle" class="node-text">10</text>
+
+                                <circle cx="140" cy="125" r="18" class="node-circle" style="stroke: #94a3b8;" />
+                                <text x="140" y="130" text-anchor="middle" class="node-text">45</text>
+
+                                <circle cx="80" cy="175" r="18" class="node-circle" style="stroke: #22c55e; fill: #f0fdf4;" />
+                                <text x="80" y="180" text-anchor="middle" class="node-text" style="fill: #166534;">35</text>
+                            </svg>
+                        </div>
+
+                        <p class="text-slate-700 font-medium mb-3">Qual chave assumirá a posição ocupada anteriormente pelo nó 40 após a conclusão da remoção?</p>
+                        <div class="space-y-3">
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q8" value="a" class="radio-input"> a) O nó 10.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q8" value="b" class="radio-input"> b) O nó 45.</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q8" value="c" class="radio-input"> c) O nó 35 (que é o maior valor presente na subárvore esquerda de 40).</label>
+                            <label class="option-label flex items-center p-4 rounded-lg bg-white"><span class="print-circle"></span><input type="radio" name="q8" value="d" class="radio-input"> d) O nó 99.</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Botões e Mensagem de Resultado -->
+                <div class="pt-6 border-t border-slate-200 no-print">
+                    <div id="result-message" class="hidden mb-6 p-5 rounded-xl font-bold text-center text-lg transition-all shadow-sm"></div>
+                    
+                    <button type="button" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xl py-4 px-6 rounded-xl transition-all shadow-md active:scale-95 flex justify-center items-center gap-2">
+                        Verificar Respostas
+                    </button>
+                    
+                    <button type="button" id="retry-btn" class="hidden w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold text-lg py-4 px-6 rounded-xl transition-all">
+                        Tentar Novamente
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const correctAnswers = {
+                q1: 'a', // Regra da subárvore esquerda menor e direita maior
+                q2: 'c', // raiz = novo
+                q3: 'b', // Ordem influencia no formato da árvore
+                q4: 'b', // 50 -> 30 -> 40 -> 45
+                q5: 'b', // Liberar nó folha e ajustar pai para NULL
+                q6: 'a', // Pai aponta diretamente para o único filho
+                q7: 'b', // Maior da subárvore esquerda
+                q8: 'c'  // O nó 35 assume a posição do 40
+            };
+
+            const submitBtn = document.getElementById('submit-btn');
+            const retryBtn = document.getElementById('retry-btn');
+            const resultMessage = document.getElementById('result-message');
+            const form = document.getElementById('quiz-form');
+
+            submitBtn.addEventListener('click', () => {
+                let score = 0;
+                const totalQuestions = Object.keys(correctAnswers).length;
+                let answeredCount = 0;
+
+                document.querySelectorAll('.option-label').forEach(label => {
+                    label.classList.remove('correct', 'incorrect');
+                });
+
+                for (let [questionName, correctAnswer] of Object.entries(correctAnswers)) {
+                    const selectedInput = document.querySelector(`input[name="${questionName}"]:checked`);
+                    const allInputsForQuestion = document.querySelectorAll(`input[name="${questionName}"]`);
+                    
+                    if (selectedInput) {
+                        answeredCount++;
+                        const selectedValue = selectedInput.value;
+                        const parentLabel = selectedInput.closest('.option-label');
+
+                        if (selectedValue === correctAnswer) {
+                            score++;
+                            parentLabel.classList.add('correct');
+                        } else {
+                            parentLabel.classList.add('incorrect');
+                        }
+                    }
+
+                    allInputsForQuestion.forEach(input => {
+                        if (input.value === correctAnswer && answeredCount === totalQuestions) {
+                            input.closest('.option-label').classList.add('correct');
+                        }
+                        if(answeredCount === totalQuestions) input.disabled = true;
+                    });
+                }
+
+                resultMessage.classList.remove('hidden');
+                
+                if (answeredCount < totalQuestions) {
+                    resultMessage.innerHTML = `⚠️ Faltam respostas! Você respondeu ${answeredCount} de ${totalQuestions} questões.`;
+                    resultMessage.className = "mb-6 p-4 rounded-xl font-bold text-center text-base bg-orange-100 text-orange-800 border border-orange-200 no-print";
+                    
+                    document.querySelectorAll('.option-label').forEach(label => label.classList.remove('correct', 'incorrect'));
+                    return;
+                }
+
+                if (score === totalQuestions) {
+                    resultMessage.innerHTML = `🎉 Perfeito! Você gabaritou as ${totalQuestions} questões de Árvores Binárias de Busca!`;
+                    resultMessage.className = "mb-6 p-4 rounded-xl font-bold text-center text-lg bg-green-100 text-green-800 border border-green-200 no-print";
+                } else if (score >= 5) {
+                    resultMessage.innerHTML = `👍 Muito bom! Você acertou ${score} de ${totalQuestions} questões.`;
+                    resultMessage.className = "mb-6 p-4 rounded-xl font-bold text-center text-lg bg-blue-100 text-blue-800 border border-blue-200 no-print";
+                } else {
+                    resultMessage.innerHTML = `📚 Continue revisando! Você acertou ${score} de ${totalQuestions} questões.`;
+                    resultMessage.className = "mb-6 p-4 rounded-xl font-bold text-center text-lg bg-slate-200 text-slate-800 border border-slate-300 no-print";
+                }
+
+                submitBtn.classList.add('hidden');
+                retryBtn.classList.remove('hidden');
+            });
+
+            retryBtn.addEventListener('click', () => {
+                form.reset();
+                document.querySelectorAll('.option-label').forEach(label => {
+                    label.classList.remove('correct', 'incorrect');
+                });
+                document.querySelectorAll('.radio-input').forEach(input => {
+                    input.disabled = false;
+                });
+                
+                resultMessage.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+                retryBtn.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
