@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade: Introdução ao Prolog</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tau Prolog CDN para interpretador Prolog no navegador -->
+    <script src="https://cdn.jsdelivr.net/npm/tau-prolog@0.3.2/modules/core.min.js"></script>
+    <!-- html2pdf.js CDN para exportação em PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        .feedback-correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; }
+        .feedback-incorrect { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-12">
+
+    <!-- Cabeçalho -->
+    <header class="bg-indigo-900 text-white py-8 shadow-md">
+        <div class="max-w-4xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-3xl font-bold">Atividade: Introdução ao Prolog</h1>
+                <p class="text-indigo-200 mt-1">Linguagens de Programação</p>
+            </div>
+            <button onclick="gerarPDF()" class="no-print bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-200 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Baixar (PDF)
+            </button>
+        </div>
+    </header>
+
+    <main id="conteudo-principal" class="max-w-4xl mx-auto px-4 mt-8 space-y-8">
+
+        <!-- Formulário de Identificação -->
+        <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <h2 class="text-xl font-bold text-slate-800 mb-4 border-b pb-2">Identificação do Aluno</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Nome:</label>
+                    <input type="text" id="aluno-nome" placeholder="Digite seu nome" class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Matrícula:</label>
+                    <input type="text" id="aluno-matricula" placeholder="Digite sua matrícula" class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 1: Quiz Teórico -->
+        <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-6">
+            <div class="border-b pb-4">
+                <h2 class="text-2xl font-bold text-indigo-900">1. Quiz</h2>
+                <p class="text-slate-600 text-sm mt-1">Conceitos fundamentais apresentados na aula de Programação Lógica.</p>
+            </div>
+
+            <!-- Pergunta 1 -->
+            <div class="space-y-3">
+                <p class="font-semibold text-slate-800">Q1. Qual é a principal diferença de foco entre a Programação Funcional e a Programação Lógica?</p>
+                <div class="space-y-2 text-sm">
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q1" value="a" class="h-4 w-4 text-indigo-600">
+                        <span>a) A Funcional foca em comandos imperativos; a Lógica foca em POO.</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q1" value="b" class="h-4 w-4 text-indigo-600">
+                        <span>b) A Funcional foca na avaliação de expressões/funções; a Lógica foca em relações, consultas e inferência.</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q1" value="c" class="h-4 w-4 text-indigo-600">
+                        <span>c) A Funcional utiliza regras Horn; a Lógica utiliza apenas funções puras.</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q1" value="d" class="h-4 w-4 text-indigo-600">
+                        <span>d) Ambas são idênticas e executam apenas comandos sequenciais.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Pergunta 2 -->
+            <div class="space-y-3">
+                <p class="font-semibold text-slate-800">Q2. Em Prolog, como são representados os Fatos e as Variáveis em termos de sintaxe?</p>
+                <div class="space-y-2 text-sm">
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q2" value="a" class="h-4 w-4 text-indigo-600">
+                        <span>a) Átomos/fatos começam com letra minúscula; variáveis começam com letra MAIÚSCULA.</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q2" value="b" class="h-4 w-4 text-indigo-600">
+                        <span>b) Átomos começam com letra maiúscula; variáveis começam com letra minúscula.</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q2" value="c" class="h-4 w-4 text-indigo-600">
+                        <span>c) Ambos devem ser gravados entre aspas simples.</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q2" value="d" class="h-4 w-4 text-indigo-600">
+                        <span>d) Variáveis são declaradas obrigatoriamente com a palavra-chave `var`.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Pergunta 3 -->
+            <div class="space-y-3">
+                <p class="font-semibold text-slate-800">Q3. O que caracteriza o processo de Backtracking (retrocesso) no mecanismo de busca do Prolog?</p>
+                <div class="space-y-2 text-sm">
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q3" value="a" class="h-4 w-4 text-indigo-600">
+                        <span>a) É o cancelamento da execução quando ocorre um erro de sintaxe no código.</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q3" value="b" class="h-4 w-4 text-indigo-600">
+                        <span>b) É a capacidade de retornar a um ponto anterior da busca para explorar alternativas quando solicitado.</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q3" value="c" class="h-4 w-4 text-indigo-600">
+                        <span>c) É a compilação automática do código para linguagem de máquina.</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <input type="radio" name="q3" value="d" class="h-4 w-4 text-indigo-600">
+                        <span>d) É o processo de associar tipos estáticos a variáveis declaradas.</span>
+                    </label>
+                </div>
+            </div>
+
+            <button onclick="validarQuiz()" class="no-print w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg shadow transition">
+                Verificar Respostas do Quiz
+            </button>
+            <div id="quiz-feedback" class="hidden p-4 rounded-lg text-sm font-medium border"></div>
+        </section>
+
+        <!-- Seção 2: Desafio de Unificação -->
+        <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-6">
+            <div class="border-b pb-4">
+                <h2 class="text-2xl font-bold text-indigo-900">2. Unificação</h2>
+                <p class="text-slate-600 text-sm mt-1">Determine o valor que a variável assume para tornar os dois termos idênticos.</p>
+            </div>
+
+            <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-4">
+                <p class="text-sm font-medium text-slate-700">Dada a unificação entre a consulta e o fato:</p>
+                <div class="font-mono text-center bg-white p-3 rounded border text-indigo-900 font-bold">
+                    dono(joao, X) = dono(joao, rex)
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-semibold text-slate-700">Qual o valor de X?</span>
+                    <input type="text" id="unif-input-1" placeholder="digite o termo" class="border border-slate-300 rounded px-3 py-1.5 font-mono text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <button onclick="validarUnificacao()" class="no-print bg-slate-800 hover:bg-slate-900 text-white px-4 py-1.5 rounded text-sm font-medium transition">
+                        Validar
+                    </button>
+                </div>
+                <div id="unif-feedback" class="hidden p-3 rounded text-sm border font-medium"></div>
+            </div>
+        </section>
+
+        <!-- Seção 3: Interpretador Prolog Integrado -->
+        <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-6">
+            <div class="border-b pb-4">
+                <h2 class="text-2xl font-bold text-indigo-900">3. Interpretador e Base de Conhecimento</h2>
+                <p class="text-slate-600 text-sm mt-1">Edite a base de conhecimento abaixo, atualize o motor Prolog e faça consultas.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Base de Dados -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-slate-700">Base de Conhecimento (Fatos e Regras):</label>
+                    <textarea id="prolog-code" class="w-full h-64 p-3 font-mono text-xs bg-slate-900 text-emerald-400 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none leading-relaxed">
+% Fatos
+dono(joao, rex).
+dono(joao, mimi).
+dono(maria, thor).
+especie(rex, cachorro).
+especie(mimi, gato).
+especie(thor, cachorro).
+
+pai(joao, ana).
+mae(ana, pedro).
+
+% Regras
+estimacao(X) :- dono(_, X).
+avo(X, Y) :- pai(X, Z), mae(Z, Y).
+                    </textarea>
+                    <button onclick="carregarBase()" class="no-print w-full bg-slate-700 hover:bg-slate-800 text-white font-medium py-2 rounded text-sm transition">
+                        Atualizar Base de Dados
+                    </button>
+                </div>
+
+                <!-- Consulta e Resultados -->
+                <div class="space-y-2 flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-slate-700">Consulta Prolog (Query):</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="prolog-query" value="dono(joao, mimi)." class="flex-1 font-mono text-xs border border-slate-300 rounded p-2 focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <button onclick="executarConsulta()" class="no-print bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded text-sm font-semibold transition">
+                                Consultar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 space-y-1 mt-2">
+                        <label class="block text-sm font-semibold text-slate-700">Resultado da Inferência:</label>
+                        <div id="prolog-output" class="h-48 p-3 font-mono text-xs bg-slate-100 text-slate-800 rounded border border-slate-300 overflow-y-auto leading-relaxed">
+                            Clique em "Atualizar Base de Dados" e depois em "Consultar" para ver os resultados.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resumo para PDF (Gerado Dinamicamente) -->
+        <section id="relatorio-impressao" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hidden space-y-4">
+            <h3 class="text-xl font-bold text-slate-900 border-b pb-2">Relatório de Desempenho</h3>
+            <div id="relatorio-conteudo" class="text-sm space-y-2 text-slate-700"></div>
+        </section>
+
+    </main>
+
+    <script>
+        // Inicialização do Motor Tau Prolog
+        let session = pl.create();
+
+        function carregarBase() {
+            const code = document.getElementById('prolog-code').value;
+            const output = document.getElementById('prolog-output');
+            
+            session = pl.create();
+            session.consult(code, {
+                success: function() {
+                    output.innerHTML = '<span class="text-emerald-600 font-bold">✓ Base de conhecimento carregada com sucesso!</span>';
+                },
+                error: function(err) {
+                    output.innerHTML = `<span class="text-rose-600 font-bold">✗ Erro de sintaxe na base:</span>\n${err}`;
+                }
+            });
+        }
+
+        // LÓGICA DE CONSULTA CORRIGIDA (Remove o false sobressalente e ajusta pontuação)
+        function executarConsulta() {
+            let query = document.getElementById('prolog-query').value.trim();
+            const output = document.getElementById('prolog-output');
+            
+            if (!query) {
+                output.innerHTML = '<span class="text-rose-600 font-bold">Por favor, digite uma consulta.</span>';
+                return;
+            }
+
+            // Adiciona o ponto final automaticamente se esquecido
+            if (!query.endsWith('.')) {
+                query += '.';
+            }
+            
+            output.innerHTML = '<span class="text-slate-500">Buscando soluções...</span>';
+            
+            session.query(query, {
+                success: function() {
+                    let resultados = [];
+                    
+                    // Busca respostas de forma recursiva (Backtracking)
+                    function buscarProximaResposta() {
+                        session.answer(function(answer) {
+                            if (answer === false) {
+                                // Se não achou resposta NENHUMA, imprime false.
+                                // Se já achou algo antes, apenas encerra a busca sem imprimir "false."
+                                if (resultados.length === 0) {
+                                    output.innerHTML = '<span class="text-rose-600 font-bold">false.</span>';
+                                } else {
+                                    output.innerHTML = resultados.join('<br>');
+                                }
+                            } else if (answer === null) {
+                                // Limite ou erro
+                                if (resultados.length === 0) {
+                                    output.innerHTML = '<span class="text-rose-600 font-bold">Limite de avaliação atingido.</span>';
+                                } else {
+                                    output.innerHTML = resultados.join('<br>') + '<br><span class="text-slate-500">...</span>';
+                                }
+                            } else {
+                                // Achou um resultado
+                                let formatado = session.format_answer(answer);
+                                
+                                // O Tau Prolog usa ";" para separar múltiplas respostas. 
+                                // Para uso didático, limpamos espaços e substituímos o último ";" por "."
+                                formatado = formatado.replace(/\s*;\s*$/, '.').trim();
+                                
+                                // Para consultas booleanas sem variáveis (ex: dono(joao, mimi).)
+                                if (!formatado || formatado === '{}' || formatado === '{ }' || formatado === 'true' || formatado === 'true.') {
+                                    formatado = 'true.';
+                                }
+                                
+                                // Adiciona o resultado se já não for um 'true' duplicado
+                                if (!(formatado === 'true.' && resultados.includes('<span class="text-indigo-700 font-bold">true.</span>'))) {
+                                    resultados.push(`<span class="text-indigo-700 font-bold">${formatado}</span>`);
+                                }
+                                
+                                // Procura a próxima resposta
+                                buscarProximaResposta();
+                            }
+                        });
+                    }
+                    
+                    buscarProximaResposta();
+                },
+                error: function(err) {
+                    output.innerHTML = `<span class="text-rose-600 font-bold">Erro na consulta:</span> ${err}`;
+                }
+            });
+        }
+
+        // Validação do Quiz
+        function validarQuiz() {
+            const q1 = document.querySelector('input[name="q1"]:checked')?.value;
+            const q2 = document.querySelector('input[name="q2"]:checked')?.value;
+            const q3 = document.querySelector('input[name="q3"]:checked')?.value;
+            
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden', 'feedback-correct', 'feedback-incorrect');
+
+            let pontos = 0;
+            if (q1 === 'b') pontos++;
+            if (q2 === 'a') pontos++;
+            if (q3 === 'b') pontos++;
+
+            if (pontos === 3) {
+                feedback.classList.add('feedback-correct');
+                feedback.innerHTML = `<strong>Parabéns! Excelente trabalho!</strong> Você acertou todas as 3 questões do quiz (100%).`;
+            } else {
+                feedback.classList.add('feedback-incorrect');
+                feedback.innerHTML = `<strong>Você acertou ${pontos} de 3 questões.</strong> Revise os conceitos dos slides e tente novamente.`;
+            }
+        }
+
+        // Validação da Unificação
+        function validarUnificacao() {
+            const val = document.getElementById('unif-input-1').value.trim().toLowerCase();
+            const feedback = document.getElementById('unif-feedback');
+            feedback.classList.remove('hidden', 'feedback-correct', 'feedback-incorrect');
+
+            if (val === 'rex') {
+                feedback.classList.add('feedback-correct');
+                feedback.innerHTML = `<strong>Correto!</strong> A variável X unifica com o átomo <code>rex</code>.`;
+            } else {
+                feedback.classList.add('feedback-incorrect');
+                feedback.innerHTML = `<strong>Incorreto.</strong> Observe o termo correspondente na segunda posição de <code>dono(joao, rex)</code>. Tente novamente!`;
+            }
+        }
+
+        // Gerar Relatório e Exportar PDF
+        function gerarPDF() {
+            const nome = document.getElementById('aluno-nome').value || 'Não informado';
+            const matricula = document.getElementById('aluno-matricula').value || 'Não informada';
+
+            const q1 = document.querySelector('input[name="q1"]:checked')?.value || 'Não respondida';
+            const q2 = document.querySelector('input[name="q2"]:checked')?.value || 'Não respondida';
+            const q3 = document.querySelector('input[name="q3"]:checked')?.value || 'Não respondida';
+            const unif = document.getElementById('unif-input-1').value || 'Não respondida';
+
+            const relatorioSection = document.getElementById('relatorio-impressao');
+            const relatorioConteudo = document.getElementById('relatorio-conteudo');
+
+            relatorioConteudo.innerHTML = `
+                <p><strong>Aluno:</strong> ${nome} | <strong>Matrícula:</strong> ${matricula}</p>
+                <p><strong>Respostas do Quiz:</strong> Q1: ${q1.toUpperCase()} | Q2: ${q2.toUpperCase()} | Q3: ${q3.toUpperCase()}</p>
+                <p><strong>Unificação (X):</strong> ${unif}</p>
+                <p><strong>Data/horário de geração do relatório:</strong> ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</p>
+            `;
+
+            relatorioSection.classList.remove('hidden');
+
+            const element = document.getElementById('conteudo-principal');
+            const opt = {
+                margin:       0.5,
+                filename:     `Atividade_Prolog_${nome.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                relatorioSection.classList.add('hidden');
+            });
+        }
+
+        // Carregar base padrão na inicialização
+        window.onload = function() {
+            carregarBase();
+        };
+    </script>
+</body>
+</html>
