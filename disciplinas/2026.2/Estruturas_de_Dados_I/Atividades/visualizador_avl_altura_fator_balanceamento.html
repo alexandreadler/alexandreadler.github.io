@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visualizador de Árvores AVL — altura iniciando em 0</title>
+<style>
+  :root{
+    --ink:#162b3b; --muted:#607384; --line:#ccd8e2; --paper:#ffffff;
+    --navy:#123d5a; --blue:#d9edf9; --blue-stroke:#2878a8;
+    --green:#e2f3e8; --green-stroke:#32835a; --amber:#fff1cf;
+    --red:#fde7e5; --shadow:0 5px 18px rgba(24,50,70,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#f3f6f8;color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+  .wrap{max-width:1220px;margin:0 auto;padding:24px 18px 38px}
+  header{margin-bottom:18px}
+  h1{font-size:clamp(25px,3vw,36px);margin:0 0 8px;color:#123d5a}
+  .sub{margin:0;color:var(--muted);line-height:1.5}
+  .convention{margin-top:14px;background:#eaf3f9;border-left:5px solid #2878a8;padding:11px 14px;border-radius:8px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,.85fr);gap:18px;align-items:start}
+  .card{background:var(--paper);border:1px solid #e0e7ed;border-radius:14px;box-shadow:var(--shadow);padding:17px}
+  .card h2{font-size:19px;margin:0 0 13px;color:#173f5a}
+  .controls{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+  input[type=number]{width:150px;max-width:45%;padding:11px 12px;border:1px solid #b9c9d5;border-radius:8px;font-size:16px;color:var(--ink)}
+  button{border:0;border-radius:8px;padding:10px 14px;font-size:14px;font-weight:700;cursor:pointer;background:#15557d;color:white}
+  button:hover{filter:brightness(1.07)}
+  button.secondary{background:#e9eff4;color:#23465d;border:1px solid #d2dde5}
+  button.danger{background:#9a3b39}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .hint{font-size:12px;color:var(--muted);margin:2px 0 12px;line-height:1.45}
+  .presets{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+  .presets button{font-size:12px;padding:8px 10px}
+  .stats{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0 13px}
+  .stat{background:#f4f7f9;border:1px solid #e2e9ee;border-radius:8px;padding:8px 11px;font-size:13px}
+  .stat strong{color:#123d5a}
+  .tree-scroll{overflow-x:auto;border:1px solid #e1e8ee;border-radius:10px;background:linear-gradient(#fff,#fbfdfe);min-height:300px}
+  svg{display:block;max-width:none;margin:0 auto}
+  .edge{stroke:#668094;stroke-width:2.5;fill:none}
+  .node circle{fill:#e5f1f8;stroke:#2878a8;stroke-width:2.3}
+  .node .value{font-size:16px;font-weight:700;fill:#17384e;text-anchor:middle;dominant-baseline:middle}
+  .node .meta{font-size:12px;fill:#425b6d;text-anchor:middle;font-weight:600}
+  .empty{min-height:300px;display:flex;align-items:center;justify-content:center;text-align:center;color:#778b9a;padding:25px;line-height:1.6}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-size:12px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:11px;height:11px;border-radius:50%;display:inline-block;background:#e5f1f8;border:2px solid #2878a8}
+  .side p{line-height:1.5;margin:7px 0 12px;font-size:14px}
+  .rule{padding:11px 12px;background:#f5f8fa;border-radius:9px;margin:9px 0;font-size:13px;line-height:1.5}
+  .rule strong{color:#153f5c}
+  .log{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;max-height:270px;overflow:auto}
+  .log li{border-left:3px solid #8eb6ce;background:#f7fafc;padding:8px 10px;border-radius:0 7px 7px 0;font-size:13px;line-height:1.4}
+  .log li.rotation{border-left-color:#c28c2d;background:#fff9eb}
+  .log li.error{border-left-color:#b84e48;background:#fff4f3}
+  .small{font-size:12px;color:var(--muted)}
+  .footer{margin-top:17px;color:#718391;font-size:12px;line-height:1.5;text-align:center}
+  @media(max-width:850px){.grid{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Visualizador de Árvores AVL</h1>
+    <p class="sub">Insira e remova valores para acompanhar a reorganização automática da árvore.</p>
+    <div class="convention"><strong>Convenção usada nesta aula:</strong> subárvore vazia = altura −1; nó folha = altura 0. O fator de balanceamento é <strong>FB = altura(SAE) − altura(SAD)</strong>.</div>
+  </header>
+
+  <div class="grid">
+    <main class="card">
+      <h2>Construir a árvore</h2>
+      <div class="controls">
+        <input id="valueInput" type="number" step="1" placeholder="Digite um inteiro" aria-label="Valor inteiro">
+        <button id="insertBtn">Inserir</button>
+        <button id="removeBtn" class="secondary">Remover</button>
+        <button id="undoBtn" class="secondary" disabled>Desfazer</button>
+        <button id="clearBtn" class="danger">Limpar</button>
+      </div>
+      <div class="controls" style="margin-top:8px">
+        <input id="sequenceInput" type="text" style="width:min(360px,100%);max-width:100%" placeholder="Sequência: 40, 20, 60, 50, 70" aria-label="Sequência de inteiros">
+        <button id="sequenceBtn" class="secondary">Inserir sequência</button>
+      </div>
+      <p class="hint">Cada inserção ou remoção atualiza as alturas e aplica as rotações AVL necessárias. Valores repetidos não são inseridos.</p>
+      <div class="presets">
+        <button class="secondary" data-seq="40,30,20">Exemplo LL: 40, 30, 20</button>
+        <button class="secondary" data-seq="40,50,60">Exemplo RR: 40, 50, 60</button>
+        <button class="secondary" data-seq="30,10,20">Exemplo LR: 30, 10, 20</button>
+        <button class="secondary" data-seq="10,30,20">Exemplo RL: 10, 30, 20</button>
+        <button class="secondary" data-seq="40,30,20,35">Exemplo com subárvore</button>
+        <button class="secondary" data-seq="40,20,60,50,70">Exemplo da imagem (40, 20, 60, 50, 70)</button>
+      </div>
+      <div class="stats" aria-live="polite">
+        <div class="stat">Quantidade de nós: <strong id="countStat">0</strong></div>
+        <div class="stat">Altura da árvore: <strong id="heightStat">−1</strong></div>
+        <div class="stat">Convenção: <strong>folha = 0</strong></div>
+      </div>
+      <div id="treeArea" class="tree-scroll" aria-label="Representação gráfica da árvore AVL">
+        <div class="empty">A árvore está vazia.<br>Insira um valor para começar.</div>
+      </div>
+      <div class="legend">
+        <span><i class="dot"></i> Nó da árvore</span>
+        <span><strong>h</strong> = altura do nó</span>
+        <span><strong>FB</strong> = fator de balanceamento</span>
+      </div>
+    </main>
+
+    <aside class="side">
+      <section class="card">
+        <h2>Como interpretar</h2>
+        <div class="rule"><strong>Altura:</strong> h(n) = 1 + max(h(esq), h(dir)). Para uma subárvore vazia, h = −1.</div>
+        <div class="rule"><strong>Fator:</strong> FB(n) = h(esq) − h(dir).</div>
+        <div class="rule"><strong>Árvore AVL:</strong> todos os nós devem ter FB igual a −1, 0 ou +1.</div>
+        <p><strong>Sinal do FB:</strong> positivo indica maior altura à esquerda; negativo indica maior altura à direita.</p>
+        <div class="rule"><strong>Casos de rotação:</strong><br>LL → simples à direita<br>RR → simples à esquerda<br>LR → dupla: esquerda no filho, depois direita no nó<br>RL → dupla: direita no filho, depois esquerda no nó</div>
+      </section>
+      <section class="card" style="margin-top:16px">
+        <h2>Etapas da operação</h2>
+        <ul id="logList" class="log"><li>Aguardando a primeira operação.</li></ul>
+      </section>
+    </aside>
+  </div>
+  <p class="footer">Visualizador didático independente. As alturas são calculadas pela quantidade de arestas, de modo que folhas têm altura 0 e árvores vazias têm altura −1.</p>
+</div>
+<script>
+(() => {
+  'use strict';
+  class Node {
+    constructor(key){ this.key=key; this.left=null; this.right=null; this.height=0; }
+  }
+  let root=null;
+  let history=[];
+  let lastLog=['A árvore está vazia. Insira um valor para começar.'];
+  const $=id=>document.getElementById(id);
+  const h=n=>n?n.height:-1;
+  const bf=n=>n?h(n.left)-h(n.right):0;
+  const update=n=>{ if(n) n.height=1+Math.max(h(n.left),h(n.right)); return n; };
+  const clone=n=>n?Object.assign(new Node(n.key),{left:clone(n.left),right:clone(n.right),height:n.height}):null;
+  function rotateRight(y,events){
+    const x=y.left, t2=x.right;
+    x.right=y; y.left=t2; update(y); update(x);
+    events.push(`Rotação simples à direita no nó ${y.key}: o nó ${x.key} sobe.`);
+    return x;
+  }
+  function rotateLeft(x,events){
+    const y=x.right, t2=y.left;
+    y.left=x; x.right=t2; update(x); update(y);
+    events.push(`Rotação simples à esquerda no nó ${x.key}: o nó ${y.key} sobe.`);
+    return y;
+  }
+  function rebalance(n,events){
+    if(!n) return n;
+    update(n);
+    const b=bf(n);
+    if(b>1){
+      if(bf(n.left)>=0){ events.push(`Caso LL identificado no nó ${n.key} (FB = +${b}).`); return rotateRight(n,events); }
+      events.push(`Caso LR identificado no nó ${n.key} (FB = +${b}).`);
+      n.left=rotateLeft(n.left,events);
+      return rotateRight(n,events);
+    }
+    if(b< -1){
+      if(bf(n.right)<=0){ events.push(`Caso RR identificado no nó ${n.key} (FB = ${b}).`); return rotateLeft(n,events); }
+      events.push(`Caso RL identificado no nó ${n.key} (FB = ${b}).`);
+      n.right=rotateRight(n.right,events);
+      return rotateLeft(n,events);
+    }
+    return n;
+  }
+  function insertRec(n,key,events){
+    if(!n){ events.push(`Valor ${key} inserido como novo nó (folha, altura 0).`); return new Node(key); }
+    if(key===n.key){ events.push(`O valor ${key} já existe. Valores repetidos não são inseridos.`); return n; }
+    if(key<n.key) n.left=insertRec(n.left,key,events); else n.right=insertRec(n.right,key,events);
+    return rebalance(n,events);
+  }
+  function minNode(n){ while(n.left) n=n.left; return n; }
+  function deleteRec(n,key,events){
+    if(!n){ events.push(`O valor ${key} não foi encontrado.`); return n; }
+    if(key<n.key) n.left=deleteRec(n.left,key,events);
+    else if(key>n.key) n.right=deleteRec(n.right,key,events);
+    else {
+      events.push(`Nó ${key} encontrado para remoção.`);
+      if(!n.left || !n.right){
+        const child=n.left||n.right;
+        if(!child){ events.push(`Nó ${key} removido (era folha).`); return null; }
+        events.push(`Nó ${key} removido; seu único filho assume sua posição.`);
+        n=child;
+      } else {
+        const successor=minNode(n.right);
+        events.push(`Nó ${key} tem dois filhos: substituído pelo sucessor ${successor.key}.`);
+        n.key=successor.key;
+        n.right=deleteRecSuccessor(n.right,successor.key,events);
+      }
+    }
+    return rebalance(n,events);
+  }
+  function deleteRecSuccessor(n,key,events){
+    if(!n) return null;
+    if(key<n.key) n.left=deleteRecSuccessor(n.left,key,events);
+    else if(key>n.key) n.right=deleteRecSuccessor(n.right,key,events);
+    else return n.right||n.left;
+    return rebalance(n,events);
+  }
+  function count(n){return n?1+count(n.left)+count(n.right):0;}
+  function maxDepth(n){return n?1+Math.max(maxDepth(n.left),maxDepth(n.right)):0;}
+  function save(){ history.push({root:clone(root),log:lastLog.slice()}); if(history.length>40) history.shift(); }
+  function setLog(events){
+    lastLog=events.length?events:['Nenhuma rotação foi necessária.'];
+    const ul=$('logList'); ul.innerHTML='';
+    lastLog.forEach(msg=>{const li=document.createElement('li');li.textContent=msg;if(msg.toLowerCase().includes('rotação')||msg.includes('Caso '))li.classList.add('rotation');if(msg.includes('não foi encontrado')||msg.includes('já existe'))li.classList.add('error');ul.appendChild(li);});
+  }
+  function draw(){
+    $('countStat').textContent=count(root);
+    $('heightStat').textContent=root?root.height:'−1';
+    $('undoBtn').disabled=history.length===0;
+    const area=$('treeArea');
+    if(!root){area.innerHTML='<div class="empty">A árvore está vazia.<br>Insira um valor para começar.</div>';return;}
+    const n=count(root), width=Math.max(720,n*105+100), height=Math.max(260,maxDepth(root)*112+105);
+    const leftPad=(width-(n*105-5))/2;
+    let index=0, nodes=[];
+    function place(node,depth){
+      if(!node)return null;
+      const l=place(node.left,depth+1);
+      const x=leftPad+index*105+50; index++;
+      const y=58+depth*112;
+      const item={node,x,y}; nodes.push(item);
+      const r=place(node.right,depth+1);
+      return item;
+    }
+    // In-order positions make every key appear from left to right.
+    const positions=new Map(); index=0;
+    function assign(node,depth){
+      if(!node)return;
+      assign(node.left,depth+1);
+      positions.set(node,{x:leftPad+index*105+50,y:58+depth*112}); index++;
+      assign(node.right,depth+1);
+    }
+    assign(root,0);
+    let edges='';
+    for(const [node,pos] of positions){
+      for(const child of [node.left,node.right]) if(child){
+        const cp=positions.get(child), dx=cp.x-pos.x,dy=cp.y-pos.y,len=Math.hypot(dx,dy),r=29;
+        const x1=pos.x+dx/len*r,y1=pos.y+dy/len*r,x2=cp.x-dx/len*r,y2=cp.y-dy/len*r;
+        edges+=`<line class="edge" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+      }
+    }
+    let circles='';
+    for(const [node,pos] of positions){
+      const b=bf(node), fill=b===0?'#e4f2f8':'#edf5fb';
+      circles+=`<g class="node"><circle cx="${pos.x}" cy="${pos.y}" r="29" fill="${fill}"/><text class="value" x="${pos.x}" y="${pos.y}">${node.key}</text><text class="meta" x="${pos.x}" y="${pos.y-37}">h=${node.height}</text><text class="meta" x="${pos.x}" y="${pos.y+45}">FB=${b>0?'+'+b:b}</text></g>`;
+    }
+    area.innerHTML=`<svg viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="Árvore AVL com altura e fator de balanceamento em cada nó">${edges}${circles}</svg>`;
+  }
+  function readInput(){
+    const raw=$('valueInput').value.trim();
+    if(raw===''){setLog(['Digite um número inteiro.']);return null;}
+    const value=Number(raw);
+    if(!Number.isSafeInteger(value)){setLog(['Digite um número inteiro válido dentro do intervalo seguro.']);return null;}
+    return value;
+  }
+  $('insertBtn').addEventListener('click',()=>{
+    const value=readInput();if(value===null)return;
+    save();const events=[`Operação: inserir ${value}.`];root=insertRec(root,value,events);setLog(events);draw();$('valueInput').value='';$('valueInput').focus();
+  });
+  $('removeBtn').addEventListener('click',()=>{
+    const value=readInput();if(value===null)return;
+    save();const events=[`Operação: remover ${value}.`];root=deleteRec(root,value,events);setLog(events);draw();$('valueInput').value='';$('valueInput').focus();
+  });
+  $('valueInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('insertBtn').click();});
+  function insertSequence(){
+    const raw=$('sequenceInput').value.trim();
+    if(!raw){setLog(['Digite uma sequência de números inteiros separados por vírgula.']);return;}
+    const parts=raw.split(/[;,\s]+/).filter(Boolean);
+    const values=parts.map(Number);
+    if(values.some(v=>!Number.isSafeInteger(v))){setLog(['Sequência inválida. Use somente números inteiros separados por vírgula ou espaço.']);return;}
+    save();root=null;const events=[`Construção da árvore pela sequência: ${values.join(', ')}.`];
+    values.forEach(v=>{root=insertRec(root,v,events);});
+    setLog(events);draw();$('sequenceInput').value='';
+  }
+  $('sequenceBtn').addEventListener('click',insertSequence);
+  $('sequenceInput').addEventListener('keydown',e=>{if(e.key==='Enter')insertSequence();});
+  $('clearBtn').addEventListener('click',()=>{if(root)save();root=null;setLog(['Árvore limpa. Insira novos valores para começar.']);draw();});
+  $('undoBtn').addEventListener('click',()=>{const prev=history.pop();if(!prev)return;root=prev.root;lastLog=prev.log;setLog(['Última operação desfeita.',...lastLog]);draw();});
+  document.querySelectorAll('[data-seq]').forEach(btn=>btn.addEventListener('click',()=>{
+    save();root=null;const events=[`Exemplo carregado: ${btn.dataset.seq}.`];
+    btn.dataset.seq.split(',').map(s=>Number(s.trim())).forEach(v=>{root=insertRec(root,v,events);});
+    setLog(events);draw();
+  }));
+  draw();
+})();
+</script>
+</body>
+</html>
