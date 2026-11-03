@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividades Interativas: Árvores Binárias Balanceadas (AVL)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        .node-circle {
+            fill: #ffffff;
+            stroke-width: 2.5px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06));
+            transition: all 0.3s ease;
+        }
+
+        .node-unbalanced {
+            fill: #fef2f2 !important;
+            stroke: #ef4444 !important;
+        }
+
+        .node-text {
+            font-weight: 700;
+            font-size: 15px;
+            fill: #1e293b;
+        }
+
+        .fb-badge {
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .edge-line {
+            stroke: #94a3b8;
+            stroke-width: 2px;
+        }
+
+        .option-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+        }
+
+        .option-card:hover:not(.correct):not(.incorrect) {
+            border-color: #94a3b8;
+            background-color: #f1f5f9;
+        }
+
+        .option-card:has(input:checked):not(.correct):not(.incorrect) {
+            border-color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        .option-card.correct {
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+            color: #15803d !important;
+        }
+
+        .option-card.incorrect {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #b91c1c !important;
+        }
+
+        @media print {
+            body {
+                background-color: #ffffff;
+                color: #000000;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .card-box {
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: none !important;
+                break-inside: avoid;
+            }
+            input[type="text"] {
+                border: none !important;
+                border-bottom: 1px solid #000 !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                background: transparent !important;
+            }
+        }
+    </style>
+</head>
+<body class="py-8 px-4 sm:px-8">
+
+    <main class="max-w-5xl mx-auto space-y-8">
+        
+        <!-- Cabeçalho -->
+        <header class="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden space-y-6">
+            <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-700 pb-6">
+                <div>
+                    <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs font-semibold tracking-wider uppercase mb-3">
+                        Estruturas de Dados • Parte 8.4
+                    </span>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold mb-2">Árvores Binárias Balanceadas (AVL)</h1>
+                    <p class="text-slate-300 text-sm sm:text-base max-w-2xl">
+                        Atividades de Cálculo de Fator de Balanceamento (FB) e Operações de Rotação Simples e Dupla.
+                    </p>
+                </div>
+                <button onclick="window.print()" class="no-print bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition flex items-center gap-2 border border-white/10 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Salvar PDF
+                </button>
+            </div>
+
+            <!-- CAMPO DE IDENTIFICAÇÃO DO ALUNO -->
+            <div class="grid sm:grid-cols-2 gap-4 bg-slate-800/60 p-4 rounded-xl border border-slate-700/60">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1" for="aluno-nome">Nome do Aluno(a):</label>
+                    <input type="text" id="aluno-nome" placeholder="Digite seu nome completo..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1" for="aluno-matricula">Matrícula:</label>
+                    <input type="text" id="aluno-matricula" placeholder="Digite sua matrícula..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                </div>
+            </div>
+        </header>
+
+        <!-- ================= PARTE 1 ================= -->
+        <section class="space-y-6">
+            <div class="border-b border-slate-200 pb-3">
+                <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <span class="bg-blue-600 text-white text-xs px-2.5 py-1 rounded-md">PARTE 1</span>
+                    Cálculo do Fator de Balanceamento
+                </h2>
+                <p class="text-slate-500 text-sm mt-1">
+                    Insira os valores, calcule os fatores de balanceamento (FB (Fator de Balanceamento) = SAE (Subárvore Esquerda) - SAD (Subárvore Direita)), identifique o nó desbalanceado e verifique se é uma árvore AVL.
+                </p>
+            </div>
+
+            <!-- Exercício 1.a -->
+            <div class="card-box bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="font-bold text-lg text-slate-800">Exercício 1.a) Sequência: <code class="text-blue-600">[30, 15, 50, 5, 10, 20]</code></h3>
+                
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 flex justify-center overflow-x-auto">
+                    <svg width="400" height="220" viewBox="0 0 400 220">
+                        <line x1="200" y1="30" x2="110" y2="80" class="edge-line"/>
+                        <line x1="200" y1="30" x2="290" y2="80" class="edge-line"/>
+                        <line x1="110" y1="80" x2="60" y2="130" class="edge-line"/>
+                        <line x1="110" y1="80" x2="160" y2="130" class="edge-line"/>
+                        <line x1="60" y1="130" x2="85" y2="180" class="edge-line"/>
+
+                        <circle cx="200" cy="30" r="18" class="node-circle" stroke="#2563eb"/>
+                        <text x="200" y="35" text-anchor="middle" class="node-text">30</text>
+                        <text x="228" y="35" class="fb-badge fill-blue-600">FB: +1</text>
+
+                        <circle cx="110" cy="80" r="18" class="node-circle node-unbalanced"/>
+                        <text x="110" y="85" text-anchor="middle" class="node-text">15</text>
+                        <text x="138" y="85" class="fb-badge fill-red-600">FB: +2 ⚠️</text>
+
+                        <circle cx="290" cy="80" r="18" class="node-circle" stroke="#2563eb"/>
+                        <text x="290" y="85" text-anchor="middle" class="node-text">50</text>
+                        <text x="318" y="85" class="fb-badge fill-blue-600">FB: 0</text>
+
+                        <circle cx="60" cy="130" r="18" class="node-circle" stroke="#2563eb"/>
+                        <text x="60" y="135" text-anchor="middle" class="node-text">5</text>
+                        <text x="20" y="135" class="fb-badge fill-blue-600">FB: -1</text>
+
+                        <circle cx="160" cy="130" r="18" class="node-circle" stroke="#2563eb"/>
+                        <text x="160" y="135" text-anchor="middle" class="node-text">20</text>
+                        <text x="188" y="135" class="fb-badge fill-blue-600">FB: 0</text>
+
+                        <circle cx="85" cy="180" r="18" class="node-circle" stroke="#2563eb"/>
+                        <text x="85" y="185" text-anchor="middle" class="node-text">10</text>
+                        <text x="113" y="185" class="fb-badge fill-blue-600">FB: 0</text>
+                    </svg>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-sm font-semibold text-slate-700">Sobre o balanceamento e os Fatores de Balanceamento (FB) desta árvore, assinale a opção correta:</p>
+                    <div class="grid gap-2">
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1a" value="a">
+                            <span>a) É uma árvore AVL válida, pois todos os nós têm FB igual a 0 ou 1.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1a" value="b">
+                            <span>b) Não é uma AVL; o nó 15 está desbalanceado com FB = +2.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1a" value="c">
+                            <span>c) Não é uma AVL; o nó raiz (30) está desbalanceado com FB = -2.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1a" value="d">
+                            <span>d) É uma AVL válida, porém o nó 5 necessita de rotação simples.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercício 1.b -->
+            <div class="card-box bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="font-bold text-lg text-slate-800">Exercício 1.b) Sequência: <code class="text-blue-600">[80, 40, 100, 120, 90, 30]</code></h3>
+                
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 flex justify-center overflow-x-auto">
+                    <svg width="400" height="180" viewBox="0 0 400 180">
+                        <line x1="200" y1="30" x2="110" y2="80" class="edge-line"/>
+                        <line x1="200" y1="30" x2="290" y2="80" class="edge-line"/>
+                        <line x1="110" y1="80" x2="60" y2="130" class="edge-line"/>
+                        <line x1="290" y1="80" x2="250" y2="130" class="edge-line"/>
+                        <line x1="290" y1="80" x2="330" y2="130" class="edge-line"/>
+
+                        <circle cx="200" cy="30" r="18" class="node-circle" stroke="#2563eb"/>
+                        <text x="200" y="35" text-anchor="middle" class="node-text">80</text>
+
+                        <circle cx="110" cy="80" r="18" class="node-circle" stroke="#2563eb"/>
+                        <text x="110" y="85" text-anchor="middle" class="node-text">40</text>
+
+                        <circle cx="290" cy="80" r="18" class="node-circle" stroke="#2563eb"/>
+                        <text x="290" y="85" text-anchor="middle" class="node-text">100</text>
+
+                        <circle cx="60" cy="130" r="18" class="node-circle" stroke="#2563eb"/>
+                        <text x="60" y="135" text-anchor="middle" class="node-text">30</text>
+
+                        <circle cx="250" cy="130" r="18" class="node-circle" stroke="#2563eb"/>
+                        <text x="250" y="135" text-anchor="middle" class="node-text">90</text>
+
+                        <circle cx="330" cy="130" r="18" class="node-circle" stroke="#2563eb"/>
+                        <text x="330" y="135" text-anchor="middle" class="node-text">120</text>
+                    </svg>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-sm font-semibold text-slate-700">Analise a estrutura gerada e selecione a afirmação correta:</p>
+                    <div class="grid gap-2">
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1b" value="a">
+                            <span>a) A árvore é uma AVL ; todos os nós possuem FB (-1, 0, 1) e nenhum está desbalanceado.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1b" value="b">
+                            <span>b) O nó 80 está desbalanceado com FB = +2.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1b" value="c">
+                            <span>c) O nó 100 está desbalanceado com FB = -2.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1b" value="d">
+                            <span>d) A árvore não é AVL pois o nó 40 tem FB = +2.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercício 1.c -->
+            <div class="card-box bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="font-bold text-lg text-slate-800">Exercício 1.c) Sequência: <code class="text-blue-600">[10, 50, 4, 90, 20, 8]</code></h3>
+                
+                <div class="space-y-2">
+                    <p class="text-sm font-semibold text-slate-700">Ao inserir esta sequência em uma árvore binária de busca sem rotações, qual é o estado de balanceamento do nó 50?</p>
+                    <div class="grid gap-2">
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1c" value="a">
+                            <span>a) FB(50) = 0 (Balanceado)</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1c" value="b">
+                            <span>b) FB(50) = 0 (Subárvore Esquerda: nó 20, Subárvore Direita: nó 90)</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1c" value="c">
+                            <span>c) FB(50) = +2 (Desbalanceado à esquerda)</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q1c" value="d">
+                            <span>d) A árvore é uma AVL válida sem nós desbalanceados.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PARTE 2 ================= -->
+        <section class="space-y-6 page-break">
+            <div class="border-b border-slate-200 pb-3">
+                <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <span class="bg-indigo-600 text-white text-xs px-2.5 py-1 rounded-md">PARTE 2</span>
+                    Operações de Rotação
+                </h2>
+                <p class="text-slate-500 text-sm mt-1">
+                    Prática das operações de Rotação Simples à Esquerda (RR), Rotação Simples à Direita (LL), Rotação Dupla à Esquerda (RL) e Rotação Dupla à Direita (LR).
+                </p>
+            </div>
+
+            <!-- BLOCO 2.1: ROTAÇÃO SIMPLES À ESQUERDA -->
+            <div class="card-box bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div>
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">2.1 Rotação Simples à Esquerda (Left Rotation - Caso RR)</span>
+                    <p class="text-slate-600 text-sm mt-1">
+                        O filho direito do nó desbalanceado sobe para assumir sua posição, e o antigo nó desbalanceado passa a ser seu filho esquerdo.
+                    </p>
+                </div>
+
+                <!-- 2.1a -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-slate-700">2.1.a) Sequência: <code class="text-indigo-600 font-mono">[40, 50, 60]</code></h4>
+                    <p class="text-xs text-slate-600">Ao inserir 60, o nó 40 desbalanceia (FB = -2). Qual é a estrutura da árvore após a Rotação Simples à Esquerda?</p>
+                    <div class="grid gap-2">
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_1a" value="a">
+                            <span>a) Raiz: 40 | Esquerda: NULL | Direita: 50 (com filho direito 60)</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_1a" value="b">
+                            <span>b) Raiz: 50 | Esquerda: 40 | Direita: 60</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_1a" value="c">
+                            <span>c) Raiz: 60 | Esquerda: 50 | Direita: 40</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_1a" value="d">
+                            <span>d) Raiz: 40 | Esquerda: 50 | Direita: 60</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 2.1b -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-slate-700">2.1.b) Sequência: <code class="text-indigo-600 font-mono">[40, 20, 50, 60, 70]</code></h4>
+                    <p class="text-xs text-slate-600">Qual nó fica desbalanceado na inserção do 70 e qual nó passa a ser o pai de 50 e 70 após a rotação?</p>
+                    <div class="grid gap-2">
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_1b" value="a">
+                            <span>a) Nó desbalanceado: 50 | Nova subárvore com raiz 60 (filhos 50 e 70)</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_1b" value="b">
+                            <span>b) Nó desbalanceado: 40 | Nova subárvore com raiz 60 (filhos 50 e 70)</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_1b" value="c">
+                            <span>c) Nó desbalanceado: 20 | Rotação à direita no nó 40</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_1b" value="d">
+                            <span>d) A árvore já se mantém balanceada sem necessidade de rotação.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOCO 2.2: ROTAÇÃO SIMPLES À DIREITA -->
+            <div class="card-box bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div>
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">2.2 Rotação Simples à Direita (Right Rotation - Caso LL)</span>
+                    <p class="text-slate-600 text-sm mt-1">
+                        Ocorre quando o desbalanceamento surge por inserção na subárvore esquerda do filho esquerdo (FB = +2). O filho esquerdo sobe para a posição do nó desbalanceado.
+                    </p>
+                </div>
+
+                <!-- 2.2a -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-slate-700">2.2.a) Sequência: <code class="text-indigo-600 font-mono">[40, 30, 20]</code></h4>
+                    <p class="text-xs text-slate-600">Ao inserir 20, o nó 40 desbalanceia com FB = +2. Qual é a estrutura obtida após a Rotação Simples à Direita a partir da raiz?</p>
+                    <div class="grid gap-2">
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_2a" value="a">
+                            <span>a) Raiz: 30 | Filho Esquerdo: 20 | Filho Direito: 40</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_2a" value="b">
+                            <span>b) Raiz: 20 | Filho Esquerdo: 30 | Filho Direito: 40</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_2a" value="c">
+                            <span>c) Raiz: 40 | Filho Esquerdo: 20 (com filho esquerdo 30)</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_2a" value="d">
+                            <span>d) Raiz: 30 | Filho Esquerdo: 40 | Filho Direito: 20</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 2.2b -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-slate-700">2.2.b) Sequência: <code class="text-indigo-600 font-mono">[40, 30, 20, 35]</code></h4>
+                    <p class="text-xs text-slate-600">Considerando a rotação simples à direita na raiz (40) após a inserção de 20, onde a chave 35 fica posicionada na árvore final?</p>
+                    <div class="grid gap-2">
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_2b" value="a">
+                            <span>a) Como filho esquerdo do nó 40 (nova subárvore direita do nó 30).</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_2b" value="b">
+                            <span>b) Como filho direito do nó 20.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_2b" value="c">
+                            <span>c) Como filho direito do nó 40.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_2b" value="d">
+                            <span>d) Como nova raiz principal da árvore.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOCO 2.3: ROTAÇÃO DUPLA À ESQUERDA -->
+            <div class="card-box bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div>
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">2.3 Rotação Dupla à Esquerda (Caso RL)</span>
+                    <p class="text-slate-600 text-sm mt-1">
+                        Aplicada no desbalanceamento "Direita-Esquerda". Etapas: (1) Rotação simples à direita no filho direito; (2) Rotação simples à esquerda na raiz.
+                    </p>
+                </div>
+
+                <!-- 2.3a -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-slate-700">2.3.a) Sequência: <code class="text-indigo-600 font-mono">[20, 40, 30]</code></h4>
+                    <p class="text-xs text-slate-600">Qual nó assume a raiz da árvore após a Rotação Dupla à Esquerda?</p>
+                    <div class="grid gap-2">
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_3a" value="a">
+                            <span>a) Nó 20</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_3a" value="b">
+                            <span>b) Nó 30 (com 20 à esquerda e 40 à direita)</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_3a" value="c">
+                            <span>c) Nó 40</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_3a" value="d">
+                            <span>d) A árvore não requer rotação.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 2.3b -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-slate-700">2.3.b) Sequência: <code class="text-indigo-600 font-mono">[20, 40, 30, 50]</code></h4>
+                    <p class="text-xs text-slate-600">Ao inserir a sequência acima, em qual momento ocorre o desbalanceamento e como fica o nó 50 após os ajustes?</p>
+                    <div class="grid gap-2">
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_3b" value="a">
+                            <span>a) O desbalanceamento ocorre na inserção do 30 (corrigido com Rotação Dupla); o 50 é inserido normalmente como filho direito do 40.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_3b" value="b">
+                            <span>b) O desbalanceamento ocorre na inserção do 50, exigindo Rotação Simples.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_3b" value="c">
+                            <span>c) O nó 50 passa a ser a nova raiz principal da árvore.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_3b" value="d">
+                            <span>d) O nó 20 continua sendo a raiz com FB = 0.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOCO 2.4: ROTAÇÃO DUPLA À DIREITA -->
+            <div class="card-box bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div>
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">2.4 Rotação Dupla à Direita (Caso LR)</span>
+                    <p class="text-slate-600 text-sm mt-1">
+                        Utilizada no desbalanceamento "Esquerda-Direita". Etapas: (1) Rotação simples à esquerda no filho esquerdo; (2) Rotação simples à direita na raiz.
+                    </p>
+                </div>
+
+                <!-- 2.4a -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-slate-700">2.4.a) Sequência: <code class="text-indigo-600 font-mono">[40, 20, 30]</code></h4>
+                    <p class="text-xs text-slate-600">Após a Rotação Dupla à Direita a partir da raiz, qual é a estrutura final da árvore?</p>
+                    <div class="grid gap-2">
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_4a" value="a">
+                            <span>a) Raiz: 30 | Filho Esquerdo: 20 | Filho Direito: 40</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_4a" value="b">
+                            <span>b) Raiz: 20 | Filho Esquerdo: 30 | Filho Direito: 40</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_4a" value="c">
+                            <span>c) Raiz: 40 | Filho Esquerdo: 20 | Filho Direito: 30</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_4a" value="d">
+                            <span>d) Raiz: 30 | Filho Esquerdo: 40 | Filho Direito: 20</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 2.4b -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-slate-700">2.4.b) Sequência: <code class="text-indigo-600 font-mono">[40, 20, 30, 50]</code></h4>
+                    <p class="text-xs text-slate-600">Onde o nó 50 é posicionado na árvore já balanceada obtida no item anterior?</p>
+                    <div class="grid gap-2">
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_4b" value="a">
+                            <span>a) Como filho direito do nó 40.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_4b" value="b">
+                            <span>b) Como filho esquerdo do nó 20.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_4b" value="c">
+                            <span>c) Como filho direito do nó 20.</span>
+                        </label>
+                        <label class="option-card p-3 rounded-xl flex items-center gap-3 text-sm">
+                            <input type="radio" name="q2_4b" value="d">
+                            <span>d) Como nova raiz da árvore no lugar do 30.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Botões de Ação e Mensagem -->
+        <div class="no-print pt-4 space-y-4">
+            <div id="status-message" class="hidden p-4 rounded-xl text-center font-bold text-sm"></div>
+            
+            <div class="flex gap-4">
+                <button type="button" id="btn-submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-lg shadow-blue-500/20 active:scale-[0.99]">
+                    Validar Respostas
+                </button>
+                <button type="button" id="btn-reset" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3.5 px-6 rounded-xl transition">
+                    Reiniciar
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const correctAnswers = {
+                q1a: 'b',
+                q1b: 'a',
+                q1c: 'b',
+                q2_1a: 'b',
+                q2_1b: 'a',
+                q2_2a: 'a',
+                q2_2b: 'a',
+                q2_3a: 'b',
+                q2_3b: 'a',
+                q2_4a: 'a',
+                q2_4b: 'a'
+            };
+
+            const btnSubmit = document.getElementById('btn-submit');
+            const btnReset = document.getElementById('btn-reset');
+            const statusMsg = document.getElementById('status-message');
+
+            btnSubmit.addEventListener('click', () => {
+                let score = 0;
+                let total = Object.keys(correctAnswers).length;
+                let answered = 0;
+
+                document.querySelectorAll('.option-card').forEach(el => el.classList.remove('correct', 'incorrect'));
+
+                for (let key in correctAnswers) {
+                    const selected = document.querySelector(`input[name="${key}"]:checked`);
+                    if (selected) {
+                        answered++;
+                        if (selected.value === correctAnswers[key]) {
+                            score++;
+                            selected.closest('.option-card').classList.add('correct');
+                        } else {
+                            selected.closest('.option-card').classList.add('incorrect');
+                        }
+                    }
+                }
+
+                statusMsg.classList.remove('hidden');
+
+                if (answered < total) {
+                    statusMsg.className = "p-4 rounded-xl text-center font-bold text-sm bg-amber-100 text-amber-800 border border-amber-200";
+                    statusMsg.innerHTML = `⚠️ Por favor, responda a todas as questões antes de validar. (${answered}/${total} respondidas)`;
+                    return;
+                }
+
+                if (score === total) {
+                    statusMsg.className = "p-4 rounded-xl text-center font-bold text-sm bg-emerald-100 text-emerald-800 border border-emerald-200";
+                    statusMsg.innerHTML = `🎉 Excelente! Você acertou todas as ${total} questões de balanceamento e rotação em Árvores AVL!`;
+                } else {
+                    statusMsg.className = "p-4 rounded-xl text-center font-bold text-sm bg-blue-100 text-blue-800 border border-blue-200";
+                    statusMsg.innerHTML = `Resultado: Você acertou ${score} de ${total} questões. Revise os nós sinalizados e tente novamente!`;
+                }
+
+                btnSubmit.classList.add('hidden');
+                btnReset.classList.remove('hidden');
+            });
+
+            btnReset.addEventListener('click', () => {
+                document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+                document.querySelectorAll('.option-card').forEach(el => el.classList.remove('correct', 'incorrect'));
+                
+                statusMsg.classList.add('hidden');
+                btnSubmit.classList.remove('hidden');
+                btnReset.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
