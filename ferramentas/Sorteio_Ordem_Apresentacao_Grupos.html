@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteio - Ordem de Apresentação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .input-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        input[type="number"], input[type="text"], select {
+            padding: 8px;
+            border: 2px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 16px;
+            margin: 5px;
+        }
+        input[type="number"] {
+            width: 100px;
+        }
+        input[type="text"] {
+            width: 200px;
+        }
+        select {
+            width: 150px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .sortear-btn {
+            background-color: #e74c3c;
+            font-size: 18px;
+            padding: 15px 30px;
+        }
+        .sortear-btn:hover {
+            background-color: #c0392b;
+        }
+        .proximo-btn {
+            background-color: #27ae60;
+            font-size: 16px;
+        }
+        .proximo-btn:hover {
+            background-color: #229954;
+        }
+        .resultado {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e8f4fd;
+            border-radius: 5px;
+            border-left: 5px solid #74b9ff;
+        }
+        .grupo-ordem {
+            margin: 8px 0;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            border-left: 4px solid #0984e3;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .grupo-ordem.atual {
+            background-color: #d1ecf1;
+            border-left-color: #e74c3c;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+        }
+        .grupo-ordem.concluido {
+            background-color: #d4edda;
+            border-left-color: #28a745;
+            opacity: 0.7;
+        }
+        .ordem-numero {
+            background-color: #0984e3;
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .grupo-ordem.atual .ordem-numero {
+            background-color: #e74c3c;
+            animation: pulse 1.5s infinite;
+        }
+        .grupo-ordem.concluido .ordem-numero {
+            background-color: #28a745;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+        .cronometro-apresentacao {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff3cd;
+            border-radius: 5px;
+            border: 1px solid #ffeaa7;
+            text-align: center;
+        }
+        .timer-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: #00b894;
+            margin: 15px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .timer-display.warning {
+            color: #e17055;
+            animation: blink 1s infinite;
+        }
+        .timer-display.danger {
+            color: #d63031;
+            animation: blink 0.5s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        #grupoAtual {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #2c3e50;
+            padding: 10px;
+            background-color: #ddd;
+            border-radius: 5px;
+        }
+        .grupos-list {
+            margin: 20px 0;
+        }
+        .grupo-input {
+            margin: 8px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .stat-item {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #495057;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .tempo-config {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Sorteio da Ordem de Apresentação</h1>
+        
+        <div class="input-section">
+            <label for="numGrupos">Número de grupos:</label>
+            <input type="number" id="numGrupos" min="2" max="20" value="6">
+            <button onclick="gerarCamposGrupos()">Definir Grupos</button>
+            
+            <div id="gruposContainer" class="hidden">
+                <h3>Nomes dos Grupos:</h3>
+                <div id="gruposList" class="grupos-list"></div>
+                
+                <div class="tempo-config">
+                    <label for="tempoApresentacao">Tempo por apresentação:</label>
+                    <select id="tempoApresentacao">
+                        <option value="3">3 minutos</option>
+                        <option value="5" selected>5 minutos</option>
+                        <option value="7">7 minutos</option>
+                        <option value="10">10 minutos</option>
+                        <option value="15">15 minutos</option>
+                    </select>
+                </div>
+                
+                <button class="sortear-btn" onclick="sortearOrdem()">🎲 SORTEAR ORDEM!</button>
+            </div>
+        </div>
+
+        <div id="ordemApresentacao" class="resultado hidden">
+            <h2>🎤 Ordem de Apresentação Sorteada:</h2>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalGrupos">0</div>
+                    <div class="stat-label">Total de Grupos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="gruposRestantes">0</div>
+                    <div class="stat-label">Restantes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="tempoTotal">0</div>
+                    <div class="stat-label">Tempo Total</div>
+                </div>
+            </div>
+            
+            <div id="listaApresentacao"></div>
+            
+            <div class="cronometro-apresentacao">
+                <h3>⏰ Cronômetro da Apresentação</h3>
+                <div id="grupoAtual">Clique em "Iniciar" para começar</div>
+                <div class="timer-display" id="timerApresentacao">05:00</div>
+                <div>
+                    <button onclick="iniciarApresentacao()">▶️ Iniciar</button>
+                    <button onclick="pausarApresentacao()">⏸️ Pausar</button>
+                    <button onclick="resetarTempo()">🔄 Resetar Tempo</button>
+                    <button class="proximo-btn" onclick="proximoGrupo()">⏭️ Próximo Grupo</button>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <button onclick="novaOrdem()">🎲 Nova Ordem</button>
+                <button onclick="reiniciarTudo()">🔄 Reiniciar Tudo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let grupos = [];
+        let ordemApresentacao = [];
+        let grupoAtualIndex = 0;
+        let timerApresentacaoInterval;
+        let segundosApresentacao = 300; // 5 minutos padrão
+        let isPaused = false;
+
+        function gerarCamposGrupos() {
+            const numGrupos = document.getElementById('numGrupos').value;
+            const gruposList = document.getElementById('gruposList');
+            const container = document.getElementById('gruposContainer');
+            
+            if (numGrupos < 2) {
+                alert('É necessário pelo menos 2 grupos!');
+                return;
+            }
+            
+            gruposList.innerHTML = '';
+            grupos = [];
+            
+            for (let i = 1; i <= numGrupos; i++) {
+                const div = document.createElement('div');
+                div.className = 'grupo-input';
+                div.innerHTML = `
+                    <label>Grupo ${i}:</label>
+                    <input type="text" id="grupo${i}" placeholder="Nome do Grupo ${i}" value="Grupo ${i}">
+                `;
+                gruposList.appendChild(div);
+            }
+            
+            container.classList.remove('hidden');
+        }
+
+        function sortearOrdem() {
+            const numGrupos = document.getElementById('numGrupos').value;
+            grupos = [];
+            
+            // Coleta os nomes dos grupos
+            for (let i = 1; i <= numGrupos; i++) {
+                const nomeGrupo = document.getElementById(`grupo${i}`).value || `Grupo ${i}`;
+                grupos.push(nomeGrupo);
+            }
+            
+            // Embaralha os grupos para criar ordem aleatória
+            ordemApresentacao = [...grupos];
+            for (let i = ordemApresentacao.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [ordemApresentacao[i], ordemApresentacao[j]] = [ordemApresentacao[j], ordemApresentacao[i]];
+            }
+            
+            grupoAtualIndex = 0;
+            resetarTempo();
+            mostrarOrdemApresentacao();
+            atualizarEstatisticas();
+        }
+
+        function mostrarOrdemApresentacao() {
+            const container = document.getElementById('ordemApresentacao');
+            const lista = document.getElementById('listaApresentacao');
+            
+            lista.innerHTML = '';
+            
+            ordemApresentacao.forEach((grupo, index) => {
+                const div = document.createElement('div');
+                div.className = 'grupo-ordem';
+                div.id = `grupo-${index}`;
+                
+                if (index === grupoAtualIndex) {
+                    div.classList.add('atual');
+                } else if (index < grupoAtualIndex) {
+                    div.classList.add('concluido');
+                }
+                
+                let statusText = '';
+                let statusIcon = '';
+                
+                if (index < grupoAtualIndex) {
+                    statusText = 'Concluído';
+                    statusIcon = '✅';
+                } else if (index === grupoAtualIndex) {
+                    statusText = 'Apresentando Agora';
+                    statusIcon = '🎤';
+                } else {
+                    statusText = 'Aguardando';
+                    statusIcon = '⏳';
+                }
+                
+                div.innerHTML = `
+                    <span>
+                        <span class="ordem-numero">${index + 1}</span>
+                        <strong>${grupo}</strong>
+                    </span>
+                    <span>${statusIcon} ${statusText}</span>
+                `;
+                lista.appendChild(div);
+            });
+            
+            container.classList.remove('hidden');
+            atualizarGrupoAtual();
+        }
+
+        function atualizarGrupoAtual() {
+            const grupoAtualElement = document.getElementById('grupoAtual');
+            if (grupoAtualIndex < ordemApresentacao.length) {
+                grupoAtualElement.innerHTML = `
+                    <strong>Apresentando agora:</strong><br>
+                    ${ordemApresentacao[grupoAtualIndex]} 
+                    (${grupoAtualIndex + 1}° de ${ordemApresentacao.length})
+                `;
+            } else {
+                grupoAtualElement.innerHTML = '🎉 <strong>Todas as apresentações foram concluídas!</strong>';
+            }
+        }
+
+        function atualizarEstatisticas() {
+            const tempoMinutos = parseInt(document.getElementById('tempoApresentacao').value);
+            const totalMinutos = ordemApresentacao.length * tempoMinutos;
+            
+            document.getElementById('totalGrupos').textContent = ordemApresentacao.length;
+            document.getElementById('gruposRestantes').textContent = ordemApresentacao.length - grupoAtualIndex;
+            document.getElementById('tempoTotal').textContent = `${totalMinutos} min`;
+        }
+
+        function iniciarApresentacao() {
+            if (grupoAtualIndex >= ordemApresentacao.length) {
+                alert('Todas as apresentações já foram concluídas!');
+                return;
+            }
+
+            const tempoSelecionado = document.getElementById('tempoApresentacao').value;
+            if (!isPaused) {
+                segundosApresentacao = parseInt(tempoSelecionado) * 60;
+            }
+            isPaused = false;
+            
+            if (timerApresentacaoInterval) clearInterval(timerApresentacaoInterval);
+            
+            timerApresentacaoInterval = setInterval(() => {
+                if (segundosApresentacao > 0) {
+                    segundosApresentacao--;
+                    atualizarDisplayApresentacao();
+                } else {
+                    clearInterval(timerApresentacaoInterval);
+                    alert(`⏰ Tempo da apresentação do ${ordemApresentacao[grupoAtualIndex]} esgotado!`);
+                    // Opcional: avançar automaticamente
+                    // proximoGrupo();
+                }
+            }, 1000);
+            
+            atualizarDisplayApresentacao();
+        }
+
+        function pausarApresentacao() {
+            if (timerApresentacaoInterval) {
+                clearInterval(timerApresentacaoInterval);
+                timerApresentacaoInterval = null;
+                isPaused = true;
+            }
+        }
+
+        function resetarTempo() {
+            pausarApresentacao();
+            const tempoSelecionado = document.getElementById('tempoApresentacao').value;
+            segundosApresentacao = parseInt(tempoSelecionado) * 60;
+            isPaused = false;
+            atualizarDisplayApresentacao();
+        }
+
+        function proximoGrupo() {
+            if (grupoAtualIndex < ordemApresentacao.length - 1) {
+                grupoAtualIndex++;
+                resetarTempo();
+                mostrarOrdemApresentacao();
+                atualizarEstatisticas();
+            } else {
+                pausarApresentacao();
+                alert('🎉 Todas as apresentações foram concluídas! Parabéns a todos os grupos!');
+                atualizarGrupoAtual();
+            }
+        }
+
+        function atualizarDisplayApresentacao() {
+            const minutos = Math.floor(segundosApresentacao / 60);
+            const segundos = segundosApresentacao % 60;
+            const display = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+            
+            const timerElement = document.getElementById('timerApresentacao');
+            timerElement.textContent = display;
+            
+            // Remove classes anteriores
+            timerElement.classList.remove('warning', 'danger');
+            
+            // Aplica cor baseada no tempo restante
+            if (segundosApresentacao <= 30) { // 30 segundos
+                timerElement.classList.add('danger');
+            } else if (segundosApresentacao <= 60) { // 1 minuto
+                timerElement.classList.add('warning');
+            }
+        }
+
+        function novaOrdem() {
+            if (confirm('Tem certeza que deseja sortear uma nova ordem? O progresso atual será perdido.')) {
+                sortearOrdem();
+            }
+        }
+
+        function reiniciarTudo() {
+            if (confirm('Tem certeza que deseja reiniciar tudo? Todos os dados serão perdidos.')) {
+                pausarApresentacao();
+                document.getElementById('ordemApresentacao').classList.add('hidden');
+                document.getElementById('gruposContainer').classList.add('hidden');
+                document.getElementById('numGrupos').value = 6;
+                grupos = [];
+                ordemApresentacao = [];
+                grupoAtualIndex = 0;
+            }
+        }
+
+        // Event listener para mudança do tempo de apresentação
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('tempoApresentacao').addEventListener('change', function() {
+                resetarTempo();
+                atualizarEstatisticas();
+            });
+        });
+
+        // Inicialização
+        window.onload = function() {
+            gerarCamposGrupos();
+        }
+    </script>
+</body>
+</html>
