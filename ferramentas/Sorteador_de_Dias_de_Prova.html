@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sorteio de Prova — Distribuição por Dias</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#00ecb1; --muted:#94a3b8; --glass: rgba(255,255,255,0.04);
+      --success:#10b981; --danger:#ef4444; --glass-2: rgba(255,255,255,0.03);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071025 0%, #071a2b 60%);color:#e6eef6}
+    .app{max-width:1100px;margin:28px auto;padding:24px;border-radius:12px;background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .controls{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .control{background:var(--glass);padding:10px;border-radius:8px;display:flex;gap:8px;align-items:center}
+    label{font-size:13px;color:var(--muted)}
+    input[type=number], input[type=text], input[type=date], select{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:6px;color:inherit;color-scheme: dark;}
+    input[type=number], input[type=text]{width:86px;}
+    input[type=date]{width:125px;font-size:12px;}
+    select{font-size:12px;}
+    button{background:var(--accent);border:none;color:#042024;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:600;transition:opacity 0.2s}
+    button:disabled{opacity:0.5;cursor:not-allowed}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    button.warn{background:var(--danger);color:white}
+    .layout{display:grid;grid-template-columns:1fr 340px;gap:18px;margin-top:20px}
+    .board{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:14px;border-radius:10px;height:640px;overflow:auto}
+    .days{display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:12px}
+    .day{background:var(--card);padding:12px;border-radius:10px;min-height:520px}
+    .day h2{margin:0;font-size:14px;line-height:1.4}
+    .count{font-size:12px;color:var(--muted);margin-top:6px}
+    .grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .student{width:56px;height:56px;background:var(--glass-2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;cursor:default;transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s;box-shadow: 0 6px 18px rgba(2,6,23,0.5)}
+    .student.assigned{background:linear-gradient(180deg,var(--accent),#0aa49b);color:#002522;animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
+    .student.small{width:48px;height:36px;font-size:12px}
+    aside{background:var(--card);padding:14px;border-radius:10px;height:640px;overflow:auto}
+    .log{font-size:13px;color:var(--muted);line-height:1.45;max-height:180px;overflow-y:auto}
+    .actions{display:flex;flex-direction:column;gap:8px}
+    .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:100%;}
+    .seed{background:transparent;border:1px dashed rgba(255,255,255,0.06);padding:8px;border-radius:6px;color:var(--muted)}
+    footer{margin-top:16px;font-size:12px;color:var(--muted)}
+    .highlight{color:var(--accent);font-weight:700}
+    #dateControlsContainer{display:flex;gap:8px;flex-wrap:wrap;}
+
+    /* Bingo Display */
+    .bingo-box{background:var(--glass);border:1px dashed var(--accent);border-radius:8px;padding:12px;text-align:center;margin-bottom:12px;}
+    .bingo-title{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+    .bingo-number{font-size:32px;font-weight:800;color:var(--accent);min-height:40px;line-height:40px;}
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" role="application">
+    <header>
+      <div>
+        <h1>Sorteio: Distribuição de Alunos por Dia de Prova</h1>
+        <p class="lead">Ferramenta visual para sortear alunos entre dias de avaliação. Transparente, exportável e auditável.</p>
+      </div>
+      <div class="meta">
+        <div class="control">
+          <label for="numDays">Qtd Dias:</label>
+          <select id="numDays">
+            <option value="1">1 Dia</option>
+            <option value="2" selected>2 Dias</option>
+            <option value="3">3 Dias</option>
+            <option value="4">4 Dias</option>
+            <option value="5">5 Dias</option>
+            <option value="6">6 Dias</option>
+          </select>
+        </div>
+        <div id="dateControlsContainer"></div>
+        <div class="control">
+          <label for="speed">Velocidade:</label>
+          <select id="speed">
+            <option value="50">Super Rápido</option>
+            <option value="150">Rápido</option>
+            <option value="300" selected>Normal</option>
+            <option value="600">Lento</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="seed">Seed:</label>
+          <input id="seed" class="seed" type="text" placeholder="(opcional)" title="Seed para reprodução do sorteio" />
+        </div>
+        <div class="control">
+          <label for="students">Alunos:</label>
+          <input id="students" type="number" min="1" max="1000" value="60" />
+        </div>
+        <div class="control">
+          <label for="perDay">Por dia:</label>
+          <input id="perDay" type="number" min="1" value="30" />
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <div class="board">
+        <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="shuffleBtn">Embaralhar</button>
+            <button id="assignBtn" class="secondary">Sortear e Distribuir</button>
+            <button id="resetBtn" class="secondary">Resetar</button>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button id="exportBtn" class="secondary">Exportar CSV</button>
+            <button id="printBtn" class="secondary">Imprimir</button>
+          </div>
+        </div>
+
+        <div class="days" id="daysContainer"></div>
+
+        <div style="margin-top:14px;color:var(--muted);font-size:13px">Legenda: <span class="highlight">verde</span> = atribuído</div>
+      </div>
+
+      <aside>
+        <div class="bingo-box">
+          <div class="bingo-title">Sorteando Agora</div>
+          <div class="bingo-number" id="bingoDisplay">—</div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <strong>Painel de Transparência</strong>
+          <small style="color:var(--muted)">Seed atual: <span id="displaySeed">—</span></small>
+        </div>
+
+        <div class="log" id="log">
+          Quando o sorteio é executado, o histórico aparece aqui (passo-a-passo).
+        </div>
+
+        <div style="height:14px"></div>
+        <div class="actions">
+          <small style="color:var(--muted)">Visualização dos alunos não atribuídos:</small>
+          <div id="pool" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"></div>
+        </div>
+
+        <footer>
+          <div style="margin-top:12px;color:var(--muted)">Dicas:</div>
+          <ul style="color:var(--muted);font-size:13px">
+            <li>Defina uma seed para tornar o sorteio reproduzível.</li>
+            <li>Use <strong>Exportar CSV</strong> para registrar o resultado e anexar no Classroom.</li>
+            <li>O painel de log mostra a sequência de alocação para auditoria.</li>
+          </ul>
+        </footer>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // Utility: seeded random (Mulberry32) to allow reproducible shuffles
+    function mulberry32(a) {
+      return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+      }
+    }
+
+    function stringToSeed(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = Math.imul(31, hash) + str.charCodeAt(i) | 0;
+      }
+      return hash >>> 0;
+    }
+
+    // DOM refs
+    const studentsInput = document.getElementById('students');
+    const perDayInput = document.getElementById('perDay');
+    const seedInput = document.getElementById('seed');
+    const speedSelect = document.getElementById('speed');
+    const numDaysSelect = document.getElementById('numDays');
+    const dateControlsContainer = document.getElementById('dateControlsContainer');
+    const daysContainer = document.getElementById('daysContainer');
+    
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    const assignBtn = document.getElementById('assignBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    const printBtn = document.getElementById('printBtn');
+    const poolEl = document.getElementById('pool');
+    const logEl = document.getElementById('log');
+    const displaySeed = document.getElementById('displaySeed');
+    const bingoDisplay = document.getElementById('bingoDisplay');
+
+    // State
+    let students = [];
+    let shuffled = [];
+    let assigned = {};
+    let currentSeedUsed = null;
+    let isDrawing = false;
+
+    function renderDaysControls() {
+      if (isDrawing) return;
+      const numDays = parseInt(numDaysSelect.value, 10);
+      dateControlsContainer.innerHTML = '';
+      daysContainer.innerHTML = '';
+      assigned = {};
+
+      const defaultDates = ["2025-12-10", "2025-12-15", "2025-12-17", "2025-12-19", "2025-12-22", "2025-12-24"];
+
+      for (let i = 1; i <= numDays; i++) {
+        assigned[`day${i}`] = [];
+
+        // Dynamic input control
+        const controlDiv = document.createElement('div');
+        controlDiv.className = 'control';
+        const label = document.createElement('label');
+        label.htmlFor = `date${i}`;
+        label.innerText = `Data Dia ${i}:`;
+        const input = document.createElement('input');
+        input.id = `date${i}`;
+        input.type = 'date';
+        input.value = defaultDates[i-1] || '';
+        input.addEventListener('change', atualizarTitulosDatas);
+
+        controlDiv.appendChild(label);
+        controlDiv.appendChild(input);
+        dateControlsContainer.appendChild(controlDiv);
+
+        // Dynamic day card
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'day';
+        dayDiv.id = `day${i}`;
+        
+        const h2 = document.createElement('h2');
+        h2.id = `titleDay${i}`;
+        
+        const countDiv = document.createElement('div');
+        countDiv.className = 'count';
+        countDiv.id = `count${i}`;
+        countDiv.innerText = '0 alunos';
+
+        const gridDiv = document.createElement('div');
+        gridDiv.className = 'grid';
+        gridDiv.id = `slot${i}`;
+        gridDiv.setAttribute('aria-label', `Dia ${i} - lista de alunos`);
+
+        dayDiv.appendChild(h2);
+        dayDiv.appendChild(countDiv);
+        dayDiv.appendChild(gridDiv);
+        daysContainer.appendChild(dayDiv);
+      }
+
+      atualizarTitulosDatas();
+      resetState();
+    }
+
+    function atualizarTitulosDatas() {
+      const numDays = parseInt(numDaysSelect.value, 10);
+      for (let i = 1; i <= numDays; i++) {
+        const input = document.getElementById(`date${i}`);
+        const titleEl = document.getElementById(`titleDay${i}`);
+        if (!input || !titleEl) continue;
+
+        if (!input.value) {
+          titleEl.innerText = `Dia ${i} - Data não definida`;
+          continue;
+        }
+
+        const dateObj = new Date(input.value + 'T00:00:00');
+        const diaSemana = dateObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+        const dataFormatada = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+        const diaSemanaCap = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
+        
+        titleEl.innerText = `Dia ${i} - ${dataFormatada} - ${diaSemanaCap}`;
+      }
+    }
+
+    function buildStudents(){
+      const n = parseInt(studentsInput.value,10) || 60;
+      students = [];
+      for(let i=1;i<=n;i++) students.push(i);
+      shuffled = [...students];
+    }
+
+    function renderPool(){
+      poolEl.innerHTML = '';
+      const numDays = parseInt(numDaysSelect.value, 10);
+      let assignedSet = new Set();
+      for (let i = 1; i <= numDays; i++) {
+        (assigned[`day${i}`] || []).forEach(s => assignedSet.add(s));
+      }
+
+      shuffled.forEach(st => {
+        const div = document.createElement('div');
+        div.className = 'student small' + (assignedSet.has(st) ? ' assigned' : '');
+        div.innerText = st;
+        poolEl.appendChild(div);
+      });
+    }
+
+    function renderSlots(){
+      const numDays = parseInt(numDaysSelect.value, 10);
+      for (let i = 1; i <= numDays; i++) {
+        const slot = document.getElementById(`slot${i}`);
+        const count = document.getElementById(`count${i}`);
+        if (!slot || !count) continue;
+
+        slot.innerHTML = '';
+        const list = assigned[`day${i}`] || [];
+        list.forEach(st => {
+          const div = document.createElement('div');
+          div.className = 'student assigned';
+          div.innerText = st;
+          slot.appendChild(div);
+        });
+        count.innerText = `${list.length} alunos`;
+      }
+    }
+
+    function resetState(){
+      if(isDrawing) return;
+      buildStudents();
+      const numDays = parseInt(numDaysSelect.value, 10);
+      for (let i = 1; i <= numDays; i++) {
+        assigned[`day${i}`] = [];
+      }
+      currentSeedUsed = null;
+      displaySeed.innerText = '—';
+      bingoDisplay.innerText = '—';
+      logEl.innerText = 'Quando o sorteio é executado, o histórico aparece aqui (passo-a-passo).';
+      renderPool();
+      renderSlots();
+    }
+
+    function shuffleArray(arr, rng) {
+      let array = [...arr];
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function runShuffle(){
+      if(isDrawing) return;
+      let rawSeed = seedInput.value.trim();
+      if(!rawSeed) {
+        rawSeed = String(Math.floor(Math.random() * 1000000));
+      }
+      currentSeedUsed = rawSeed;
+      displaySeed.innerText = rawSeed;
+
+      const numericSeed = stringToSeed(rawSeed);
+      const rng = mulberry32(numericSeed);
+
+      buildStudents();
+      shuffled = shuffleArray(students, rng);
+
+      logEl.innerText = `[INFO] Lista embaralhada com a Seed: "${rawSeed}".\nOrdem parcial: ` + shuffled.slice(0,15).join(', ') + (shuffled.length > 15 ? '...' : '');
+      renderPool();
+    }
+
+    function toggleControls(disabled) {
+      isDrawing = disabled;
+      shuffleBtn.disabled = disabled;
+      assignBtn.disabled = disabled;
+      resetBtn.disabled = disabled;
+      studentsInput.disabled = disabled;
+      perDayInput.disabled = disabled;
+      numDaysSelect.disabled = disabled;
+      speedSelect.disabled = disabled;
+    }
+
+    function runAssignAnimated(){
+      if(isDrawing) return;
+
+      if(!shuffled.length || shuffled.length !== parseInt(studentsInput.value,10)) {
+        runShuffle();
+      }
+
+      const numDays = parseInt(numDaysSelect.value, 10);
+      for (let i = 1; i <= numDays; i++) {
+        assigned[`day${i}`] = [];
+      }
+      renderSlots();
+      renderPool();
+
+      const perDay = parseInt(perDayInput.value,10) || 30;
+      const totalToAssign = Math.min(shuffled.length, perDay * numDays);
+      const drawSpeed = parseInt(speedSelect.value, 10) || 300;
+      
+      toggleControls(true);
+      logEl.innerText = `[SORTEIO INICIADO - MODO BINGO]\nSeed: ${currentSeedUsed || 'Aleatório'}\n--- Sorteando ---\n`;
+
+      let index = 0;
+      
+      const timer = setInterval(() => {
+        if(index >= totalToAssign) {
+          clearInterval(timer);
+          toggleControls(false);
+          bingoDisplay.innerText = 'FIM';
+          
+          let logText = `[SORTEIO CONCLUÍDO]\nSeed: ${currentSeedUsed || 'Aleatório'}\n`;
+          for (let d = 1; d <= numDays; d++) {
+            const dateInput = document.getElementById(`date${d}`);
+            const dateVal = dateInput ? dateInput.value : '';
+            logText += `Dia ${d} (${dateVal}): ${assigned[`day${d}`].length} alunos [${assigned[`day${d}`].join(', ')}]\n`;
+          }
+          const unassigned = shuffled.slice(totalToAssign);
+          if(unassigned.length > 0) {
+            logText += `Não atribuídos: ${unassigned.length} alunos [${unassigned.join(', ')}]\n`;
+          }
+          logEl.innerText = logText;
+          return;
+        }
+
+        const studentNumber = shuffled[index];
+        bingoDisplay.innerText = studentNumber;
+
+        // Atribuição sequencial aos dias conforme os limites de capacidade
+        for (let d = 1; d <= numDays; d++) {
+          if (assigned[`day${d}`].length < perDay) {
+            assigned[`day${d}`].push(studentNumber);
+            break;
+          }
+        }
+
+        renderSlots();
+        renderPool();
+        index++;
+      }, drawSpeed);
+    }
+
+    function exportCSV(){
+      if(isDrawing) return;
+      const numDays = parseInt(numDaysSelect.value, 10);
+      let csvContent = "data:text/csv;charset=utf-8,Dia,Data,Aluno\n";
+      
+      for (let d = 1; d <= numDays; d++) {
+        const dateInput = document.getElementById(`date${d}`);
+        const dateVal = dateInput ? dateInput.value : '';
+        (assigned[`day${d}`] || []).forEach(st => {
+          csvContent += `Dia ${d},${dateVal},${st}\n`;
+        });
+      }
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `sorteio_provas_seed_${currentSeedUsed || 'resultado'}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Listeners
+    numDaysSelect.addEventListener('change', renderDaysControls);
+    studentsInput.addEventListener('change', resetState);
+    shuffleBtn.addEventListener('click', runShuffle);
+    assignBtn.addEventListener('click', runAssignAnimated);
+    resetBtn.addEventListener('click', resetState);
+    exportBtn.addEventListener('click', exportCSV);
+    printBtn.addEventListener('click', () => window.print());
+
+    // Init
+    renderDaysControls();
+  </script>
+</body>
+</html>
