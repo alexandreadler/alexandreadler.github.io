@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visualizador de Árvores AVL — altura iniciando em 0</title>
+<style>
+  :root{
+    --ink:#162b3b; --muted:#607384; --line:#ccd8e2; --paper:#ffffff;
+    --navy:#123d5a; --blue:#d9edf9; --blue-stroke:#2878a8;
+    --green:#e2f3e8; --green-stroke:#32835a; --amber:#fff1cf;
+    --red:#fde7e5; --shadow:0 5px 18px rgba(24,50,70,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#f3f6f8;color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+  .wrap{max-width:1220px;margin:0 auto;padding:24px 18px 38px}
+  header{margin-bottom:18px}
+  h1{font-size:clamp(25px,3vw,36px);margin:0 0 8px;color:#123d5a}
+  .sub{margin:0;color:var(--muted);line-height:1.5}
+  .convention{margin-top:14px;background:#eaf3f9;border-left:5px solid #2878a8;padding:11px 14px;border-radius:8px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,.85fr);gap:18px;align-items:start}
+  .card{background:var(--paper);border:1px solid #e0e7ed;border-radius:14px;box-shadow:var(--shadow);padding:17px}
+  .card h2{font-size:19px;margin:0 0 13px;color:#173f5a}
+  .controls{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+  input[type=number]{width:150px;max-width:45%;padding:11px 12px;border:1px solid #b9c9d5;border-radius:8px;font-size:16px;color:var(--ink)}
+  button{border:0;border-radius:8px;padding:10px 14px;font-size:14px;font-weight:700;cursor:pointer;background:#15557d;color:white}
+  button:hover{filter:brightness(1.07)}
+  button.secondary{background:#e9eff4;color:#23465d;border:1px solid #d2dde5}
+  button.danger{background:#9a3b39}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .hint{font-size:12px;color:var(--muted);margin:2px 0 12px;line-height:1.45}
+  .presets{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+  .presets button{font-size:12px;padding:8px 10px}
+  .stats{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0 13px}
+  .stat{background:#f4f7f9;border:1px solid #e2e9ee;border-radius:8px;padding:8px 11px;font-size:13px}
+  .stat strong{color:#123d5a}
+  .tree-scroll{overflow-x:auto;border:1px solid #e1e8ee;border-radius:10px;background:linear-gradient(#fff,#fbfdfe);min-height:300px}
+  svg{display:block;max-width:none;margin:0 auto}
+  .edge{stroke:#668094;stroke-width:2.5;fill:none}
+  .node circle{fill:#e5f1f8;stroke:#2878a8;stroke-width:2.3;transition:fill .25s,stroke .25s,stroke-width .25s}
+  .node .value{font-size:16px;font-weight:700;fill:#17384e;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+  .node .meta{font-size:12px;fill:#425b6d;text-anchor:middle;font-weight:600;pointer-events:none}
+  .node.focus circle{fill:#fff0c9;stroke:#bd8121;stroke-width:3.5}
+  .node.unbalanced circle{fill:#fde1df;stroke:#b84943;stroke-width:4}
+  .node.rotated circle{fill:#dff2e5;stroke:#32835a;stroke-width:3.5}
+  .stepper{border:1px solid #dce6ed;background:#f9fcfe;border-radius:11px;padding:13px;margin:12px 0 14px}
+  .step-top{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+  .step-counter{font-size:12px;font-weight:700;color:#31566e;white-space:nowrap}
+  .progress{height:7px;background:#e3ebf0;border-radius:99px;overflow:hidden;flex:1}
+  .progress-fill{height:100%;width:0;background:#2878a8;transition:width .25s}
+  .stepper h3{font-size:17px;margin:5px 0;color:#153f5c}
+  .step-description{font-size:14px;line-height:1.5;margin:0 0 11px;color:#334e60;min-height:42px}
+  .play-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .play-controls button{padding:9px 12px}
+  .play-controls select{padding:8px 9px;border:1px solid #cbd8e1;border-radius:7px;background:white;color:#25465b}
+  .timeline-note{font-size:11px;color:#718391;margin-top:8px}
+  .log li{cursor:pointer;transition:background .2s,border-color .2s}
+  .log li.active{border-left-color:#15557d;background:#e8f3fa;font-weight:700}
+  .log li.done{border-left-color:#32835a}
+  .node-enter{opacity:0}
+  .empty{min-height:300px;display:flex;align-items:center;justify-content:center;text-align:center;color:#778b9a;padding:25px;line-height:1.6}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-size:12px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:11px;height:11px;border-radius:50%;display:inline-block;background:#e5f1f8;border:2px solid #2878a8}
+  .side p{line-height:1.5;margin:7px 0 12px;font-size:14px}
+  .rule{padding:11px 12px;background:#f5f8fa;border-radius:9px;margin:9px 0;font-size:13px;line-height:1.5}
+  .rule strong{color:#153f5c}
+  .log{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;max-height:270px;overflow:auto}
+  .log li{border-left:3px solid #8eb6ce;background:#f7fafc;padding:8px 10px;border-radius:0 7px 7px 0;font-size:13px;line-height:1.4}
+  .log li.rotation{border-left-color:#c28c2d;background:#fff9eb}
+  .log li.error{border-left-color:#b84e48;background:#fff4f3}
+  .small{font-size:12px;color:var(--muted)}
+  .footer{margin-top:17px;color:#718391;font-size:12px;line-height:1.5;text-align:center}
+  @media(max-width:850px){.grid{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Visualizador de Árvores AVL (Versão de testes)</h1>
+    <p class="sub">Insira e remova valores para acompanhar a reorganização automática da árvore.</p>
+    <div class="convention"><strong>Convenção usada nesta aula:</strong> subárvore vazia = altura −1; nó folha = altura 0. O fator de balanceamento é <strong>FB = altura(SAE) − altura(SAD)</strong>.</div>
+  </header>
+
+  <div class="grid">
+    <main class="card">
+      <h2>Construir a árvore</h2>
+      <div class="controls">
+        <input id="valueInput" type="number" step="1" placeholder="Digite um inteiro" aria-label="Valor inteiro">
+        <button id="insertBtn">Inserir</button>
+        <button id="removeBtn" class="secondary">Remover</button>
+        <button id="undoBtn" class="secondary" disabled>Desfazer</button>
+        <button id="clearBtn" class="danger">Limpar</button>
+      </div>
+      <div class="controls" style="margin-top:8px">
+        <input id="sequenceInput" type="text" style="width:min(360px,100%);max-width:100%" placeholder="Sequência: 40, 20, 50, 60, 70" aria-label="Sequência de inteiros">
+        <button id="sequenceBtn" class="secondary">Inserir sequência</button>
+      </div>
+      <p class="hint">Cada operação é apresentada passo a passo: comparações, inserção/remoção, atualização das alturas, fatores de balanceamento e rotações. Valores repetidos não são inseridos.</p>
+      <div class="presets">
+        <button class="secondary" data-seq="40,30,20">Exemplo LL: 40, 30, 20</button>
+        <button class="secondary" data-seq="40,50,60">Exemplo RR: 40, 50, 60</button>
+        <button class="secondary" data-seq="30,10,20">Exemplo LR: 30, 10, 20</button>
+        <button class="secondary" data-seq="10,30,20">Exemplo RL: 10, 30, 20</button>
+        <button class="secondary" data-seq="40,30,20,35">Exemplo (40, 30, 20, 35)</button>
+        <button class="secondary" data-seq="40,20,50,60,70">Exemplo (40, 20, 50, 60, 70)</button>
+      </div>
+      <div class="stats" aria-live="polite">
+        <div class="stat">Quantidade de nós: <strong id="countStat">0</strong></div>
+        <div class="stat">Altura da árvore: <strong id="heightStat">−1</strong></div>
+        <div class="stat">Convenção: <strong>folha = 0</strong></div>
+      </div>
+      <section class="stepper" aria-live="polite" aria-label="Acompanhamento passo a passo">
+        <div class="step-top">
+          <span class="step-counter" id="stepCounter">Sem operação</span>
+          <div class="progress" aria-label="Progresso da explicação"><div id="progressFill" class="progress-fill"></div></div>
+        </div>
+        <h3 id="stepTitle">Acompanhe cada etapa</h3>
+        <p id="stepDescription" class="step-description">Insira um valor ou uma sequência. O sistema mostrará as comparações, as atualizações de altura, os fatores de balanceamento e as rotações.</p>
+        <div class="play-controls">
+          <button id="prevStepBtn" class="secondary" disabled>◀ Anterior</button>
+          <button id="playStepBtn">▶ Reproduzir</button>
+          <button id="nextStepBtn" class="secondary" disabled>Próximo ▶</button>
+          <button id="endStepBtn" class="secondary" disabled>Ir ao final</button>
+          <label class="small" for="speedSelect">Velocidade</label>
+          <select id="speedSelect" aria-label="Velocidade da animação">
+            <option value="0.65">Lenta</option>
+            <option value="1" selected>Normal</option>
+            <option value="1.5">Rápida</option>
+          </select>
+        </div>
+        <div class="timeline-note">Use Anterior e Próximo para explicar manualmente, ou Reproduzir para assistir à operação. Você também pode selecionar uma etapa no histórico ao lado.</div>
+      </section>
+      <div id="treeArea" class="tree-scroll" aria-label="Representação gráfica da árvore AVL">
+        <div class="empty">A árvore está vazia.<br>Insira um valor para começar.</div>
+      </div>
+      <div class="legend">
+        <span><i class="dot"></i> Nó da árvore</span>
+        <span><strong>h</strong> = altura do nó</span>
+        <span><strong>FB</strong> = fator de balanceamento</span>
+      </div>
+    </main>
+
+    <aside class="side">
+      <section class="card">
+        <h2>Como interpretar</h2>
+        <div class="rule"><strong>Altura:</strong> h(n) = 1 + max(h(esq), h(dir)). Para uma subárvore vazia, h = −1.</div>
+        <div class="rule"><strong>Fator:</strong> FB(n) = h(esq) − h(dir).</div>
+        <div class="rule"><strong>Árvore AVL:</strong> todos os nós devem ter FB igual a −1, 0 ou +1.</div>
+        <p><strong>Sinal do FB:</strong> positivo indica maior altura à esquerda; negativo indica maior altura à direita.</p>
+        <div class="rule"><strong>Casos de rotação:</strong><br>LL → simples à direita<br>RR → simples à esquerda<br>LR → dupla: esquerda no filho, depois direita no nó<br>RL → dupla: direita no filho, depois esquerda no nó</div>
+      </section>
+      <section class="card" style="margin-top:16px">
+        <h2>Etapas da operação</h2>
+        <ul id="logList" class="log"><li>Aguardando a primeira operação.</li></ul>
+      </section>
+    </aside>
+  </div>
+  <p class="footer">Esta ferramenta está em desenvolvimento e pode apresentar erros, inconsistências nos cálculos ou comportamentos inesperados durante as operações. Os resultados devem ser conferidos antes de serem utilizados para fins acadêmicos. As alturas são calculadas pela quantidade de arestas, de modo que folhas têm altura 0 e árvores vazias têm altura −1.</p>
+</div>
+<script>
+(() => {
+  'use strict';
+  class Node {
+    constructor(key){ this.key=key; this.left=null; this.right=null; this.height=0; }
+  }
+  let root=null;
+  let history=[];
+  let timeline=[];
+  let currentStep=-1;
+  let playback=null;
+  let lastPositions=new Map();
+  const SVG='http://www.w3.org/2000/svg';
+  const $=id=>document.getElementById(id);
+  const h=n=>n?n.height:-1;
+  const bf=n=>n?h(n.left)-h(n.right):0;
+  const update=n=>{ if(n) n.height=1+Math.max(h(n.left),h(n.right)); return n; };
+  const clone=n=>n?Object.assign(new Node(n.key),{left:clone(n.left),right:clone(n.right),height:n.height}):null;
+  const count=n=>n?1+count(n.left)+count(n.right):0;
+  const maxDepth=n=>n?1+Math.max(maxDepth(n.left),maxDepth(n.right)):0;
+  const fmt=n=>n>0?`+${n}`:String(n);
+  const attach=(parent,side,node)=>{ if(parent) parent[side]=node; else root=node; };
+
+  function stopPlayback(){
+    if(playback){clearInterval(playback);playback=null;}
+    $('playStepBtn').textContent='▶ Reproduzir';
+  }
+  function beginTimeline(){stopPlayback();timeline=[];currentStep=-1;lastPositions=new Map();}
+  function record(title,description,focus=[],kind='info'){
+    timeline.push({title,description,focus:[...focus],kind,root:clone(root)});
+  }
+  function save(){history.push(clone(root));if(history.length>40)history.shift();}
+
+  function rotateRight(y){
+    const x=y.left, t2=x.right;
+    x.right=y; y.left=t2;
+    update(y);update(x);
+    return x;
+  }
+  function rotateLeft(x){
+    const y=x.right, t2=y.left;
+    y.left=x; x.right=t2;
+    update(x);update(y);
+    return y;
+  }
+
+  function rebalance(n,parent,side){
+    update(n);
+    const b=bf(n);
+    if(b>1){
+      const childBalance=bf(n.left);
+      if(childBalance>=0){
+        record(`Desequilíbrio LL no nó ${n.key}`,`O nó ${n.key} está desbalanceado para a esquerda (FB = ${fmt(b)}). Seu filho esquerdo também está mais alto à esquerda (FB = ${fmt(childBalance)}). Aplicaremos uma rotação simples à direita.`,[n.key,n.left.key],'unbalanced');
+        const oldRoot=n, pivot=n.left, newRoot=rotateRight(n);
+        attach(parent,side,newRoot);
+        record(`Rotação à direita concluída`, `O filho esquerdo ${pivot.key} subiu e assumiu a posição de ${oldRoot.key}. O nó ${oldRoot.key} passou a ser filho direito de ${pivot.key}.`,[pivot.key,oldRoot.key],'rotation');
+        return newRoot;
+      }
+      record(`Desequilíbrio LR no nó ${n.key}`,`O nó ${n.key} está pesado à esquerda, mas seu filho esquerdo está pesado à direita. Primeiro faremos uma rotação à esquerda no filho ${n.left.key}.`,[n.key,n.left.key],'unbalanced');
+      const child=n.left;
+      n.left=rotateLeft(child);
+      record(`Primeira etapa da rotação LR`, `Rotação à esquerda no nó ${child.key}: o nó ${n.left.key} sobe dentro da subárvore esquerda.`,[n.left.key,child.key],'rotation');
+      const oldRoot=n, pivot=n.left, newRoot=rotateRight(n);
+      attach(parent,side,newRoot);
+      record(`Segunda etapa da rotação LR`, `Rotação à direita no nó ${oldRoot.key}: o nó ${pivot.key} assume a posição do nó desbalanceado.`,[pivot.key,oldRoot.key],'rotation');
+      return newRoot;
+    }
+    if(b< -1){
+      const childBalance=bf(n.right);
+      if(childBalance<=0){
+        record(`Desequilíbrio RR no nó ${n.key}`,`O nó ${n.key} está desbalanceado para a direita (FB = ${b}). Seu filho direito também está mais alto à direita (FB = ${childBalance}). Aplicaremos uma rotação simples à esquerda.`,[n.key,n.right.key],'unbalanced');
+        const oldRoot=n, pivot=n.right, newRoot=rotateLeft(n);
+        attach(parent,side,newRoot);
+        record(`Rotação à esquerda concluída`, `O filho direito ${pivot.key} subiu e assumiu a posição de ${oldRoot.key}. O nó ${oldRoot.key} passou a ser filho esquerdo de ${pivot.key}.`,[pivot.key,oldRoot.key],'rotation');
+        return newRoot;
+      }
+      record(`Desequilíbrio RL no nó ${n.key}`,`O nó ${n.key} está pesado à direita, mas seu filho direito está pesado à esquerda. Primeiro faremos uma rotação à direita no filho ${n.right.key}.`,[n.key,n.right.key],'unbalanced');
+      const child=n.right;
+      n.right=rotateRight(child);
+      record(`Primeira etapa da rotação RL`, `Rotação à direita no nó ${child.key}: o nó ${n.right.key} sobe dentro da subárvore direita.`,[n.right.key,child.key],'rotation');
+      const oldRoot=n, pivot=n.right, newRoot=rotateLeft(n);
+      attach(parent,side,newRoot);
+      record(`Segunda etapa da rotação RL`, `Rotação à esquerda no nó ${oldRoot.key}: o nó ${pivot.key} assume a posição do nó desbalanceado.`,[pivot.key,oldRoot.key],'rotation');
+      return newRoot;
+    }
+    return n;
+  }
+
+  function insertRec(n,key,parent=null,side=null,ctx){
+    if(!n){
+      const fresh=new Node(key);attach(parent,side,fresh);ctx.inserted=true;
+      record(`Valor ${key} inserido`, `Encontramos uma posição vazia. O valor ${key} foi inserido como nó folha, com altura 0.`,[key],'insert');
+      return fresh;
+    }
+    if(key===n.key){ctx.duplicate=true;record(`Valor ${key} repetido`,`O valor ${key} já existe na árvore. Esta implementação não insere valores repetidos.`,[n.key],'error');return n;}
+    const direction=key<n.key?'esquerda':'direita';
+    record(`Comparação no nó ${n.key}`,`${key} ${key<n.key?'<':'>'} ${n.key}. Seguiremos pela subárvore ${direction}.`,[n.key],'path');
+    if(key<n.key) insertRec(n.left,key,n,'left',ctx); else insertRec(n.right,key,n,'right',ctx);
+    update(n);
+    const leftH=h(n.left),rightH=h(n.right),balance=bf(n);
+    record(`Atualização do nó ${n.key}`,`Altura da SAE = ${leftH}; altura da SAD = ${rightH}. Altura do nó ${n.key} = ${n.height}. FB(${n.key}) = ${leftH} − (${rightH}) = ${fmt(balance)}.`,[n.key],Math.abs(balance)>1?'unbalanced':'check');
+    return rebalance(n,parent,side);
+  }
+
+  function minNode(n){while(n.left)n=n.left;return n;}
+  function deleteRec(n,key,parent=null,side=null,ctx){
+    if(!n){if(!ctx.notFound){record(`Valor ${key} não encontrado`,`Não existe um nó com o valor ${key}. A árvore permanece sem essa remoção.`,[],'error');ctx.notFound=true;}return null;}
+    if(key<n.key){record(`Comparação no nó ${n.key}`,`${key} < ${n.key}. A busca continua pela esquerda.`,[n.key],'path');deleteRec(n.left,key,n,'left',ctx);}
+    else if(key>n.key){record(`Comparação no nó ${n.key}`,`${key} > ${n.key}. A busca continua pela direita.`,[n.key],'path');deleteRec(n.right,key,n,'right',ctx);}
+    else {
+      record(`Nó ${key} encontrado`,`Encontramos o valor que será removido.`,[n.key],'path');
+      if(!n.left&&!n.right){attach(parent,side,null);record(`Nó ${key} removido`,`O nó era folha; basta removê-lo.`,[key],'delete');return null;}
+      if(!n.left||!n.right){const child=n.left||n.right;attach(parent,side,child);record(`Nó ${key} removido`,`O nó tinha apenas um filho. Esse filho assume sua posição.`,[key,child.key],'delete');return child;}
+      const successor=minNode(n.right),old=key;
+      n.key=successor.key;
+      record(`Substituição do nó ${old}`,`O nó tinha dois filhos. Seu valor foi substituído pelo sucessor em ordem: ${successor.key}. Agora removeremos a ocorrência original do sucessor.`,[n.key],'delete');
+      deleteMin(n.right,n,'right');
+    }
+    update(n);
+    const leftH=h(n.left),rightH=h(n.right),balance=bf(n);
+    record(`Verificação do nó ${n.key}`,`Após a remoção: altura da SAE = ${leftH}; altura da SAD = ${rightH}; altura do nó = ${n.height}; FB = ${fmt(balance)}.`,[n.key],Math.abs(balance)>1?'unbalanced':'check');
+    return rebalance(n,parent,side);
+  }
+  function deleteMin(n,parent,side){
+    if(!n.left){attach(parent,side,n.right);return n.right;}
+    deleteMin(n.left,n,'left');
+    update(n);
+    return rebalance(n,parent,side);
+  }
+
+  function finishTimeline(){
+    if(!timeline.length)record('Operação concluída','Nenhuma alteração foi realizada.',[],'info');
+    currentStep=0;renderStep();renderLog();
+  }
+  function renderLog(){
+    const ul=$('logList');ul.innerHTML='';
+    timeline.forEach((step,i)=>{
+      const li=document.createElement('li');
+      li.textContent=`${i+1}. ${step.title} — ${step.description}`;
+      if(step.kind==='rotation'||step.kind==='unbalanced')li.classList.add('rotation');
+      if(step.kind==='error')li.classList.add('error');
+      li.tabIndex=0;li.setAttribute('role','button');li.setAttribute('aria-label',`Ir para etapa ${i+1}: ${step.title}`);
+      li.addEventListener('click',()=>{stopPlayback();currentStep=i;renderStep();});
+      li.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();stopPlayback();currentStep=i;renderStep();}});
+      ul.appendChild(li);
+    });
+  }
+  function renderStep(){
+    if(currentStep<0||!timeline.length)return;
+    const step=timeline[currentStep];
+    $('stepCounter').textContent=`Etapa ${currentStep+1} de ${timeline.length}`;
+    $('progressFill').style.width=`${((currentStep+1)/timeline.length)*100}%`;
+    $('stepTitle').textContent=step.title;
+    $('stepDescription').textContent=step.description;
+    $('prevStepBtn').disabled=currentStep===0;
+    $('nextStepBtn').disabled=currentStep===timeline.length-1;
+    $('endStepBtn').disabled=currentStep===timeline.length-1;
+    $('insertBtn').disabled=currentStep!==timeline.length-1;
+    $('removeBtn').disabled=currentStep!==timeline.length-1;
+    $('sequenceBtn').disabled=currentStep!==timeline.length-1;
+    $('clearBtn').disabled=currentStep!==timeline.length-1;
+    $('undoBtn').disabled=history.length===0||currentStep!==timeline.length-1;
+    [...$('logList').children].forEach((li,i)=>{li.classList.toggle('active',i===currentStep);li.classList.toggle('done',i<currentStep);});
+    draw(step.root,new Set(step.focus),step.kind);
+  }
+  function goToStep(i){if(!timeline.length)return;stopPlayback();currentStep=Math.max(0,Math.min(timeline.length-1,i));renderStep();}
+  function play(){
+    if(!timeline.length)return;
+    if(currentStep>=timeline.length-1)currentStep=0;
+    stopPlayback();$('playStepBtn').textContent='Ⅱ Pausar';renderStep();
+    const interval=Math.max(650,1900/Number($('speedSelect').value));
+    playback=setInterval(()=>{
+      if(currentStep>=timeline.length-1){stopPlayback();renderStep();return;}
+      currentStep++;renderStep();
+      if(currentStep>=timeline.length-1)stopPlayback();
+    },interval);
+  }
+
+  function draw(tree,focus=new Set(),kind='info'){
+    const area=$('treeArea');
+    $('countStat').textContent=count(tree);
+    $('heightStat').textContent=tree?tree.height:'−1';
+    if(!tree){area.innerHTML='<div class="empty">A árvore está vazia.<br>Insira um valor para começar.</div>';lastPositions=new Map();return;}
+    if(!area.querySelector('svg')){
+      area.innerHTML=`<svg id="treeSvg" xmlns="${SVG}" role="img" aria-label="Árvore AVL com altura e fator de balanceamento em cada nó"><g id="edgeLayer"></g><g id="nodeLayer"></g></svg>`;
+      lastPositions=new Map();
+    }
+    const svg=$('treeSvg'),edgeLayer=$('edgeLayer'),nodeLayer=$('nodeLayer');
+    const n=count(tree),width=Math.max(720,n*108+120),depth=maxDepth(tree),height=Math.max(270,depth*118+115);
+    const xStart=(width-(n-1)*108)/2;
+    svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.setAttribute('width',width);svg.setAttribute('height',height);
+    const positions=new Map();let idx=0;
+    function assign(node,d){if(!node)return;assign(node.left,d+1);positions.set(node,{x:xStart+idx*108,y:62+d*118});idx++;assign(node.right,d+1);}
+    assign(tree,0);
+    edgeLayer.innerHTML='';
+    for(const [node,pos] of positions){
+      for(const child of [node.left,node.right])if(child){
+        const cp=positions.get(child),dx=cp.x-pos.x,dy=cp.y-pos.y,len=Math.hypot(dx,dy),r=29;
+        const line=document.createElementNS(SVG,'line');line.setAttribute('class','edge');
+        line.setAttribute('x1',pos.x+dx/len*r);line.setAttribute('y1',pos.y+dy/len*r);
+        line.setAttribute('x2',cp.x-dx/len*r);line.setAttribute('y2',cp.y-dy/len*r);edgeLayer.appendChild(line);
+      }
+    }
+    const existing=new Map([...nodeLayer.querySelectorAll('g.node')].map(el=>[Number(el.dataset.key),el]));
+    const currentKeys=new Set();
+    for(const [node,pos] of positions){
+      currentKeys.add(node.key);let g=existing.get(node.key);const old=lastPositions.get(node.key);
+      if(!g){
+        g=document.createElementNS(SVG,'g');g.setAttribute('class','node');g.dataset.key=node.key;
+        const circle=document.createElementNS(SVG,'circle');circle.setAttribute('r','29');
+        const value=document.createElementNS(SVG,'text');value.setAttribute('class','value');value.setAttribute('y','1');value.textContent=node.key;
+        const meta=document.createElementNS(SVG,'text');meta.setAttribute('class','meta height-label');meta.setAttribute('y','-39');
+        const fb=document.createElementNS(SVG,'text');fb.setAttribute('class','meta fb-label');fb.setAttribute('y','46');
+        g.append(circle,value,meta,fb);nodeLayer.appendChild(g);
+        g.setAttribute('transform',`translate(${pos.x} ${pos.y})`);
+        g.animate([{opacity:0,transform:`translate(${pos.x} ${pos.y-18})`},{opacity:1,transform:`translate(${pos.x} ${pos.y})`}],{duration:380,easing:'ease-out'});
+      }else{
+        const from=old||pos;
+        if(old&&(old.x!==pos.x||old.y!==pos.y)){
+          const anim=document.createElementNS(SVG,'animateTransform');
+          anim.setAttribute('attributeName','transform');anim.setAttribute('type','translate');
+          anim.setAttribute('from',`${from.x} ${from.y}`);anim.setAttribute('to',`${pos.x} ${pos.y}`);
+          anim.setAttribute('dur','0.48s');anim.setAttribute('fill','freeze');
+          g.setAttribute('transform',`translate(${pos.x} ${pos.y})`);g.appendChild(anim);
+          try{anim.beginElement();}catch(_){g.setAttribute('transform',`translate(${pos.x} ${pos.y})`);}
+          setTimeout(()=>anim.remove(),520);
+        }else g.setAttribute('transform',`translate(${pos.x} ${pos.y})`);
+      }
+      g.classList.toggle('focus',focus.has(node.key)&&kind!=='unbalanced'&&kind!=='rotation');
+      g.classList.toggle('unbalanced',focus.has(node.key)&&kind==='unbalanced');
+      g.classList.toggle('rotated',focus.has(node.key)&&kind==='rotation');
+      g.querySelector('.height-label').textContent=`h=${node.height}`;
+      g.querySelector('.fb-label').textContent=`FB=${fmt(bf(node))}`;
+    }
+    for(const [key,g] of existing){if(!currentKeys.has(key)){g.animate([{opacity:1,transform:g.getAttribute('transform')},{opacity:0,transform:g.getAttribute('transform')}],{duration:240,fill:'forwards'});setTimeout(()=>{if(!lastPositions.has(key))g.remove();},250);}}
+    lastPositions=new Map([...positions].map(([node,pos])=>[node.key,pos]));
+  }
+
+  function readValue(){
+    const raw=$('valueInput').value.trim();if(raw===''){alert('Digite um número inteiro.');return null;}
+    const v=Number(raw);if(!Number.isSafeInteger(v)){alert('Digite um número inteiro válido.');return null;}return v;
+  }
+  function runInsert(value){
+    save();beginTimeline();record('Início da inserção',`Vamos inserir o valor ${value} seguindo as regras de uma árvore binária de busca.`,[],'info');
+    const ctx={inserted:false,duplicate:false};
+    insertRec(root,value,null,null,ctx);
+    if(ctx.duplicate)record('Inserção não realizada',`O valor ${value} já estava presente. A árvore não foi alterada.`,[value],'error');
+    record('Inserção concluída',ctx.duplicate?'A árvore permaneceu sem alterações.':`A inserção de ${value} foi concluída. A árvore possui ${count(root)} nó(s) e altura ${root?root.height:-1}.`,[], 'finish');
+    finishTimeline();
+  }
+  function runRemove(value){
+    save();beginTimeline();record('Início da remoção',`Vamos procurar o valor ${value} para removê-lo da árvore AVL.`,[],'info');
+    const ctx={notFound:false};deleteRec(root,value,null,null,ctx);
+    record('Remoção concluída',ctx.notFound?'Nenhum nó foi removido.':`A remoção de ${value} foi concluída. A árvore possui ${count(root)} nó(s) e altura ${root?root.height:-1}.`,[],'finish');
+    finishTimeline();
+  }
+  function runSequence(values,label='sequência'){
+    save();beginTimeline();root=null;
+    record('Árvore inicial vazia',`Começaremos uma nova árvore com a ${label}: ${values.join(', ')}.`,[],'info');
+    values.forEach((v,i)=>{
+      record(`Inserção ${i+1} de ${values.length}`,`Agora vamos inserir ${v}. Acompanhe as comparações e as verificações de balanceamento.`,[],'info');
+      const ctx={inserted:false,duplicate:false};insertRec(root,v,null,null,ctx);
+    });
+    record('Construção concluída',`Todos os valores foram processados. A árvore possui ${count(root)} nó(s) e altura ${root?root.height:-1}.`,[],'finish');
+    finishTimeline();
+  }
+
+  $('insertBtn').addEventListener('click',()=>{const v=readValue();if(v===null)return;runInsert(v);$('valueInput').value='';});
+  $('removeBtn').addEventListener('click',()=>{const v=readValue();if(v===null)return;runRemove(v);$('valueInput').value='';});
+  $('valueInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('insertBtn').click();});
+  function parseSequence(){
+    const raw=$('sequenceInput').value.trim();if(!raw){alert('Digite uma sequência de inteiros separados por vírgula.');return null;}
+    const parts=raw.split(/[;,\s]+/).filter(Boolean),values=parts.map(Number);
+    if(!values.length||values.some(v=>!Number.isSafeInteger(v))){alert('Sequência inválida. Use somente números inteiros separados por vírgula ou espaço.');return null;}
+    return values;
+  }
+  $('sequenceBtn').addEventListener('click',()=>{const values=parseSequence();if(!values)return;runSequence(values);$('sequenceInput').value='';});
+  $('sequenceInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('sequenceBtn').click();});
+  document.querySelectorAll('[data-seq]').forEach(btn=>btn.addEventListener('click',()=>runSequence(btn.dataset.seq.split(',').map(Number),`exemplo ${btn.textContent}`)));
+  $('clearBtn').addEventListener('click',()=>{if(root)save();beginTimeline();root=null;record('Árvore limpa','A árvore está vazia. Insira um valor para começar.',[],'info');finishTimeline();});
+  $('undoBtn').addEventListener('click',()=>{stopPlayback();if(history.length===0)return;const previous=history.pop();root=previous;beginTimeline();record('Operação desfeita','A árvore voltou ao estado anterior à última operação.',[],'finish');finishTimeline();});
+  $('prevStepBtn').addEventListener('click',()=>goToStep(currentStep-1));
+  $('nextStepBtn').addEventListener('click',()=>goToStep(currentStep+1));
+  $('endStepBtn').addEventListener('click',()=>goToStep(timeline.length-1));
+  $('playStepBtn').addEventListener('click',()=>{if(playback)stopPlayback();else play();});
+  $('speedSelect').addEventListener('change',()=>{if(playback){play();}});
+  record('Pronto para começar','Insira um valor ou escolha um exemplo. Cada etapa será apresentada com animação e explicação.',[],'info');
+  finishTimeline();
+})();
+</script>
+</body>
+</html>
