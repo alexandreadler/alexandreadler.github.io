@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo: Árvores em C</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-panel: #0b1120;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #4ade80;
+            --accent-amber: #fbbf24;
+            --accent-purple: #c084fc;
+            --accent-red: #f87171;
+            --code-bg: #0d1323;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.65;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        header h1 {
+            font-size: 1.55rem;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        .badge {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.3rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            background-color: var(--bg-panel);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 2rem;
+            overflow-x: auto;
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 1rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+        }
+
+        .container {
+            max-width: 1340px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 960px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.02rem;
+            color: var(--accent-blue);
+            margin: 1.2rem 0 0.5rem;
+        }
+
+        p.desc {
+            color: var(--text-muted);
+            font-size: 0.94rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Caixas Didáticas Intuitivas */
+        .concept-box {
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            border-radius: 8px;
+            padding: 1rem 1.15rem;
+            margin-bottom: 1.15rem;
+            font-size: 0.92rem;
+        }
+
+        .concept-box h4 {
+            color: var(--accent-blue);
+            font-size: 0.96rem;
+            margin-bottom: 0.45rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .concept-box ul {
+            margin-left: 1.25rem;
+            color: #e2e8f0;
+        }
+
+        .concept-box li {
+            margin-bottom: 0.3rem;
+        }
+
+        .legend-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 0.75rem 0 1rem;
+        }
+
+        .pill {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+        }
+
+        .pill strong {
+            color: var(--accent-amber);
+        }
+
+        .step-narration {
+            background: rgba(74, 222, 128, 0.1);
+            border-left: 4px solid var(--accent-green);
+            padding: 0.85rem 1rem;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.92rem;
+            color: #f1f5f9;
+            margin-top: 0.85rem;
+        }
+
+        /* Code Block & Syntax Highlighting */
+        pre.code-box {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.88rem;
+            overflow-x: auto;
+            line-height: 1.55;
+            color: #e2e8f0;
+        }
+
+        .code-line {
+            display: block;
+            padding: 1px 6px;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+
+        .code-line.highlight {
+            background-color: rgba(56, 189, 248, 0.22);
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .kw { color: #c084fc; font-weight: bold; }
+        .tp { color: #38bdf8; }
+        .fn { color: #60a5fa; }
+        .str { color: #4ade80; }
+        .num { color: #fbbf24; }
+        .cm { color: #64748b; font-style: italic; }
+
+        /* Buttons */
+        .btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.55rem 1rem;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn:hover { background-color: #1d4ed8; }
+        .btn:active { transform: scale(0.98); }
+
+        .btn-secondary {
+            background-color: #334155;
+            color: var(--text-main);
+        }
+        .btn-secondary:hover { background-color: #475569; }
+
+        .btn-green {
+            background-color: #16a34a;
+        }
+        .btn-green:hover { background-color: #15803d; }
+
+        .btn-amber {
+            background-color: #d97706;
+        }
+        .btn-amber:hover { background-color: #b45309; }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Memory Diagram */
+        .mem-box-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: center;
+            padding: 1.25rem 1rem 1rem;
+            background: var(--bg-panel);
+            border-radius: 8px;
+            border: 1px dashed var(--border-color);
+        }
+
+        .mem-node {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            border: 2px solid var(--accent-blue);
+            border-radius: 6px;
+            background: #1e293b;
+            width: 310px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 0.85rem;
+            position: relative;
+        }
+
+        .mem-node-addr {
+            position: absolute;
+            top: -19px;
+            left: 4px;
+            font-size: 0.74rem;
+            color: var(--accent-amber);
+        }
+
+        .mem-cell {
+            padding: 0.65rem 0.4rem;
+            border-right: 1px solid var(--border-color);
+        }
+        .mem-cell:last-child { border-right: none; }
+        .mem-cell span {
+            display: block;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        /* SVG Canvas */
+        .svg-stage {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            width: 100%;
+            min-height: 280px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Alert Boxes */
+        .alert-warning {
+            background: rgba(251, 191, 36, 0.1);
+            border-left: 4px solid var(--accent-amber);
+            padding: 0.9rem 1rem;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.88rem;
+            margin-top: 1rem;
+        }
+
+        .alert-warning strong {
+            color: var(--accent-amber);
+        }
+
+        /* Call Stack & Output Pill */
+        .stack-box {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.85rem;
+            min-height: 110px;
+            font-family: monospace;
+            font-size: 0.84rem;
+        }
+
+        .stack-item {
+            background: rgba(192, 132, 252, 0.15);
+            border: 1px solid rgba(192, 132, 252, 0.4);
+            color: #e9d5ff;
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+
+        .output-strip {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            color: var(--accent-green);
+            font-size: 0.95rem;
+            margin-top: 0.75rem;
+        }
+
+        /* Console Sandbox Styles */
+        .ide-wrapper {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 1024px) {
+            .ide-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .editor-toolbar {
+            background: #162032;
+            padding: 0.6rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .editor-toolbar span {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+        }
+
+        textarea.c-editor {
+            width: 100%;
+            height: 410px;
+            background: var(--code-bg);
+            color: #f1f5f9;
+            border: none;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            resize: vertical;
+            outline: none;
+            tab-size: 4;
+        }
+
+        .console-container {
+            display: flex;
+            flex-direction: column;
+            background: #050811;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .console-header {
+            background: #162032;
+            padding: 0.6rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+        }
+
+        .console-screen {
+            flex: 1;
+            min-height: 250px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+        }
+
+        .console-line-sys { color: #94a3b8; }
+        .console-line-ok { color: #4ade80; }
+        .console-line-err { color: #f87171; }
+        .console-line-warn { color: #fbbf24; }
+        .console-line-out { color: #f8fafc; }
+
+        .console-input-bar {
+            display: flex;
+            border-top: 1px solid var(--border-color);
+            background: #0b1120;
+            padding: 0.45rem 0.75rem;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .console-input-bar span {
+            color: var(--accent-green);
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .console-input-bar input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-family: monospace;
+            font-size: 0.88rem;
+            outline: none;
+        }
+
+        /* Quick Command Chips */
+        .cmd-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            padding: 0.6rem 0.75rem;
+            background: #0f172a;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .chip-btn {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #cbd5e1;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.78rem;
+            cursor: pointer;
+        }
+        .chip-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        /* Accordion for Exercises */
+        details.exercise-item {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.9rem 1.1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        details.exercise-item summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-main);
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        details.exercise-item summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .ex-body {
+            margin-top: 0.85rem;
+            padding-top: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.92rem;
+            color: var(--text-muted);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <h1>Guia Interativo: Estruturas de Dados em Árvore (C)</h1>
+        <p>Fundamentos teóricos, representação em memória dinâmica, percursos recursivos e Árvores Binárias de Busca (ABB)</p>
+    </div>
+    <span class="badge">DCOMP / CCENS - UFES</span>
+</header>
+
+<nav class="tabs">
+    <button class="tab-btn active" onclick="openTab('tab1', this)">1. O que é um Nó e a Memória</button>
+    <button class="tab-btn" onclick="openTab('tab2', this)">2. Como Percorrer a Árvore</button>
+    <button class="tab-btn" onclick="openTab('tab3', this)">3. Árvore de Busca (ABB)</button>
+    <button class="tab-btn" onclick="openTab('tab4', this)">4. Praticar no Console C</button>
+</nav>
+
+<main class="container">
+
+    <!-- ==================== ABA 1: O NÓ E A MEMÓRIA ==================== -->
+    <section id="tab1" class="tab-content active">
+        <div class="concept-box">
+            <h4>💡 Conceito Fundamental: Estrutura Hierárquica e Representação em Memória</h4>
+            <p>Na Ciência da Computação, uma árvore é uma estrutura de dados hierárquica não linear representada com o <strong>nó raiz</strong> no nível superior (nível 0) e os <strong>nós folha</strong> nas extremidades inferiores. Em C, cada <strong>nó</strong> é implementado como uma estrutura autorreferenciada (<code>struct</code>) alocada dinamicamente, composta por três campos:</p>
+            <div class="legend-pills">
+                <div class="pill"><strong>info:</strong> Campo de dado que armazena a chave ou informação do nó (ex.: <code>'a'</code> ou <code>40</code>)</div>
+                <div class="pill"><strong>sae:</strong> Ponteiro para a <strong>S</strong>ub<strong>á</strong>rvore <strong>E</strong>squerda (filho à esquerda)</div>
+                <div class="pill"><strong>sad:</strong> Ponteiro para a <strong>S</strong>ub<strong>á</strong>rvore <strong>D</strong>ireita (filho à direita)</div>
+                <div class="pill"><strong>NULL:</strong> Ponteiro nulo que indica ausência de subárvore (árvore vazia)</div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h2>Implementação em C: Definição do Nó e Alocação Dinâmica</h2>
+                <p class="desc">Abaixo definimos o tipo estruturado do nó (<code>struct no</code>) e a função auxiliar <code>criarNo</code>, que realiza a alocação dinâmica na memória <em>heap</em> via <code>malloc</code> e inicializa seus ponteiros.</p>
+                
+                <pre class="code-box" id="code-tab1">
+<span class="code-line" data-step="0"><span class="kw">typedef struct</span> no {</span>
+<span class="code-line" data-step="0">    <span class="tp">char</span> info;          <span class="cm">// O dado guardado dentro da bolinha</span></span>
+<span class="code-line" data-step="0">    <span class="kw">struct</span> no *sae;     <span class="cm">// Seta para Subárvore Esquerda</span></span>
+<span class="code-line" data-step="0">    <span class="kw">struct</span> no *sad;     <span class="cm">// Seta para Subárvore Direita</span></span>
+<span class="code-line" data-step="0">} No;</span>
+<span class="code-line" data-step="0"></span>
+<span class="code-line" data-step="1">No* <span class="fn">criarNo</span>(<span class="tp">char</span> c, No* esq, No* dir) {</span>
+<span class="code-line" data-step="1">    No* novo = (No*) <span class="fn">malloc</span>(<span class="kw">sizeof</span>(No)); <span class="cm">// Reserva memória</span></span>
+<span class="code-line" data-step="1">    novo->info = c;                      <span class="cm">// Guarda o valor</span></span>
+<span class="code-line" data-step="1">    novo->sae = esq;                     <span class="cm">// Conecta filho esquerdo</span></span>
+<span class="code-line" data-step="1">    novo->sad = dir;                     <span class="cm">// Conecta filho direito</span></span>
+<span class="code-line" data-step="1">    <span class="kw">return</span> novo;                         <span class="cm">// Devolve o endereço</span></span>
+<span class="code-line" data-step="1">}</span>
+<span class="code-line" data-step="0"></span>
+<span class="code-line" data-step="2"><span class="cm">// Construção de baixo para cima (dos filhos para a raiz):</span></span>
+<span class="code-line" data-step="2">No* d = <span class="fn">criarNo</span>(<span class="str">'d'</span>, NULL, NULL); <span class="cm">// 1. Folha 'd' sem filhos</span></span>
+<span class="code-line" data-step="2">No* b = <span class="fn">criarNo</span>(<span class="str">'b'</span>, NULL, d);    <span class="cm">// 2. 'b' aponta para 'd'</span></span>
+<span class="code-line" data-step="3">No* e = <span class="fn">criarNo</span>(<span class="str">'e'</span>, NULL, NULL); <span class="cm">// 3. Folha 'e'</span></span>
+<span class="code-line" data-step="3">No* f = <span class="fn">criarNo</span>(<span class="str">'f'</span>, NULL, NULL); <span class="cm">// 3. Folha 'f'</span></span>
+<span class="code-line" data-step="3">No* c = <span class="fn">criarNo</span>(<span class="str">'c'</span>, e, f);       <span class="cm">// 3. 'c' liga 'e' e 'f'</span></span>
+<span class="code-line" data-step="4">No* raiz = <span class="fn">criarNo</span>(<span class="str">'a'</span>, b, c);    <span class="cm">// 4. Raiz 'a' liga tudo!</span></span></pre>
+
+                <div class="alert-warning">
+                    <strong>Por que começamos de baixo para cima aqui?</strong> Para conectar o pai <code>'a'</code> aos filhos <code>b</code> e <code>c</code>, os filhos precisam existir primeiro na memória para terem um endereço (ex: <code>0x1080</code>) para onde apontar!
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Construção <em>Bottom-Up</em> Passo a Passo</h2>
+                <p class="desc">Selecione cada etapa (Passos 1 a 4) para acompanhar o encadeamento dos ponteiros e a disposição dos campos do nó na memória:</p>
+                
+                <div class="btn-group" id="mem-step-btns">
+                    <button class="btn btn-secondary" data-mstep="1" onclick="setMemStep(1)">Passo 1: Criar Folha 'd'</button>
+                    <button class="btn btn-secondary" data-mstep="2" onclick="setMemStep(2)">Passo 2: Ligar 'b' em 'd'</button>
+                    <button class="btn btn-secondary" data-mstep="3" onclick="setMemStep(3)">Passo 3: Montar lado 'c'</button>
+                    <button class="btn" data-mstep="4" onclick="setMemStep(4)">Passo 4: Conectar Raiz 'a'</button>
+                </div>
+
+                <div class="svg-stage" id="svg-tab1-container"></div>
+
+                <div class="step-narration" id="mem-narration"></div>
+
+                <h3>Representação Interna do Nó na Memória (<code>struct no</code>):</h3>
+                <div class="mem-box-container" id="mem-inspector"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ABA 2: PERCURSOS RECURSIVOS ==================== -->
+    <section id="tab2" class="tab-content">
+        <div class="concept-box">
+            <h4>🧭 O que são Percursos e o que significam as siglas R - E - D?</h4>
+            <p>Percorrer (ou caminhar em) uma árvore binária consiste em visitar sistematicamente cada um de seus nós exatamente uma vez. Como a definição da estrutura é recursiva, cada nó envolve três operações fundamentais, representadas pelas siglas:</p>
+            <div class="legend-pills">
+                <div class="pill"><strong>R = Raiz:</strong> Visitar/imprimir o nó atual onde você está</div>
+                <div class="pill"><strong>E = Esquerda:</strong> Explorar toda a subárvore da esquerda (<code>sae</code>)</div>
+                <div class="pill"><strong>D = Direita:</strong> Explorar toda a subárvore da direita (<code>sad</code>)</div>
+            </div>
+            <ul>
+                <li><strong>Pré-Ordem (R - E - D):</strong> Imprime o nó <em>antes</em> de descer para os filhos (<strong>R</strong>aiz primeiro, depois <strong>E</strong>squerda, depois <strong>D</strong>ireita).</li>
+                <li><strong>In-Ordem (E - R - D):</strong> Vai tudo para a <strong>E</strong>squerda, imprime a <strong>R</strong>aiz no meio, e depois vai para a <strong>D</strong>ireita.</li>
+                <li><strong>Pós-Ordem (E - D - R):</strong> Visita todos os filhos primeiro (<strong>E</strong>squerda e <strong>D</strong>ireita) e só imprime a <strong>R</strong>aiz por último.</li>
+            </ul>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h2>Simulador de Caminhamento</h2>
+                <p class="desc">Selecione uma estratégia de percurso e utilize <strong>Próximo Passo ▶</strong> para acompanhar a sequência de visitas nó a nó:</p>
+                
+                <div class="btn-group">
+                    <button class="btn" id="btn-pre" onclick="selectTraversal('pre')">Pré-Ordem (R-E-D)</button>
+                    <button class="btn btn-secondary" id="btn-in" onclick="selectTraversal('in')">In-Ordem (E-R-D)</button>
+                    <button class="btn btn-secondary" id="btn-pos" onclick="selectTraversal('pos')">Pós-Ordem (E-D-R)</button>
+                </div>
+
+                <div class="step-narration" id="trav-mode-explain" style="margin-bottom: 1rem; margin-top: 0;"></div>
+
+                <pre class="code-box" id="traversal-code-box"></pre>
+
+                <div class="btn-group" style="margin-top: 1rem;">
+                    <button class="btn btn-green" onclick="stepTraversal(1)">Próximo Passo ▶</button>
+                    <button class="btn btn-secondary" onclick="stepTraversal(-1)">◀ Voltar Passo</button>
+                    <button class="btn btn-secondary" onclick="resetTraversal()">Reiniciar</button>
+                </div>
+
+                <div class="output-strip">
+                    <strong>Ordem impressa na tela:</strong> <span id="traversal-output"></span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Mapa Visual da Árvore</h2>
+                <p class="desc">Azul/Amarelo = nó sendo visitado agora | Verde = nó já impresso | Cinza = ainda não visitado.</p>
+                <div class="svg-stage" id="svg-tab2-container"></div>
+                
+                <h3>O que o programa está fazendo agora?</h3>
+                <div class="stack-box" id="call-stack-box"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ABA 3: ÁRVORE BINÁRIA DE BUSCA (ABB) ==================== -->
+    <section id="tab3" class="tab-content">
+        <div class="concept-box">
+            <h4>🔍 Definição Formal: Árvore Binária de Busca (ABB)</h4>
+            <p>Uma Árvore Binária de Busca é uma árvore binária cuja organização respeita a seguinte propriedade de ordenação para todo nó <em>v</em>:</p>
+            <div class="legend-pills">
+                <div class="pill"><strong>Subárvore Esquerda (<code>sae</code>):</strong> Todas as chaves são estritamente <strong>menores</strong> que a chave de <em>v</em></div>
+                <div class="pill"><strong>Subárvore Direita (<code>sad</code>):</strong> Todas as chaves são estritamente <strong>maiores</strong> que a chave de <em>v</em></div>
+            </div>
+            <p style="margin-top:0.4rem; color:#cbd5e1;"><strong>Propriedade Fundamental:</strong> A execução do percurso <strong>In-Ordem (E-R-D)</strong> sobre qualquer ABB produz, necessariamente, a sequência de chaves em ordem crescente.</p>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h2>Como funciona cada operação em C</h2>
+                <p class="desc">Clique nos botões abaixo para ver o código em C e a explicação de como o algoritmo toma decisões:</p>
+                
+                <div class="btn-group">
+                    <button class="btn" id="btn-bst-busca" onclick="showBstCode('busca')">1. Buscar Número</button>
+                    <button class="btn btn-secondary" id="btn-bst-insercao" onclick="showBstCode('insercao')">2. Inserir Número</button>
+                    <button class="btn btn-secondary" id="btn-bst-remocao" onclick="showBstCode('remocao')">3. Remover Número</button>
+                </div>
+
+                <div class="step-narration" id="bst-op-explain" style="margin-bottom: 1rem; margin-top: 0;"></div>
+
+                <pre class="code-box" id="bst-code-box"></pre>
+            </div>
+
+            <div class="card">
+                <h2>Análise dos 3 Casos de Remoção na ABB</h2>
+                <p class="desc">A remoção de um nó deve preservar a propriedade de ordenação da ABB e evitar perda de referências. Selecione cada caso estrutural abaixo:</p>
+                
+                <div class="btn-group" id="bst-scen-btns">
+                    <button class="btn" data-scen="original" onclick="setBstScenario('original')">Árvore Inicial</button>
+                    <button class="btn btn-secondary" data-scen="caso1" onclick="setBstScenario('caso1')">Caso 1: Apagar 45 (Folha)</button>
+                    <button class="btn btn-secondary" data-scen="caso2" onclick="setBstScenario('caso2')">Caso 2: Apagar 30 (1 Filho)</button>
+                    <button class="btn btn-secondary" data-scen="caso3" onclick="setBstScenario('caso3')">Caso 3: Apagar 40 (2 Filhos)</button>
+                </div>
+
+                <div class="svg-stage" id="svg-tab3-container"></div>
+                <div class="step-narration" id="bst-scenario-desc"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ABA 4: CONSOLE C & EXERCÍCIOS ==================== -->
+    <section id="tab4" class="tab-content">
+        <div class="concept-box">
+            <h4>🧪 Guia de Uso do Ambiente Experimental em C</h4>
+            <ul>
+                <li><strong>1. Seleção do Algoritmo:</strong> Escolha um dos 4 programas de referência nos botões abaixo para carregar a implementação completa no editor.</li>
+                <li><strong>2. Execução:</strong> Clique em <strong>▶ Executar Código</strong> para validar a sintaxe e observar a saída do programa no terminal interativo.</li>
+                <li><strong>3. Manipulação Dinâmica:</strong> Utilize os comandos rápidos abaixo do terminal (ou digite instruções como <code>inserir 25</code>) para testar operações em tempo real sobre a árvore em memória.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Editor de Código C & Terminal Interativo</h2>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="loadTemplate('ex1')">Exemplo 1: Listar Folhas</button>
+                <button class="btn btn-secondary" onclick="loadTemplate('ex2')">Exemplo 2: Altura e Total de Nós</button>
+                <button class="btn btn-secondary" onclick="loadTemplate('ex3')">Exemplo 3: Ordenar com In-Ordem</button>
+                <button class="btn btn-secondary" onclick="loadTemplate('ex4')">Exemplo 4: Equilíbrio (AVL)</button>
+            </div>
+
+            <div class="ide-wrapper">
+                <!-- Editor C -->
+                <div class="editor-container">
+                    <div class="editor-toolbar">
+                        <span>📄 arvore_binaria.c</span>
+                        <div style="display:flex; gap:0.5rem;">
+                            <button class="btn btn-secondary" onclick="copyEditorCode()">📋 Copiar Código</button>
+                            <button class="btn btn-green" onclick="compileAndRunC()">▶ Executar Código</button>
+                        </div>
+                    </div>
+                    <textarea id="c-code-editor" class="c-editor" spellcheck="false"></textarea>
+                </div>
+
+                <!-- Console Interativo -->
+                <div class="console-container">
+                    <div class="console-header">
+                        <span>💻 Terminal Interativo</span>
+                        <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem;" onclick="clearConsole()">Limpar Tela</button>
+                    </div>
+                    <div id="console-output" class="console-screen"></div>
+                    
+                    <div class="cmd-chips">
+                        <span style="font-size:0.75rem; color:#94a3b8; align-self:center;">Atalhos:</span>
+                        <button class="chip-btn" onclick="quickCmd('inserir 25')">+ inserir 25</button>
+                        <button class="chip-btn" onclick="quickCmd('remover 40')">- remover 40</button>
+                        <button class="chip-btn" onclick="quickCmd('inordem')">inordem</button>
+                        <button class="chip-btn" onclick="quickCmd('folhas')">folhas</button>
+                        <button class="chip-btn" onclick="quickCmd('altura')">altura</button>
+                        <button class="chip-btn" onclick="quickCmd('ajuda')">ajuda</button>
+                    </div>
+
+                    <div class="console-input-bar">
+                        <span>c-tree&gt;</span>
+                        <input type="text" id="console-cmd" placeholder="Digite um comando ou clique nos atalhos acima..." onkeydown="handleConsoleKey(event)">
+                        <button class="btn" style="padding: 4px 10px; font-size: 0.8rem;" onclick="runConsoleCmd()">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Desafios Guiados (Clique para abrir as dicas)</h2>
+            
+            <details class="exercise-item">
+                <summary>Desafio 1: Descobrir quais são os nós folhas (Grau 0) <span>▼</span></summary>
+                <div class="ex-body">
+                    <p><strong>O que é uma folha?</strong> É qualquer nó que não tem filhos nem na esquerda (<code>sae == NULL</code>) nem na direita (<code>sad == NULL</code>).</p>
+                    <p style="margin-top:0.5rem;"><strong>Como testar:</strong> Carregue o <em>Exemplo 1</em> acima, altere os números dentro de <code>int valores[] = {40, 10, 60, 5, 30, 50, 70};</code> e clique em <strong>Executar Código</strong> para ver quais números ficam nas pontas da árvore.</p>
+                </div>
+            </details>
+
+            <details class="exercise-item">
+                <summary>Desafio 2: Medir a Altura da Árvore <span>▼</span></summary>
+                <div class="ex-body">
+                    <p><strong>Regra da disciplina:</strong> Uma árvore totalmente vazia vale <code>-1</code>. Uma árvore com apenas 1 nó (raiz sozinha) tem altura <code>0</code>. A cada andar que a árvore desce, somamos <code>+1</code>.</p>
+                    <p style="margin-top:0.5rem;"><strong>Como testar:</strong> Carregue o <em>Exemplo 2</em>, execute e depois use o atalho <code>+ inserir 25</code> no terminal e clique em <code>altura</code> para ver se a altura aumentou.</p>
+                </div>
+            </details>
+
+            <details class="exercise-item">
+                <summary>Desafio 3: Provar que o percurso In-Ordem ordena os dados <span>▼</span></summary>
+                <div class="ex-body">
+                    <p><strong>Experimento:</strong> No <em>Exemplo 3</em>, os números <code>{47, 25, 77, 11, ...}</code> estão todos embaralhados. Ao clicar em <strong>Executar Código</strong>, a função <code>inOrdem</code> visita sempre Esquerda → Raiz → Direita, fazendo os números saírem perfeitamente ordenados do menor para o maior.</p>
+                </div>
+            </details>
+
+            <details class="exercise-item">
+                <summary>Desafio 4: Verificar se a árvore está equilibrada (Fator de Balanceamento AVL) <span>▼</span></summary>
+                <div class="ex-body">
+                    <p><strong>Definição de Fator de Balanceamento (FB):</strong> Para qualquer nó <em>v</em>, o fator de balanceamento é dado por <code>FB(v) = altura(v->sae) - altura(v->sad)</code>. Na condição de balanceamento AVL, todo nó deve satisfazer <code>FB(v) ∈ {-1, 0, +1}</code>; valores como <code>+2</code> ou <code>-2</code> caracterizam desbalanceamento e exigem operações de rotação.</p>
+                </div>
+            </details>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    Guia Interativo de Apoio • Estruturas de Dados I (DCOMP / UFES) • 
+    <a href="https://alexandreadler.github.io/ferramentas/Visualizador_Arvore_AVL.html" target="_blank">🔗 Abrir Visualizador Interativo de Árvores AVL</a>
+</footer>
+
+<script>
+    /* ==================== NAVEGAÇÃO ENTRE ABAS ==================== */
+    function openTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    /* ==================== ABA 1: O NÓ E A MEMÓRIA ==================== */
+    const memStepsData = {
+        1: {
+            addr: "0x1040", info: "'d'", sae: "NULL (vazio)", sad: "NULL (vazio)",
+            narration: "Passo 1: Alocamos o nó folha 'd'. Como não possui subárvores filhas, ambos os ponteiros (sae e sad) recebem NULL.",
+            nodes: [{id:'d', label:'d', x:220, y:140}],
+            edges: []
+        },
+        2: {
+            addr: "0x1080", info: "'b'", sae: "NULL (vazio)", sad: "0x1040 → 'd'",
+            narration: "Passo 2: Alocamos o nó interno 'b'. Seu ponteiro esquerdo (sae) recebe NULL, enquanto o ponteiro direito (sad) armazena o endereço 0x1040, referenciando o nó 'd'.",
+            nodes: [
+                {id:'b', label:'b', x:160, y:90},
+                {id:'d', label:'d', x:220, y:170}
+            ],
+            edges: [{x1:160, y1:90, x2:220, y2:170}]
+        },
+        3: {
+            addr: "0x1160", info: "'c'", sae: "0x1100 → 'e'", sad: "0x1130 → 'f'",
+            narration: "Passo 3: Alocamos os nós folha 'e' e 'f' e, na sequência, o nó pai 'c', encadeando 'e' à subárvore esquerda (sae) e 'f' à subárvore direita (sad).",
+            nodes: [
+                {id:'b', label:'b', x:130, y:110},
+                {id:'d', label:'d', x:180, y:190},
+                {id:'c', label:'c', x:310, y:110},
+                {id:'e', label:'e', x:260, y:190},
+                {id:'f', label:'f', x:360, y:190}
+            ],
+            edges: [
+                {x1:130, y1:110, x2:180, y2:190},
+                {x1:310, y1:110, x2:260, y2:190},
+                {x1:310, y1:110, x2:360, y2:190}
+            ]
+        },
+        4: {
+            addr: "0x1200", info: "'a' (Raiz)", sae: "0x1080 → 'b'", sad: "0x1160 → 'c'",
+            narration: "Passo 4 (Árvore Construída): Alocamos o nó raiz 'a', encadeando a subárvore 'b' em sae e a subárvore 'c' em sad. O ponteiro raiz passa a ser o ponto de acesso único para toda a estrutura.",
+            nodes: [
+                {id:'a', label:'a', x:220, y:45},
+                {id:'b', label:'b', x:130, y:120},
+                {id:'d', label:'d', x:180, y:200},
+                {id:'c', label:'c', x:310, y:120},
+                {id:'e', label:'e', x:260, y:200},
+                {id:'f', label:'f', x:360, y:200}
+            ],
+            edges: [
+                {x1:220, y1:45, x2:130, y2:120},
+                {x1:220, y1:45, x2:310, y2:120},
+                {x1:130, y1:120, x2:180, y2:200},
+                {x1:310, y1:120, x2:260, y2:200},
+                {x1:310, y1:120, x2:360, y2:200}
+            ]
+        }
+    };
+
+    function setMemStep(step) {
+        document.querySelectorAll('#mem-step-btns button').forEach(b => {
+            b.className = (parseInt(b.dataset.mstep) === step) ? 'btn' : 'btn btn-secondary';
+        });
+        document.querySelectorAll('#code-tab1 .code-line').forEach(line => {
+            line.classList.toggle('highlight', parseInt(line.dataset.step) === step);
+        });
+
+        const data = memStepsData[step];
+        document.getElementById('mem-narration').textContent = data.narration;
+
+        const inspector = document.getElementById('mem-inspector');
+        inspector.innerHTML = `
+            <div class="mem-node">
+                <div class="mem-node-addr">Endereço na RAM: ${data.addr}</div>
+                <div class="mem-cell"><span>sae (Esquerda)</span>${data.sae}</div>
+                <div class="mem-cell"><span style="color:#38bdf8;">info (Dado)</span><strong>${data.info}</strong></div>
+                <div class="mem-cell"><span>sad (Direita)</span>${data.sad}</div>
+            </div>
+        `;
+
+        let svg = `<svg width="440" height="245" viewBox="0 0 440 245">`;
+        data.edges.forEach(e => {
+            svg += `<line x1="${e.x1}" y1="${e.y1}" x2="${e.x2}" y2="${e.y2}" stroke="#64748b" stroke-width="2.5"/>`;
+        });
+        data.nodes.forEach(n => {
+            svg += `
+                <circle cx="${n.x}" cy="${n.y}" r="20" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+                <text x="${n.x}" y="${n.y + 5}" fill="#f8fafc" font-family="monospace" font-size="15" font-weight="bold" text-anchor="middle">${n.label}</text>
+            `;
+        });
+        svg += `</svg>`;
+        document.getElementById('svg-tab1-container').innerHTML = svg;
+    }
+
+    /* ==================== ABA 2: PERCURSOS RECURSIVOS ==================== */
+    const traversalNodes = [
+        {id: 2, x: 200, y: 35},
+        {id: 1, x: 110, y: 95},
+        {id: 8, x: 290, y: 95},
+        {id: 4, x: 225, y: 155},
+        {id: 9, x: 355, y: 155},
+        {id: 3, x: 180, y: 215},
+        {id: 6, x: 270, y: 215},
+        {id: 5, x: 240, y: 265},
+        {id: 7, x: 300, y: 265}
+    ];
+    const traversalEdges = [
+        [2,1], [2,8], [8,4], [8,9], [4,3], [4,6], [6,5], [6,7]
+    ];
+
+    const traversalOrders = {
+        pre: {
+            explain: "Percurso em Pré-Ordem (R - E - D): Processa primeiro o nó atual (R), percorre recursivamente toda a subárvore esquerda (E) e, por fim, percorre a subárvore direita (D).",
+            code: `<span class="kw">void</span> <span class="fn">preOrdem</span>(No* r) {
+    <span class="kw">if</span> (r == NULL) <span class="kw">return</span>;       <span class="cm">// Se chegou no vazio, volta</span>
+    <span class="fn">printf</span>(<span class="str">"%d "</span>, r->info);      <span class="cm">// 1º (R): Imprime a Raiz atual</span>
+    <span class="fn">preOrdem</span>(r->sae);           <span class="cm">// 2º (E): Vai para a Esquerda</span>
+    <span class="fn">preOrdem</span>(r->sad);           <span class="cm">// 3º (D): Vai para a Direita</span>
+}`,
+            seq: [2, 1, 8, 4, 3, 6, 5, 7, 9],
+            reasons: [
+                "Começa na Raiz (2) e já a imprime (R primeiro).",
+                "Desce para a esquerda do 2, chega no (1) e imprime.",
+                "Esquerda do 2 acabou. Vai para a direita do 2, chega no (8) e imprime.",
+                "Desce para a esquerda do 8, chega no (4) e imprime.",
+                "Desce para a esquerda do 4, chega no (3) e imprime.",
+                "Esquerda do 4 acabou. Vai para a direita do 4, chega no (6) e imprime.",
+                "Desce para a esquerda do 6, chega no (5) e imprime.",
+                "Esquerda do 6 acabou. Vai para a direita do 6, chega no (7) e imprime.",
+                "Toda a esquerda do 8 terminou. Vai para a direita do 8 e imprime o (9)."
+            ]
+        },
+        in: {
+            explain: "Percurso em In-Ordem / Simétrico (E - R - D): Percorre recursivamente toda a subárvore esquerda (E), processa o nó atual (R) no retorno da recursão e, em seguida, percorre a subárvore direita (D).",
+            code: `<span class="kw">void</span> <span class="fn">inOrdem</span>(No* r) {
+    <span class="kw">if</span> (r == NULL) <span class="kw">return</span>;       <span class="cm">// Se chegou no vazio, volta</span>
+    <span class="fn">inOrdem</span>(r->sae);            <span class="cm">// 1º (E): Vai tudo para Esquerda</span>
+    <span class="fn">printf</span>(<span class="str">"%d "</span>, r->info);      <span class="cm">// 2º (R): Imprime a Raiz no meio</span>
+    <span class="fn">inOrdem</span>(r->sad);            <span class="cm">// 3º (D): Vai para a Direita</span>
+}`,
+            seq: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            reasons: [
+                "Passa direto pelo 2 para ir à esquerda. Chega no (1), que não tem esquerda, e imprime o 1.",
+                "Volta para o pai (2) agora que a esquerda acabou, e imprime o 2.",
+                "Vai para a direita (8 -> 4 -> 3). O (3) é o mais à esquerda desse lado, então imprime 3.",
+                "Volta para o pai (4) e imprime o 4.",
+                "Vai para a direita do 4 (nó 6) e desce à esquerda até o (5). Imprime o 5.",
+                "Volta para o pai (6) e imprime o 6.",
+                "Vai para a direita do 6 e imprime o (7).",
+                "Toda a subárvore esquerda do 8 acabou! Volta para o (8) e imprime o 8.",
+                "Por fim, desce para a direita do 8 e imprime o (9)."
+            ]
+        },
+        pos: {
+            explain: "Percurso em Pós-Ordem (E - D - R): Percorre recursivamente a subárvore esquerda (E) e a subárvore direita (D), processando o nó atual (R) somente após visitar todos os seus descendentes.",
+            code: `<span class="kw">void</span> <span class="fn">posOrdem</span>(No* r) {
+    <span class="kw">if</span> (r == NULL) <span class="kw">return</span>;       <span class="cm">// Se chegou no vazio, volta</span>
+    <span class="fn">posOrdem</span>(r->sae);           <span class="cm">// 1º (E): Resolve a Esquerda</span>
+    <span class="fn">posOrdem</span>(r->sad);           <span class="cm">// 2º (D): Resolve a Direita</span>
+    <span class="fn">printf</span>(<span class="str">"%d "</span>, r->info);      <span class="cm">// 3º (R): Imprime a Raiz por último</span>
+}`,
+            seq: [1, 3, 5, 7, 6, 4, 9, 8, 2],
+            reasons: [
+                "Desce à esquerda do 2 e imprime a folha (1) (sem filhos à esquerda nem direita).",
+                "Não pode imprimir o 2 ainda! Vai para a direita (8 -> 4 -> 3) e imprime a folha (3).",
+                "Antes de imprimir o 4, precisa resolver a direita dele (6 -> 5). Imprime a folha (5).",
+                "Antes de imprimir o 6, resolve a direita dele e imprime a folha (7).",
+                "Agora que os dois filhos do (6) foram impressos, imprime o pai (6).",
+                "Agora que os dois lados do (4) terminaram, imprime o pai (4).",
+                "Antes de imprimir o 8, vai para a direita dele e imprime a folha (9).",
+                "Agora que os dois lados do (8) terminaram, imprime o pai (8).",
+                "Por último de todos, imprime a Raiz principal (2)!"
+            ]
+        }
+    };
+
+    let currentTravMode = 'pre';
+    let currentTravStep = -1;
+
+    function selectTraversal(mode) {
+        currentTravMode = mode;
+        ['pre', 'in', 'pos'].forEach(m => {
+            document.getElementById('btn-' + m).className = (m === mode) ? 'btn' : 'btn btn-secondary';
+        });
+        document.getElementById('trav-mode-explain').textContent = traversalOrders[mode].explain;
+        document.getElementById('traversal-code-box').innerHTML = traversalOrders[mode].code;
+        resetTraversal();
+    }
+
+    function resetTraversal() {
+        currentTravStep = -1;
+        renderTraversalState();
+    }
+
+    function stepTraversal(delta) {
+        const max = traversalOrders[currentTravMode].seq.length - 1;
+        currentTravStep = Math.max(-1, Math.min(max, currentTravStep + delta));
+        renderTraversalState();
+    }
+
+    function renderTraversalState() {
+        const orderObj = traversalOrders[currentTravMode];
+        const seq = orderObj.seq;
+        const visited = currentTravStep >= 0 ? seq.slice(0, currentTravStep + 1) : [];
+        const activeNode = currentTravStep >= 0 ? seq[currentTravStep] : null;
+
+        document.getElementById('traversal-output').textContent = visited.length ? visited.join('  →  ') : '(nenhum número impresso ainda)';
+
+        const stackBox = document.getElementById('call-stack-box');
+        if (activeNode === null) {
+            stackBox.innerHTML = `<span class="console-line-sys">Clique em "Próximo Passo ▶" para começar a percorrer a partir da raiz (2).</span>`;
+        } else {
+            stackBox.innerHTML = `
+                <div class="stack-item"><strong>Passo ${currentTravStep + 1} de ${seq.length} (Nó ${activeNode}):</strong> ${orderObj.reasons[currentTravStep]}</div>
+                <div class="stack-item" style="opacity:0.8;"><strong>Já visitados:</strong> [${visited.join(', ')}]</div>
+            `;
+        }
+
+        let svg = `<svg width="440" height="295" viewBox="0 0 440 295">`;
+        traversalEdges.forEach(([u, v]) => {
+            const n1 = traversalNodes.find(n => n.id === u);
+            const n2 = traversalNodes.find(n => n.id === v);
+            svg += `<line x1="${n1.x}" y1="${n1.y}" x2="${n2.x}" y2="${n2.y}" stroke="#475569" stroke-width="2"/>`;
+        });
+        traversalNodes.forEach(n => {
+            const isCurrent = n.id === activeNode;
+            const isDone = visited.includes(n.id) && !isCurrent;
+            const fill = isCurrent ? '#2563eb' : (isDone ? '#14532d' : '#1e293b');
+            const stroke = isCurrent ? '#fbbf24' : (isDone ? '#4ade80' : '#38bdf8');
+            svg += `
+                <circle cx="${n.x}" cy="${n.y}" r="18" fill="${fill}" stroke="${stroke}" stroke-width="2.5"/>
+                <text x="${n.x}" y="${n.y + 5}" fill="#f8fafc" font-family="monospace" font-size="14" font-weight="bold" text-anchor="middle">${n.id}</text>
+            `;
+        });
+        svg += `</svg>`;
+        document.getElementById('svg-tab2-container').innerHTML = svg;
+    }
+
+    /* ==================== ABA 3: ÁRVORE BINÁRIA DE BUSCA (ABB) ==================== */
+    const bstOps = {
+        busca: {
+            explain: "Como funciona a Busca: Comparamos o número procurado com a raiz. Se for menor, descartamos todo o lado direito e vamos só para a esquerda (sae). Se for maior, vamos só para a direita (sad).",
+            code: `No* <span class="fn">buscar</span>(No* raiz, <span class="tp">int</span> chave) {
+    <span class="cm">// Se chegou no vazio (não achou) ou achou o número:</span>
+    <span class="kw">if</span> (raiz == NULL || raiz->info == chave)
+        <span class="kw">return</span> raiz;
+
+    <span class="cm">// Se o número é menor, procura só na esquerda:</span>
+    <span class="kw">if</span> (chave < raiz->info)
+        <span class="kw">return</span> <span class="fn">buscar</span>(raiz->sae, chave);
+
+    <span class="cm">// Caso contrário, procura só na direita:</span>
+    <span class="kw">return</span> <span class="fn">buscar</span>(raiz->sad, chave);
+}`
+        },
+        insercao: {
+            explain: "Operação de Inserção: Percorremos a árvore recursivamente comparando a chave com cada nó (valores menores seguem para sae; maiores, para sad) até atingir um ponteiro NULL, ponto onde o novo nó é alocado.",
+            code: `No* <span class="fn">inserir</span>(No* raiz, <span class="tp">int</span> valor) {
+    <span class="cm">// Achou um espaço vazio! Cria a caixinha aqui:</span>
+    <span class="kw">if</span> (raiz == NULL) {
+        No* novo = (No*) <span class="fn">malloc</span>(<span class="kw">sizeof</span>(No));
+        novo->info = valor;
+        novo->sae = novo->sad = NULL;
+        <span class="kw">return</span> novo;
+    }
+    <span class="cm">// Decide se desce para a esquerda ou para a direita:</span>
+    <span class="kw">if</span> (valor < raiz->info)
+        raiz->sae = <span class="fn">inserir</span>(raiz->sae, valor);
+    <span class="kw">else if</span> (valor > raiz->info)
+        raiz->sad = <span class="fn">inserir</span>(raiz->sad, valor);
+
+    <span class="kw">return</span> raiz;
+}`
+        },
+        remocao: {
+            explain: "Como funciona a Remoção: Existem 3 situações: (1) Se o nó não tem filhos, apenas apagamos; (2) Se tem 1 filho, o avô adota o neto; (3) Se tem 2 filhos, promovemos o maior número do lado esquerdo para o lugar dele.",
+            code: `No* <span class="fn">remover</span>(No* raiz, <span class="tp">int</span> valor) {
+    <span class="kw">if</span> (raiz == NULL) <span class="kw">return</span> NULL;
+    <span class="kw">if</span> (valor < raiz->info) raiz->sae = <span class="fn">remover</span>(raiz->sae, valor);
+    <span class="kw">else if</span> (valor > raiz->info) raiz->sad = <span class="fn">remover</span>(raiz->sad, valor);
+    <span class="kw">else</span> { <span class="cm">// Encontrou o nó que queremos apagar!</span>
+        <span class="cm">// Caso 1 e 2: Sem filhos ou com apenas 1 filho</span>
+        <span class="kw">if</span> (raiz->sae == NULL) { No* t = raiz->sad; <span class="fn">free</span>(raiz); <span class="kw">return</span> t; }
+        <span class="kw">if</span> (raiz->sad == NULL) { No* t = raiz->sae; <span class="fn">free</span>(raiz); <span class="kw">return</span> t; }
+
+        <span class="cm">// Caso 3 (2 filhos): busca o maior da subárvore esquerda</span>
+        No* aux = raiz->sae;
+        <span class="kw">while</span> (aux->sad != NULL) aux = aux->sad;
+        raiz->info = aux->info; <span class="cm">// Copia o valor substituto</span>
+        raiz->sae = <span class="fn">remover</span>(raiz->sae, aux->info); <span class="cm">// Apaga a cópia</span>
+    }
+    <span class="kw">return</span> raiz;
+}`
+        }
+    };
+
+    function showBstCode(op) {
+        ['busca', 'insercao', 'remocao'].forEach(k => {
+            document.getElementById('btn-bst-' + k).className = (k === op) ? 'btn' : 'btn btn-secondary';
+        });
+        document.getElementById('bst-op-explain').textContent = bstOps[op].explain;
+        document.getElementById('bst-code-box').innerHTML = bstOps[op].code;
+    }
+
+    const bstScenarios = {
+        original: {
+            desc: "Árvore Inicial: Observe que à esquerda do 40 todos são menores (10, 5, 30, 35) e à direita todos são maiores (60, 50, 70, 45).",
+            nodes: [
+                {id:40, x:220, y:40}, {id:10, x:130, y:105}, {id:60, x:310, y:105},
+                {id:5, x:80, y:175}, {id:30, x:175, y:175}, {id:50, x:265, y:175}, {id:70, x:360, y:175},
+                {id:35, x:150, y:235}, {id:45, x:205, y:235}
+            ],
+            edges: [[40,10],[40,60],[10,5],[10,30],[60,50],[60,70],[30,35],[30,45]]
+        },
+        caso1: {
+            desc: "Caso 1 (Apagar Folha 45): Como o 45 não tem nenhum filho pendurado nele, basta apagar o 45 da memória e o pai (30) passa a apontar para NULL.",
+            nodes: [
+                {id:40, x:220, y:40}, {id:10, x:130, y:105}, {id:60, x:310, y:105},
+                {id:5, x:80, y:175}, {id:30, x:175, y:175, highlight:true}, {id:50, x:265, y:175}, {id:70, x:360, y:175},
+                {id:35, x:150, y:235}
+            ],
+            edges: [[40,10],[40,60],[10,5],[10,30],[60,50],[60,70],[30,35]]
+        },
+        caso2: {
+            desc: "Caso 2 (Apagar nó com 1 Filho - 30): Se apagarmos o 30, o filho dele (45) ficaria órfão. Então o avô (10) adota diretamente o 45!",
+            nodes: [
+                {id:40, x:220, y:40}, {id:10, x:130, y:105, highlight:true}, {id:60, x:310, y:105},
+                {id:5, x:80, y:175}, {id:45, x:175, y:175, highlight:true}, {id:50, x:265, y:175}, {id:70, x:360, y:175}
+            ],
+            edges: [[40,10],[40,60],[10,5],[10,45],[60,50],[60,70]]
+        },
+        caso3: {
+            desc: "Caso 3 (Apagar Raiz 40 com 2 Filhos): Buscamos o maior número do lado esquerdo (35) para assumir o posto de raiz no lugar do 40, mantendo toda a árvore ordenada!",
+            nodes: [
+                {id:35, x:220, y:40, highlight:true}, {id:10, x:130, y:105}, {id:60, x:310, y:105},
+                {id:5, x:80, y:175}, {id:30, x:175, y:175}, {id:50, x:265, y:175}, {id:70, x:360, y:175},
+                {id:45, x:205, y:235}
+            ],
+            edges: [[35,10],[35,60],[10,5],[10,30],[60,50],[60,70],[30,45]]
+        }
+    };
+
+    function setBstScenario(key) {
+        document.querySelectorAll('#bst-scen-btns button').forEach(b => {
+            b.className = (b.dataset.scen === key) ? 'btn' : 'btn btn-secondary';
+        });
+        const sc = bstScenarios[key];
+        document.getElementById('bst-scenario-desc').textContent = sc.desc;
+        let svg = `<svg width="440" height="275" viewBox="0 0 440 275">`;
+        sc.edges.forEach(([u, v]) => {
+            const n1 = sc.nodes.find(n => n.id === u);
+            const n2 = sc.nodes.find(n => n.id === v);
+            if(n1 && n2) svg += `<line x1="${n1.x}" y1="${n1.y}" x2="${n2.x}" y2="${n2.y}" stroke="#475569" stroke-width="2"/>`;
+        });
+        sc.nodes.forEach(n => {
+            const stroke = n.highlight ? '#fbbf24' : '#38bdf8';
+            const fill = n.highlight ? '#78350f' : '#1e293b';
+            svg += `
+                <circle cx="${n.x}" cy="${n.y}" r="18" fill="${fill}" stroke="${stroke}" stroke-width="2.5"/>
+                <text x="${n.x}" y="${n.y + 5}" fill="#f8fafc" font-family="monospace" font-size="13" font-weight="bold" text-anchor="middle">${n.id}</text>
+            `;
+        });
+        svg += `</svg>`;
+        document.getElementById('svg-tab3-container').innerHTML = svg;
+    }
+
+    /* ==================== ABA 4: CONSOLE C INTERATIVO & EXERCÍCIOS ==================== */
+    const codeTemplates = {
+        ex1: `#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct no {
+    int info;
+    struct no *sae;
+    struct no *sad;
+} No;
+
+No* inserir(No* raiz, int v) {
+    if (raiz == NULL) {
+        No* n = (No*) malloc(sizeof(No));
+        n->info = v;
+        n->sae = n->sad = NULL;
+        return n;
+    }
+    if (v < raiz->info) raiz->sae = inserir(raiz->sae, v);
+    else if (v > raiz->info) raiz->sad = inserir(raiz->sad, v);
+    return raiz;
+}
+
+// Imprime apenas os nos folhas (aqueles sem filhos)
+void imprimirFolhas(No* raiz) {
+    if (raiz == NULL) return;
+    if (raiz->sae == NULL && raiz->sad == NULL) {
+        printf("%d ", raiz->info);
+        return;
+    }
+    imprimirFolhas(raiz->sae);
+    imprimirFolhas(raiz->sad);
+}
+
+int main() {
+    No* raiz = NULL;
+    int valores[] = {40, 10, 60, 5, 30, 50, 70};
+    for (int i = 0; i < 7; i++) raiz = inserir(raiz, valores[i]);
+
+    printf("Nos folhas da arvore: ");
+    imprimirFolhas(raiz);
+    printf("\n");
+    return 0;
+}`,
+        ex2: `#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct no {
+    int info;
+    struct no *sae;
+    struct no *sad;
+} No;
+
+No* inserir(No* raiz, int v) {
+    if (raiz == NULL) {
+        No* n = (No*) malloc(sizeof(No));
+        n->info = v;
+        n->sae = n->sad = NULL;
+        return n;
+    }
+    if (v < raiz->info) raiz->sae = inserir(raiz->sae, v);
+    else if (v > raiz->info) raiz->sad = inserir(raiz->sad, v);
+    return raiz;
+}
+
+// Arvore vazia = -1 | No sozinho = 0
+int altura(No* raiz) {
+    if (raiz == NULL) return -1;
+    int hEsq = altura(raiz->sae);
+    int hDir = altura(raiz->sad);
+    return 1 + (hEsq > hDir ? hEsq : hDir);
+}
+
+int contarNos(No* raiz) {
+    if (raiz == NULL) return 0;
+    return 1 + contarNos(raiz->sae) + contarNos(raiz->sad);
+}
+
+int main() {
+    No* raiz = NULL;
+    int valores[] = {40, 10, 60, 5, 30, 50, 70};
+    for (int i = 0; i < 7; i++) raiz = inserir(raiz, valores[i]);
+
+    printf("Altura da arvore: %d\n", altura(raiz));
+    printf("Total de nos: %d\n", contarNos(raiz));
+    return 0;
+}`,
+        ex3: `#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct no {
+    int info;
+    struct no *sae;
+    struct no *sad;
+} No;
+
+No* inserir(No* raiz, int v) {
+    if (raiz == NULL) {
+        No* n = (No*) malloc(sizeof(No));
+        n->info = v;
+        n->sae = n->sad = NULL;
+        return n;
+    }
+    if (v < raiz->info) raiz->sae = inserir(raiz->sae, v);
+    else if (v > raiz->info) raiz->sad = inserir(raiz->sad, v);
+    return raiz;
+}
+
+// Percurso Esquerda -> Raiz -> Direita
+void inOrdem(No* raiz) {
+    if (raiz == NULL) return;
+    inOrdem(raiz->sae);
+    printf("%d ", raiz->info);
+    inOrdem(raiz->sad);
+}
+
+int main() {
+    No* raiz = NULL;
+    int seq[] = {47, 25, 77, 11, 43, 65, 93, 7, 17, 31, 44, 68};
+    for (int i = 0; i < 12; i++) raiz = inserir(raiz, seq[i]);
+
+    printf("Percurso In-Ordem (sempre ordenado na ABB):\n");
+    inOrdem(raiz);
+    printf("\n");
+    return 0;
+}`,
+        ex4: `#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct no {
+    int info;
+    struct no *sae;
+    struct no *sad;
+} No;
+
+No* inserir(No* raiz, int v) {
+    if (raiz == NULL) {
+        No* n = (No*) malloc(sizeof(No));
+        n->info = v;
+        n->sae = n->sad = NULL;
+        return n;
+    }
+    if (v < raiz->info) raiz->sae = inserir(raiz->sae, v);
+    else if (v > raiz->info) raiz->sad = inserir(raiz->sad, v);
+    return raiz;
+}
+
+int altura(No* raiz) {
+    if (raiz == NULL) return -1;
+    int hEsq = altura(raiz->sae);
+    int hDir = altura(raiz->sad);
+    return 1 + (hEsq > hDir ? hEsq : hDir);
+}
+
+// FB = altura da esquerda - altura da direita
+int fatorBalanceamento(No* raiz) {
+    if (raiz == NULL) return 0;
+    return altura(raiz->sae) - altura(raiz->sad);
+}
+
+void verificarAVL(No* raiz) {
+    if (raiz == NULL) return;
+    verificarAVL(raiz->sae);
+    printf("No %d -> Altura: %d | FB: %d\n", raiz->info, altura(raiz), fatorBalanceamento(raiz));
+    verificarAVL(raiz->sad);
+}
+
+int main() {
+    No* raiz = NULL;
+    int seq[] = {30, 15, 50, 5, 10, 20};
+    for (int i = 0; i < 6; i++) raiz = inserir(raiz, seq[i]);
+
+    verificarAVL(raiz);
+    return 0;
+}`
+    };
+
+    class BSTNode {
+        constructor(info) {
+            this.info = info;
+            this.sae = null;
+            this.sad = null;
+        }
+    }
+
+    class CTreeRuntime {
+        constructor() { this.raiz = null; }
+        reset() { this.raiz = null; }
+        inserir(v, no = this.raiz) {
+            if (this.raiz === null && no === null) {
+                this.raiz = new BSTNode(v);
+                return this.raiz;
+            }
+            if (no === null) return new BSTNode(v);
+            if (v < no.info) no.sae = this.inserir(v, no.sae);
+            else if (v > no.info) no.sad = this.inserir(v, no.sad);
+            return no;
+        }
+        remover(v, no = this.raiz) {
+            if (no === null) return null;
+            if (v < no.info) no.sae = this.remover(v, no.sae);
+            else if (v > no.info) no.sad = this.remover(v, no.sad);
+            else {
+                if (no.sae === null) return no.sad;
+                if (no.sad === null) return no.sae;
+                let aux = no.sae;
+                while (aux.sad !== null) aux = aux.sad;
+                no.info = aux.info;
+                no.sae = this.remover(aux.info, no.sae);
+            }
+            return no;
+        }
+        altura(no = this.raiz) {
+            if (no === null) return -1;
+            return 1 + Math.max(this.altura(no.sae), this.altura(no.sad));
+        }
+        contarNos(no = this.raiz) {
+            if (no === null) return 0;
+            return 1 + this.contarNos(no.sae) + this.contarNos(no.sad);
+        }
+        fb(no) {
+            if (!no) return 0;
+            return this.altura(no.sae) - this.altura(no.sad);
+        }
+        inOrdem(no = this.raiz, arr = []) {
+            if (!no) return arr;
+            this.inOrdem(no.sae, arr);
+            arr.push(no.info);
+            this.inOrdem(no.sad, arr);
+            return arr;
+        }
+        preOrdem(no = this.raiz, arr = []) {
+            if (!no) return arr;
+            arr.push(no.info);
+            this.preOrdem(no.sae, arr);
+            this.preOrdem(no.sad, arr);
+            return arr;
+        }
+        posOrdem(no = this.raiz, arr = []) {
+            if (!no) return arr;
+            this.posOrdem(no.sae, arr);
+            this.posOrdem(no.sad, arr);
+            arr.push(no.info);
+            return arr;
+        }
+        folhas(no = this.raiz, arr = []) {
+            if (!no) return arr;
+            if (!no.sae && !no.sad) {
+                arr.push(no.info);
+                return arr;
+            }
+            this.folhas(no.sae, arr);
+            this.folhas(no.sad, arr);
+            return arr;
+        }
+        detalhesAVL(no = this.raiz, lines = []) {
+            if (!no) return lines;
+            this.detalhesAVL(no.sae, lines);
+            lines.push(`Nó ${no.info} -> Altura: ${this.altura(no)} | Fator Balanceamento (FB): ${this.fb(no)}`);
+            this.detalhesAVL(no.sad, lines);
+            return lines;
+        }
+    }
+
+    const runtime = new CTreeRuntime();
+
+    function loadTemplate(key) {
+        document.getElementById('c-code-editor').value = codeTemplates[key];
+        logConsole(`Exemplo '${key}' carregado no editor. Clique em "▶ Executar Código" para rodar!`, 'console-line-sys');
+    }
+
+    function logConsole(msg, cls = 'console-line-out') {
+        const screen = document.getElementById('console-output');
+        const div = document.createElement('div');
+        div.className = cls;
+        div.textContent = msg;
+        screen.appendChild(div);
+        screen.scrollTop = screen.scrollHeight;
+    }
+
+    function clearConsole() {
+        document.getElementById('console-output').innerHTML = '';
+    }
+
+    function copyEditorCode() {
+        const code = document.getElementById('c-code-editor').value;
+        navigator.clipboard.writeText(code);
+        logConsole('Código copiado! Você pode colar no OnlineGDB ou no seu editor favorito.', 'console-line-ok');
+    }
+
+    function compileAndRunC() {
+        const code = document.getElementById('c-code-editor').value;
+        logConsole('$ Compilando e executando o código C...', 'console-line-sys');
+
+        if (!code.includes('main')) {
+            logConsole("Erro: Todo programa em C precisa da função 'main()'.", 'console-line-err');
+            return;
+        }
+        if (code.includes('malloc') && !code.includes('stdlib.h')) {
+            logConsole("Aviso: Você usou 'malloc', mas esqueceu de incluir '#include <stdlib.h>' no topo.", 'console-line-warn');
+        }
+        const openBraces = (code.match(/\{/g) || []).length;
+        const closeBraces = (code.match(/\}/g) || []).length;
+        if (openBraces !== closeBraces) {
+            logConsole(`Erro de sintaxe: você abriu ${openBraces} chaves '{', mas fechou ${closeBraces} chaves '}'.`, 'console-line-err');
+            return;
+        }
+
+        runtime.reset();
+        const arrayMatch = code.match(/\{([\d\s,]+)\}/);
+        if (arrayMatch) {
+            const nums = arrayMatch[1].split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+            nums.forEach(n => runtime.inserir(n));
+        }
+
+        const mainBody = code.slice(code.indexOf('main'));
+        if (mainBody.includes('imprimirFolhas')) {
+            logConsole('Nós folhas (pontas da árvore): ' + runtime.folhas().join(' '), 'console-line-ok');
+        }
+        if (mainBody.includes('altura')) {
+            logConsole('Altura da árvore: ' + runtime.altura(), 'console-line-ok');
+        }
+        if (mainBody.includes('contarNos')) {
+            logConsole('Total de nós na árvore: ' + runtime.contarNos(), 'console-line-ok');
+        }
+        if (mainBody.includes('inOrdem')) {
+            logConsole('Percurso In-Ordem (E-R-D): ' + runtime.inOrdem().join(' '), 'console-line-ok');
+        }
+        if (mainBody.includes('preOrdem')) {
+            logConsole('Percurso Pré-Ordem (R-E-D): ' + runtime.preOrdem().join(' '), 'console-line-ok');
+        }
+        if (mainBody.includes('posOrdem')) {
+            logConsole('Percurso Pós-Ordem (E-D-R): ' + runtime.posOrdem().join(' '), 'console-line-ok');
+        }
+        if (mainBody.includes('verificarAVL') || mainBody.includes('fatorBalanceamento')) {
+            runtime.detalhesAVL().forEach(line => logConsole(line, 'console-line-ok'));
+        }
+
+        logConsole('Execução concluída com sucesso!', 'console-line-sys');
+    }
+
+    function quickCmd(cmdStr) {
+        document.getElementById('console-cmd').value = cmdStr;
+        runConsoleCmd();
+    }
+
+    function handleConsoleKey(e) {
+        if (e.key === 'Enter') runConsoleCmd();
+    }
+
+    function runConsoleCmd() {
+        const input = document.getElementById('console-cmd');
+        const raw = input.value.trim();
+        if (!raw) return;
+        input.value = '';
+
+        logConsole('c-tree> ' + raw, 'console-line-sys');
+        const parts = raw.toLowerCase().split(/\s+/);
+        const cmd = parts[0];
+        const arg = parseInt(parts[1]);
+
+        switch (cmd) {
+            case 'ajuda':
+            case 'help':
+                logConsole('Comandos que você pode testar na árvore:', 'console-line-warn');
+                logConsole('  inserir <num>  -> Adiciona um número na árvore (ex: inserir 25)');
+                logConsole('  remover <num>  -> Apaga um número da árvore (ex: remover 40)');
+                logConsole('  inordem        -> Mostra os números em ordem crescente (E-R-D)');
+                logConsole('  preordem       -> Mostra o percurso Pré-Ordem (R-E-D)');
+                logConsole('  posordem       -> Mostra o percurso Pós-Ordem (E-D-R)');
+                logConsole('  folhas         -> Mostra apenas os nós que não têm filhos');
+                logConsole('  altura         -> Mostra a altura e a quantidade de nós');
+                logConsole('  fb             -> Verifica o equilíbrio (Fator de Balanceamento)');
+                logConsole('  limpar         -> Esvazia toda a árvore');
+                break;
+            case 'inserir':
+                if (isNaN(arg)) return logConsole('Escreva um número depois de inserir. Exemplo: inserir 25', 'console-line-err');
+                runtime.inserir(arg);
+                logConsole(`Número ${arg} inserido na árvore!`, 'console-line-ok');
+                break;
+            case 'remover':
+                if (isNaN(arg)) return logConsole('Escreva um número depois de remover. Exemplo: remover 40', 'console-line-err');
+                runtime.raiz = runtime.remover(arg, runtime.raiz);
+                logConsole(`Número ${arg} removido da árvore!`, 'console-line-ok');
+                break;
+            case 'inordem':
+                logConsole('In-Ordem (E-R-D): ' + (runtime.inOrdem().join(' ') || '(a árvore está vazia)'), 'console-line-ok');
+                break;
+            case 'preordem':
+                logConsole('Pré-Ordem (R-E-D): ' + (runtime.preOrdem().join(' ') || '(a árvore está vazia)'), 'console-line-ok');
+                break;
+            case 'posordem':
+                logConsole('Pós-Ordem (E-D-R): ' + (runtime.posOrdem().join(' ') || '(a árvore está vazia)'), 'console-line-ok');
+                break;
+            case 'folhas':
+                logConsole('Nós folhas: ' + (runtime.folhas().join(' ') || '(a árvore está vazia)'), 'console-line-ok');
+                break;
+            case 'altura':
+                logConsole('Altura: ' + runtime.altura() + ' | Total de nós: ' + runtime.contarNos(), 'console-line-ok');
+                break;
+            case 'fb':
+                const lines = runtime.detalhesAVL();
+                if (!lines.length) logConsole('(a árvore está vazia)', 'console-line-warn');
+                else lines.forEach(l => logConsole(l, 'console-line-ok'));
+                break;
+            case 'limpar':
+                runtime.reset();
+                logConsole('Árvore esvaziada (raiz = NULL).', 'console-line-warn');
+                break;
+            default:
+                logConsole(`Não entendi '${cmd}'. Clique em 'ajuda' nos atalhos para ver os comandos.`, 'console-line-err');
+        }
+    }
+
+    /* ==================== INICIALIZAÇÃO ==================== */
+    window.onload = () => {
+        setMemStep(1);
+        selectTraversal('pre');
+        showBstCode('busca');
+        setBstScenario('original');
+        loadTemplate('ex1');
+        logConsole("Bem-vindo! Clique em '▶ Executar Código' acima ou use os atalhos abaixo.", 'console-line-ok');
+    };
+</script>
+
+</body>
+</html>
