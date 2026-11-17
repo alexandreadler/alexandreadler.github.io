@@ -1599,7 +1599,7 @@
                 },
                 rem_caso1: {
                     btnLabel: 'Caso 1: Apagar 45 (Folha)',
-                    desc: "Caso 1 — Apagar Folha (45) a partir da Árvore Inicial: Como o 45 não possui filhos, ele é removido diretamente da memória e o ponteiro esquerdo de 50 passa a apontar para NULL.",
+                    desc: "Caso 1 - Apagar Folha (45) a partir da Árvore Inicial: Como o 45 não possui filhos, ele é removido diretamente da memória e o ponteiro esquerdo de 50 passa a apontar para NULL.",
                     nodes: [
                         {id:40, x:220, y:38, state:'normal'},
                         {id:10, x:130, y:102, state:'normal'}, {id:60, x:310, y:102, state:'normal'},
@@ -1611,7 +1611,7 @@
                 },
                 rem_caso2: {
                     btnLabel: 'Caso 2: Apagar 50 (1 Filho)',
-                    desc: "Caso 2 — Apagar Nó com 1 Filho (50) a partir da Árvore Inicial: Na árvore inicial, o 50 possui apenas o filho esquerdo (45). Ao remover o 50, o pai (60) adota diretamente o 45 (60->sae = 45).",
+                    desc: "Caso 2 - Apagar Nó com 1 Filho (50) a partir da Árvore Inicial: Na árvore inicial, o 50 possui apenas o filho esquerdo (45). Ao remover o 50, o pai (60) adota diretamente o 45 (60->sae = 45).",
                     nodes: [
                         {id:40, x:220, y:38, state:'normal'},
                         {id:10, x:130, y:102, state:'normal'}, {id:60, x:310, y:102, state:'path'},
@@ -1623,7 +1623,7 @@
                 },
                 rem_caso3: {
                     btnLabel: 'Caso 3: Apagar 40 (2 Filhos)',
-                    desc: "Caso 3 — Apagar Raiz com 2 Filhos (40) a partir da Árvore Inicial: Buscamos o maior valor da subárvore esquerda (35) para substituir o 40 na raiz, removendo o 35 de sua antiga posição sob o 30.",
+                    desc: "Caso 3 - Apagar Raiz com 2 Filhos (40) a partir da Árvore Inicial: Buscamos o maior valor da subárvore esquerda (35) para substituir o 40 na raiz, removendo o 35 de sua antiga posição sob o 30.",
                     nodes: [
                         {id:35, x:220, y:38, state:'found'},
                         {id:10, x:130, y:102, state:'normal'}, {id:60, x:310, y:102, state:'normal'},
@@ -2150,7 +2150,7 @@ No* <span class="fn">rotacaoDireita</span>(No* y) {
                 {
                     label: '1. Árvore Desbalanceada (LL)',
                     narration: "Após inserir [30, 20, 10]: O nó 30 apresenta altura 2 e FB = 1 - (-1) = +2 (crítico). O caminho do desequilíbrio segue para a esquerda (20) e novamente para a esquerda (10), caracterizando o caso LL.",
-                    status: "⚠️ Desbalanceada no nó 30 (FB = +2) — Caso LL detectado",
+                    status: "⚠️ Desbalanceada no nó 30 (FB = +2) - Caso LL detectado",
                     nodes: [
                         {id: 30, x: 260, y: 45, h: 2, fb: '+2', state: 'critical'},
                         {id: 20, x: 185, y: 125, h: 1, fb: '+1', state: 'pivot'},
@@ -2195,7 +2195,7 @@ No* <span class="fn">rotacaoEsquerda</span>(No* x) {
                 {
                     label: '1. Árvore Desbalanceada (RR)',
                     narration: "Após inserir [10, 20, 30]: O nó 10 apresenta altura 2 e FB = (-1) - 1 = -2 (crítico). O caminho do desequilíbrio segue para a direita (20) e novamente para a direita (30), caracterizando o caso RR.",
-                    status: "⚠️ Desbalanceada no nó 10 (FB = -2) — Caso RR detectado",
+                    status: "⚠️ Desbalanceada no nó 10 (FB = -2) - Caso RR detectado",
                     nodes: [
                         {id: 10, x: 180, y: 45, h: 2, fb: '-2', state: 'critical'},
                         {id: 20, x: 255, y: 125, h: 1, fb: '-1', state: 'pivot'},
@@ -2236,7 +2236,7 @@ No* <span class="fn">rotacaoDuplaDireita</span>(No* z) {
                 {
                     label: '1. Desequilíbrio LR',
                     narration: "Após inserir [40, 20, 30]: O nó 40 está pesado à esquerda (FB = +2), enquanto seu filho esquerdo 20 está pesado à direita (FB = -1). Como há uma dobra ('joelho' 40 → 20 → 30), uma rotação simples direta não resolveria.",
-                    status: "⚠️ Desbalanceada no nó 40 (FB = +2) e filho 20 (FB = -1) — Caso LR",
+                    status: "⚠️ Desbalanceada no nó 40 (FB = +2) e filho 20 (FB = -1) - Caso LR",
                     nodes: [
                         {id: 40, x: 260, y: 45, h: 2, fb: '+2', state: 'critical'},
                         {id: 20, x: 165, y: 125, h: 1, fb: '-1', state: 'pivot'},
@@ -2289,7 +2289,7 @@ No* <span class="fn">rotacaoDuplaEsquerda</span>(No* z) {
                 {
                     label: '1. Desequilíbrio RL',
                     narration: "Após inserir [20, 40, 30]: O nó 20 está pesado à direita (FB = -2), enquanto seu filho direito 40 está pesado à esquerda (FB = +1). Esse 'joelho' (20 → 40 → 30) exige a rotação dupla à esquerda.",
-                    status: "⚠️ Desbalanceada no nó 20 (FB = -2) e filho 40 (FB = +1) — Caso RL",
+                    status: "⚠️ Desbalanceada no nó 20 (FB = -2) e filho 40 (FB = +1) - Caso RL",
                     nodes: [
                         {id: 20, x: 180, y: 45, h: 2, fb: '-2', state: 'critical'},
                         {id: 40, x: 275, y: 125, h: 1, fb: '+1', state: 'pivot'},
