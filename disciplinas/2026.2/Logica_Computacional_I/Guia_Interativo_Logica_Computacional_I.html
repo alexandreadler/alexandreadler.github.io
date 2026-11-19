@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia Interativo (em construção) - Lógica Computacional I</title>
+<style>
+:root{
+  --bg-main:#f4f7fb;--bg-card:#ffffff;--bg-panel:#edf3fa;--border:#d9e2ee;
+  --ink:#253247;--muted:#61718a;--blue:#4778b8;--blue-soft:#e9f2ff;
+  --green:#38856b;--green-soft:#eaf6f0;--amber:#a96b19;--amber-soft:#fff4df;
+  --purple:#7962a8;--purple-soft:#f2edfb;--red:#b65b5b;--red-soft:#fff0ee;
+  --code:#f3f6fa;--shadow:0 5px 18px rgba(35,55,85,.06)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+body{font-family:Segoe UI,system-ui,-apple-system,sans-serif;background:var(--bg-main);color:var(--ink);line-height:1.62}
+header{background:linear-gradient(125deg,#e9f3ff 0%,#f4f1ff 55%,#eef8f4 100%);border-bottom:1px solid var(--border);padding:1.7rem 2rem}
+.header-inner{max-width:1380px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:1.2rem;flex-wrap:wrap}
+header h1{font-size:clamp(1.4rem,3vw,2rem);line-height:1.2;color:#315a8e;margin-bottom:.45rem}
+header p{color:var(--muted);max-width:900px}
+.badge{display:inline-flex;align-items:center;border:1px solid #cad9ed;background:#fff;color:#486b99;border-radius:999px;padding:.35rem .8rem;font-size:.82rem;font-weight:700;white-space:nowrap}
+.tabs{display:flex;gap:.25rem;overflow-x:auto;background:#fff;border-bottom:1px solid var(--border);padding:0 max(1rem,calc((100vw - 1340px)/2));position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(30,50,80,.04)}
+.tab-btn{background:transparent;border:0;border-bottom:3px solid transparent;color:#687991;padding:1rem 1.05rem;font-size:.93rem;font-weight:700;white-space:nowrap;cursor:pointer}
+.tab-btn:hover{color:#315a8e;background:#f7faff}.tab-btn.active{color:#315f99;border-bottom-color:#6c98cb;background:#f7faff}
+.container{max-width:1380px;margin:auto;padding:1.5rem}
+.tab-content{display:none;animation:fade .2s ease}.tab-content.active{display:block}@keyframes fade{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.1rem}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:13px;padding:1.25rem;margin-bottom:1rem;box-shadow:var(--shadow);min-width:0}
+.card h2{font-size:1.2rem;margin-bottom:.55rem;color:#30415b}.card h3{font-size:1.02rem;margin:1rem 0 .45rem;color:#426c9e}.card p{margin:.45rem 0}.desc{color:var(--muted);font-size:.93rem;margin-bottom:.9rem}
+.concept-box{background:var(--blue-soft);border:1px solid #cbdcf2;border-radius:11px;padding:1rem 1.15rem;margin-bottom:1rem}
+.concept-box h2,.concept-box h3{margin-top:0;color:#315f99}.concept-box p{margin:.4rem 0}
+.concept-box.green{background:var(--green-soft);border-color:#c9e5d7}.concept-box.amber{background:var(--amber-soft);border-color:#f0ddb3}.concept-box.purple{background:var(--purple-soft);border-color:#ded4f0}.concept-box.red{background:var(--red-soft);border-color:#f0d0cb}
+.pills{display:flex;gap:.45rem;flex-wrap:wrap;margin:.65rem 0}.pill{display:inline-block;padding:.3rem .65rem;border:1px solid var(--border);border-radius:7px;background:#f7f9fc;color:#40516a;font-size:.83rem}
+.slide-ref{display:inline-block;margin-top:.45rem;padding:.22rem .55rem;background:#f1f5fa;border:1px solid #dce5ef;border-radius:6px;color:#61738d;font: .76rem/1.45 Consolas,monospace}
+.math{display:inline-block;font-family:Cambria,Georgia,serif;background:#f5f8fc;border:1px solid #e1e8f1;border-radius:7px;padding:.1rem .45rem;color:#293e5b;white-space:normal}
+.formula{font-family:Cambria,Georgia,serif;font-size:1.12rem;text-align:center;background:#f5f8fc;border:1px solid #e1e8f1;border-radius:9px;padding:.75rem;margin:.7rem 0;color:#2d4361}
+.table-wrap{overflow-x:auto;margin:.65rem 0}.coverage-table{min-width:980px;font-size:.86rem}.coverage-table code{white-space:normal;overflow-wrap:anywhere;font-size:.8rem;color:#49627f}.btn.btn-small{padding:.35rem .55rem;font-size:.78rem;margin:.12rem;white-space:nowrap}table{width:100%;border-collapse:collapse;font-size:.92rem;background:#fff}th,td{border:1px solid #dfe6ef;padding:.55rem .65rem;text-align:left;vertical-align:top}th{background:#edf3fa;color:#3d5574}tr:nth-child(even) td{background:#fbfcfe}
+.callout{border-left:4px solid #76a0d0;background:#f2f7fd;padding:.8rem 1rem;border-radius:0 8px 8px 0;margin:.8rem 0}.callout.good{border-left-color:#69a98d;background:#eff8f3}.callout.warn{border-left-color:#d6a452;background:#fff8ea}.callout.bad{border-left-color:#d1847d;background:#fff4f2}
+.step{background:var(--green-soft);border-left:4px solid #72ad90;padding:.75rem .9rem;border-radius:0 8px 8px 0;margin:.75rem 0;color:#345c4c}
+.btn{border:1px solid #b9cce3;background:#eaf2fc;color:#315b8e;padding:.55rem .85rem;border-radius:8px;font-weight:700;cursor:pointer;font-size:.88rem}.btn:hover{background:#dceafa}.btn.secondary{background:#f5f7fa;color:#53647c;border-color:#d8e0ea}.btn.green{background:#e8f5ee;color:#347357;border-color:#bfdfce}.btn.amber{background:#fff4df;color:#94601b;border-color:#efd7a9}.btn:focus-visible,.tab-btn:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #a8c9f0;outline-offset:2px}
+.btn-row{display:flex;flex-wrap:wrap;gap:.5rem;margin:.7rem 0}
+.control-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.6rem 0}select,input[type=number]{border:1px solid #cbd6e4;border-radius:8px;padding:.55rem .65rem;background:#fff;color:var(--ink);font-size:.95rem}
+.result{background:#f4f8fd;border:1px solid #d8e4f1;border-radius:9px;padding:.8rem 1rem;margin-top:.75rem;min-height:2.5rem;color:#3c536f}.result.good{background:#eff8f3;border-color:#c8e6d5;color:#32664f}.result.bad{background:#fff2f0;border-color:#f0d0cb;color:#884d48}
+.truth-grid{display:grid;grid-template-columns:repeat(6,minmax(42px,1fr));gap:.35rem;margin:.7rem 0}.truth-practice-table{min-width:760px}.truth-practice-table th:last-child,.truth-practice-table td:last-child{background:#f1f7ff;font-weight:700}.truth-practice-table td{padding:.35rem;text-align:center}.truth-input{width:3.15rem;max-width:100%;padding:.48rem .25rem;border:1px solid #cbd6e4;border-radius:7px;text-align:center;text-transform:uppercase;font-weight:700;font-size:1rem;color:#2d4361;background:#fff}.truth-input:focus{outline:3px solid #c4dcf7;outline-offset:1px}.truth-input.correct{border-color:#8bc5a4;background:#edf8f1;color:#276746}.truth-input.incorrect{border-color:#e0a19b;background:#fff0ee;color:#954b45}.truth-input.revealed{border-color:#9db9dd;background:#edf4ff;color:#315b8e}.truth-practice-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin:.75rem 0}.truth-practice-actions button{min-height:40px}.truth-practice-note{font-size:.86rem;color:var(--muted);margin:.4rem 0}.truth-practice-table .row-label{font-weight:700;color:#60738c;background:#f7f9fc;text-align:center}.truth-practice-table td.final-cell{background:#f0f6ff;font-weight:800}.truth-cell{border:1px solid #dce4ef;border-radius:7px;background:#fafcff;padding:.45rem .25rem;text-align:center;font-size:.83rem}.truth-cell.yes{background:#e8f5ed;border-color:#b8dfc8;color:#2f7551}.truth-cell.no{background:#fff0ee;border-color:#edcfca;color:#a04f48}
+.memory-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.35rem;margin:.8rem 0}.memory-cell{padding:.55rem .35rem;border:1px solid #dce5ef;border-radius:8px;background:#f8fafc;text-align:center;font-size:.83rem}.memory-cell.yes{background:#e9f6ef;color:#347454;border-color:#c6e5d3}.memory-cell.no{background:#fff0ed;color:#9b514b;border-color:#efcfca}
+.exercise-item{background:#fafcff;border:1px solid var(--border);border-radius:9px;padding:.8rem .95rem;margin:.65rem 0}.exercise-item summary{cursor:pointer;font-weight:700;color:#405a7d}.exercise-body{border-top:1px solid #e3eaf2;margin-top:.65rem;padding-top:.65rem;color:#53657d;font-size:.92rem}
+.quiz-card{border:1px solid var(--border);border-radius:11px;padding:1rem;margin:.85rem 0;background:#fff}.quiz-card h3{margin:0 0 .6rem;color:#344e70}.option{display:flex;gap:.55rem;align-items:flex-start;padding:.48rem .58rem;border:1px solid #e0e7ef;border-radius:8px;margin:.35rem 0;cursor:pointer;background:#fcfdff}.option:hover{background:#f3f7fc;border-color:#b8cce5}.option input{margin-top:.32rem}.explain{display:none;margin-top:.7rem;padding:.75rem .85rem;border-radius:8px;background:#eff7f2;border-left:4px solid #70a98d;color:#355c4a}.explain.show{display:block}.quiz-actions{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-top:.65rem}
+.progress{height:8px;background:#e4eaf2;border-radius:99px;overflow:hidden;flex:1;min-width:100px}.progress span{display:block;height:100%;background:#7ca4d2;width:0;transition:width .2s}.small{font-size:.82rem;color:var(--muted)}
+footer{text-align:center;padding:1.7rem;color:var(--muted);border-top:1px solid var(--border);margin-top:1.5rem;font-size:.84rem}
+@media(max-width:960px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr 1fr}.container{padding:1rem}.tabs{padding:0 .45rem}}
+@media(max-width:600px){header{padding:1.2rem}.container{padding:.75rem}.card{padding:1rem}.grid-3{grid-template-columns:1fr}.tab-btn{padding:.8rem .8rem;font-size:.85rem}.truth-grid{grid-template-columns:repeat(5,minmax(35px,1fr))}.memory-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.formula{font-size:1rem}}
+@media(max-width:700px){.tabs{scrollbar-width:thin}.tab-btn{padding:.72rem .78rem;font-size:.82rem}}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div>
+      <h1>📘 Guia Interativo <i>(em construção)</i> - Lógica Computacional I</h1>
+      <p>Guia em construção para apoiar a revisão dos assuntos da disciplina, com explicações, exemplos das aulas e atividades interativas.</p>
+    </div>
+    <span class="badge">DCOMP · CCENS · UFES</span>
+  </div>
+</header>
+<nav class="tabs" aria-label="Navegação do guia">
+  <button class="tab-btn active" data-target="inicio" onclick="openTab('inicio',this)">Visão geral</button>
+  <button class="tab-btn" data-target="fundamentos" onclick="openTab('fundamentos',this)">1. Fundamentos</button>
+  <button class="tab-btn" data-target="operacoes-prop" onclick="openTab('operacoes-prop',this)">2. Operações sobre proposições</button>
+  <button class="tab-btn" data-target="tabelas-tv" onclick="openTab('tabelas-tv',this)">3. Construção de tabelas-verdade</button>
+  <button class="tab-btn" data-target="classificacoes-tv" onclick="openTab('classificacoes-tv',this)">4. Tautologias e contingências</button>
+  <button class="tab-btn" data-target="implicacao" onclick="openTab('implicacao',this)">5. Implicação lógica</button>
+  <button class="tab-btn" data-target="equivalencia" onclick="openTab('equivalencia',this)">6. Equivalência lógica</button>
+  <button class="tab-btn" data-target="algebra" onclick="openTab('algebra',this)">7. Álgebra das proposições</button>
+  <button class="tab-btn" data-target="dedutivo" onclick="openTab('dedutivo',this)">8. Método dedutivo</button>
+  <button class="tab-btn" data-target="validade-tv" onclick="openTab('validade-tv',this)">9. Validade por tabelas</button>
+  <button class="tab-btn" data-target="validade-regras" onclick="openTab('validade-regras',this)">10. Regras e equivalências</button>
+  <button class="tab-btn" data-target="demonstracoes" onclick="openTab('demonstracoes',this)">11. Demonstrações</button>
+  <button class="tab-btn" data-target="abertas" onclick="openTab('abertas',this)">12. Sentenças abertas</button>
+  <button class="tab-btn" data-target="operacoes" onclick="openTab('operacoes',this)">13. Operações sobre sentenças abertas</button>
+  <button class="tab-btn" data-target="quantificadores" onclick="openTab('quantificadores',this)">14. Quantificadores</button>
+  <button class="tab-btn" data-target="pratica" onclick="openTab('pratica',this)">Praticar</button>
+</nav>
+<main class="container">
+
+<section id="inicio" class="tab-content active">
+  <div class="concept-box">
+    <h2>Guia de estudo - Lógica Computacional I</h2>
+    <p>O guia organiza os principais assuntos trabalhados nas aulas, dos fundamentos da lógica até sentenças abertas e quantificadores. Você encontrará explicações, exemplos dos slides, quadros comparativos, tabelas-verdade e atividades para testar o que aprendeu.</p>
+    <p>Use as abas para estudar cada assunto. Os controles interativos funcionam localmente no navegador; não é necessário estar conectado à internet.</p>
+  </div>
+  <div class="grid-3">
+    <article class="card"><h2>1. Fundamentos</h2><p>Aplicações da lógica, proposições, valores lógicos, linguagem simbólica, proposições simples e compostas, conectivos e circuitos com interruptores.</p><button class="btn" onclick="goTab('fundamentos')">Abrir módulo →</button><div class="slide-ref">Aulas 01 e 02 · Introdução à Lógica; Proposições e Conectivos</div></article>
+    <article class="card"><h2>2. Operações sobre proposições</h2><p>Negação, conjunção, disjunção inclusiva e exclusiva, condicional, bicondicional e exercícios de tradução.</p><button class="btn" onclick="goTab('operacoes-prop')">Abrir módulo →</button><div class="slide-ref">Aula 03 · Operações Lógicas sobre Proposições</div></article>
+    <article class="card"><h2>3. Construção de tabelas-verdade</h2><p>Número de linhas, combinações de V e F, organização das colunas, precedência, parênteses e associatividade.</p><button class="btn" onclick="goTab('tabelas-tv')">Abrir módulo →</button><div class="slide-ref">Aula 04 · Construção de Tabelas-verdade</div></article>
+    <article class="card"><h2>4. Tautologias, contradições e contingências</h2><p>Classificação pela última coluna, princípios da não contradição e do terceiro excluído, exemplos e aplicações em programação.</p><button class="btn" onclick="goTab('classificacoes-tv')">Abrir módulo →</button><div class="slide-ref">Aula 05 · Tautologias, Contradições e Contingências</div></article>
+    <article class="card"><h2>5. Implicação lógica</h2><p>Diferença entre condicional e implicação, validade, contraexemplo, direção da implicação e proposições associadas.</p><button class="btn" onclick="goTab('implicacao')">Abrir módulo →</button><div class="slide-ref">Aula 06 · Implicação lógica</div></article>
+    <article class="card"><h2>6. Equivalência lógica</h2><p>Definição, comparação de tabelas-verdade, propriedades da equivalência, equivalências notáveis e conectivos de Sheffer.</p><button class="btn" onclick="goTab('equivalencia')">Abrir módulo →</button><div class="slide-ref">Aula 07 · Equivalência Lógica</div></article>
+    <article class="card"><h2>7. Álgebra das proposições</h2><p>Leis de idempotência, identidade, comutatividade, associatividade, distributividade, absorção, De Morgan e negações.</p><button class="btn" onclick="goTab('algebra')">Abrir módulo →</button><div class="slide-ref">Aula 08 · Álgebra das Proposições</div></article>
+    <article class="card"><h2>8. Método dedutivo</h2><p>Premissas, conclusão, argumentos, regras de inferência, demonstração algébrica e redução de conectivos.</p><button class="btn" onclick="goTab('dedutivo')">Abrir módulo →</button><div class="slide-ref">Aula 09 · Método Dedutivo; regras iniciais no final da Aula 06</div></article>
+    <article class="card"><h2>9. Validade por tabelas-verdade</h2><p>Critério de validade, argumentos válidos e inválidos e identificação de combinações que refutam argumentos.</p><button class="btn" onclick="goTab('validade-tv')">Abrir módulo →</button><div class="slide-ref">Aulas 10 e 11 · Validade Mediante Tabelas Verdade</div></article>
+    <article class="card"><h2>10. Validade por regras de inferência e equivalências</h2><p>Regra de substituição, equivalências notáveis, demonstrações de argumentos e inconsistência lógica.</p><button class="btn" onclick="goTab('validade-regras')">Abrir módulo →</button><div class="slide-ref">Aulas 12 e 13 · Validade Mediante Regras de Inferência e Equivalências</div></article>
+    <article class="card"><h2>11. Demonstrações</h2><p>Demonstração condicional e demonstração indireta (por absurdo), regras, etapas de prova e exercícios.</p><button class="btn" onclick="goTab('demonstracoes')">Abrir módulo →</button><div class="slide-ref">Aula 14 · Demonstração Condicional e Demonstração Indireta</div></article>
+    <article class="card"><h2>12. Sentenças abertas</h2><p>Variáveis, conjunto universo, conjunto-verdade, conjuntos numéricos, classificações e produto cartesiano.</p><button class="btn" onclick="goTab('abertas')">Abrir módulo →</button><div class="slide-ref">Aula 15 · Sentenças Abertas</div></article>
+    <article class="card"><h2>13. Operações sobre sentenças abertas</h2><p>Negação, conjunção, disjunção, condicional, bicondicional e operações com conjuntos-verdade.</p><button class="btn" onclick="goTab('operacoes')">Abrir módulo →</button><div class="slide-ref">Aula 16 · Operações Lógicas sobre Sentenças Abertas</div></article>
+    <article class="card"><h2>14. Quantificadores</h2><p>Universal, existencial, negações, contraexemplo, variável livre/ligada e existência e unicidade.</p><button class="btn" onclick="goTab('quantificadores')">Abrir módulo →</button><div class="slide-ref">Aula 17 · Quantificadores</div></article>
+  </div>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Como explorar os recursos interativos:</h2>
+      <ul style="margin:.45rem 0 .5rem 1.25rem;color:#53657d">
+        <li>Altere os valores de P e Q para observar os conectivos.</li>
+        <li>Teste distância e velocidade no exemplo do carro autônomo.</li>
+        <li>Avance passo a passo nas demonstrações e deduções.</li>
+        <li>Resolva as questões na aba “Praticar” e confira a explicação.</li>
+      </ul>
+    </article>
+    <article class="card" style="grid-column:1/-1">
+      <h2>Mapa de correspondência: aulas, arquivos e módulos do guia</h2>
+      <p>Consulte a tabela para localizar cada aula, conferir o nome do PDF correspondente e ver em qual módulo do guia os assuntos foram organizados. A numeração dos slides segue a paginação indicada em cada apresentação.</p>
+      <div class="table-wrap">
+        <table class="coverage-table">
+          <thead><tr><th style="width:6rem">Aula</th><th style="width:24rem">Nome do PDF da aula</th><th>Assuntos</th><th style="width:13rem">Onde está no guia</th></tr></thead>
+          <tbody>
+            <tr><td>01 · 16 slides</td><td><code>LogMat_Slide-01-Introdução à Lógica.pdf</code></td><td>Aplicações da lógica simbólica/clássica; exemplo do primeiro carro autônomo desenvolvido pela UFES; decisões de programas com condições verdadeiras ou falsas.</td><td><button class="btn btn-small" onclick="goTab('fundamentos')">Módulo 1 · Fundamentos</button></td></tr>
+            <tr><td>02 · 37 slides</td><td><code>LogMat_Slide-02-Proposições e Conectivos.pdf</code></td><td>Proposição e frase declarativa; valor lógico; princípios da não contradição e do terceiro excluído; proposições simples e compostas; linguagem corrente e simbólica; conectivos; sistemas dicotômicos; interruptores em série/paralelo; expressões lógicas, C e tabela-verdade.</td><td><button class="btn btn-small" onclick="goTab('fundamentos')">Módulo 1 · Fundamentos</button></td></tr>
+            <tr><td>03 · 25 slides</td><td><code>LogMat_Slide-03-Operações Lógicas sobre Proposições.pdf</code></td><td>Negação, conjunção, disjunção inclusiva e exclusiva, exemplos, Feature Model, condicional, antecedente/consequente e bicondicional.</td><td><button class="btn btn-small" onclick="goTab('operacoes-prop')">Módulo 2 · Operações</button></td></tr>
+            <tr><td>04 · 24 slides</td><td><code>LogMat_Slide-04-Construção de Tabelas-verdade.pdf</code></td><td>Quantidade de linhas (2ⁿ), combinação dos valores V/F, construção e organização das colunas, precedência, parênteses, associatividade à direita da condicional, exercícios com três variáveis e substituição de valores dados.</td><td><button class="btn btn-small" onclick="goTab('tabelas-tv')">Módulo 3 · Tabelas-verdade</button></td></tr>
+            <tr><td>05 · 30 slides</td><td><code>LogMat_Slide-05 - Tautologias, Contradições e Contingências.pdf</code></td><td>Definições e classificação pela última coluna; princípios da não contradição e do terceiro excluído; exercícios de tautologia, contradição e contingência; validação de regras e requisitos; aplicações em programação.</td><td><button class="btn btn-small" onclick="goTab('classificacoes-tv')">Módulo 4 · Classificações</button></td></tr>
+            <tr><td>06 · 45 slides</td><td><code>LogMat_Slide-06 - Implicação lógica(2).pdf</code></td><td>Condicional × implicação lógica; regra fundamental da implicação; direção da implicação, recíproca e equivalência; introdução às regras de inferência e exemplos de Modus Ponens, Modus Tollens, Silogismo Hipotético e Silogismo Disjuntivo.</td><td><button class="btn btn-small" onclick="goTab('implicacao')">Módulo 5 · Implicação</button> <button class="btn btn-small" onclick="goTab('dedutivo')">Módulo 8 · Método dedutivo</button></td></tr>
+            <tr><td>07 · 12 slides</td><td><code>LogMat_Slide-07-Equivalência Lógica(1).pdf</code></td><td>Definição de equivalência por tabelas idênticas; propriedades reflexiva, simétrica e transitiva; tautologias e equivalência lógica; proposições associadas e conectivos de Sheffer.</td><td><button class="btn btn-small" onclick="goTab('equivalencia')">Módulo 6 · Equivalência</button></td></tr>
+            <tr><td>08 · 26 slides</td><td><code>LogMat_Slide-08 - Álgebra das Proposições(2).pdf</code></td><td>Leis e propriedades algébricas; idempotência, identidade, comutatividade, associatividade, distributividade, absorção, De Morgan, negação da condicional e da bicondicional.</td><td><button class="btn btn-small" onclick="goTab('algebra')">Módulo 7 · Álgebra</button></td></tr>
+            <tr><td>09 · 35 slides</td><td><code>LogMat_Slide-09-Método Dedutivo(1).pdf</code></td><td>Premissas, conclusão e estrutura de argumentos; raciocínio dedutivo; regras de inferência (incluindo Modus Ponens, Modus Tollens e silogismos); demonstração algébrica; simplificação, adição e outras regras; exercícios.</td><td><button class="btn btn-small" onclick="goTab('dedutivo')">Módulo 8 · Método dedutivo</button></td></tr>
+            <tr><td>10 · 9 slides</td><td><code>LogMat_Slide-10-Validade Mediante Tabelas Verdade(1).pdf</code></td><td>Critério formal de validade; análise das linhas em que todas as premissas são verdadeiras; exemplos de argumentos válidos e inválidos; prova de não validade por contraexemplo.</td><td><button class="btn btn-small" onclick="goTab('validade-tv')">Módulo 9 · Validade por tabelas</button></td></tr>
+            <tr><td>11 · 13 slides</td><td><code>LogMat_Slide-11-Validade Mediante Tabelas Verdade.pdf</code></td><td>Exemplo contextualizado de chuva e rua molhada; representação simbólica do argumento; validade e não validade; contraexemplo com premissas verdadeiras e conclusão falsa; exercícios.</td><td><button class="btn btn-small" onclick="goTab('validade-tv')">Módulo 9 · Validade por tabelas</button></td></tr>
+            <tr><td>12 · 14 slides</td><td><code>LogMat_Slide-12 - Validade Mediante Regras de Inferência e Equivalências(1).pdf</code></td><td>Regra de substituição; equivalências notáveis; demonstrações de validade combinando regras de inferência e equivalências.</td><td><button class="btn btn-small" onclick="goTab('validade-regras')">Módulo 10 · Regras e equivalências</button></td></tr>
+            <tr><td>13 · 19 slides</td><td><code>LogMat_Slide-13-Validade Mediante Regras de Inferência e Equivalências.pdf</code></td><td>Regra de substituição; equivalências notáveis; provas de argumentos; inconsistência lógica; atividades de aplicação.</td><td><button class="btn btn-small" onclick="goTab('validade-regras')">Módulo 10 · Regras e equivalências</button></td></tr>
+            <tr><td>14 · 22 slides</td><td><code>LogMat_Slide-14-Demonstração Condicional e Demonstração Indireta(1).pdf</code></td><td>Demonstração condicional, Regra da Importação, demonstração indireta/por absurdo, exemplos contextualizados, comparação dos métodos e exercícios.</td><td><button class="btn btn-small" onclick="goTab('demonstracoes')">Módulo 11 · Demonstrações</button></td></tr>
+            <tr><td>15 · 28 slides</td><td><code>LogMat_Slide-15 - Sentenças Abertas.pdf</code></td><td>Sentença aberta; variável e conjunto universo; conjunto-verdade; ℕ, ℤ, ℚ e ℝ; condições universal, possível e impossível; sentenças com duas ou mais variáveis e produto cartesiano.</td><td><button class="btn btn-small" onclick="goTab('abertas')">Módulo 12 · Sentenças abertas</button></td></tr>
+            <tr><td>16 · 34 slides</td><td><code>LogMat_Slide-16 - Operações Lógicas Sobre Sentenças Abertas.pdf</code></td><td>Negação, conjunção, disjunção, condicional e bicondicional aplicadas a sentenças abertas; determinação de conjuntos-verdade; propriedades com condições universal e impossível.</td><td><button class="btn btn-small" onclick="goTab('operacoes')">Módulo 13 · Operações sobre sentenças abertas</button></td></tr>
+            <tr><td>17 · 25 slides</td><td><code>LogMat_Slide-17 - Quantificadores.pdf</code></td><td>Necessidade de quantificadores; universal e existencial; comparação; negação dos quantificadores; contraexemplo e exercícios.</td><td><button class="btn btn-small" onclick="goTab('quantificadores')">Módulo 14 · Quantificadores</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout good"><strong>Sobre a tabela acima:</strong> cada linha identifica um arquivo de aula e indica o módulo correspondente. Quando uma aula foi dividida entre dois módulos (como a Aula 06), os dois destinos estão indicados.</div>
+      <div class="callout warn"><strong>Sobre o guia:</strong> este material ainda está em construção. Ele reúne explicações e exemplos para facilitar a revisão, mas pode conter erros, omissões ou pontos que precisem de ajustes. Use os slides da disciplina como referência e, se encontrar algo que pareça incorreto ou pouco claro, confira o material da aula e comunique o professor.</div>
+    </article>
+  </div>
+</section>
+
+<section id="fundamentos" class="tab-content">
+  <div class="concept-box">
+    <h2>1. Introdução à lógica, proposições e conectivos</h2>
+    <p>A lógica simbólica ou clássica trabalha com afirmações que podem receber um valor lógico: verdadeiro (V) ou falso (F). Na Computação, condições lógicas aparecem em decisões de programas, bancos de dados, inteligência artificial, circuitos digitais e verificação de software.</p>
+    <div class="slide-ref">Fontes: LogMat Slide 01 - Introdução à Lógica, slides 2 a 14; LogMat Slide 02 - Proposições e Conectivos, slides 3 a 36</div>
+  </div>
+  <div class="grid-2">
+    <article class="card">
+      <h2>A lógica em uma decisão computacional</h2>
+      <p>O exemplo dos slides usa o primeiro carro autônomo desenvolvido pela UFES. O computador não precisa “entender” o conceito cotidiano de perigo para avaliar uma condição lógica: ele recebe valores e aplica uma regra.</p>
+      <div class="formula">Se distância &lt; 2 metros e velocidade &gt; 40 km/h, então frear.</div>
+      <p>Defina P: a distância é menor que 2 metros. Q: a velocidade é maior que 40 km/h. A ação de frear ocorre quando P ∧ Q é verdadeira.</p>
+      <div class="control-row"><label for="distCar"><strong>Distância (m):</strong></label><input id="distCar" type="number" value="1.5" min="0" step="0.1" oninput="updateCarDecision()"><label for="speedCar"><strong>Velocidade (km/h):</strong></label><input id="speedCar" type="number" value="45" min="0" step="1" oninput="updateCarDecision()"></div>
+      <div id="carDecision" class="result good">P = V e Q = V. A conjunção é verdadeira: frear.</div>
+      <div class="slide-ref">Fonte: Slide 01, slides 3 a 8</div>
+    </article>
+    <article class="card">
+      <h2>O que é uma proposição?</h2>
+      <p>Proposição é um conjunto de palavras ou símbolos que exprime um pensamento de sentido completo. Na apresentação, ela é tratada como uma oração declarativa que pode ser classificada como verdadeira ou falsa.</p>
+      <div class="pills"><span class="pill">A Lua é um satélite da Terra. <strong>V</strong></span><span class="pill">Vitória é a capital do Espírito Santo. <strong>V</strong></span></div>
+      <p>Uma pergunta, uma ordem ou uma exclamação não é, por si só, uma proposição declarativa com valor lógico.</p>
+      <div class="callout">Princípio da não contradição: uma proposição não pode ser verdadeira e falsa ao mesmo tempo. Princípio do terceiro excluído: toda proposição é V ou F.</div>
+      <div class="slide-ref">Fonte: Slide 02, slides 2 a 10</div>
+    </article>
+    <article class="card">
+      <h2>Proposições simples e compostas</h2>
+      <p><strong>Simples (atômica):</strong> possui apenas uma proposição, sem outra proposição como parte. <strong>Composta (molecular):</strong> combina duas ou mais proposições.</p>
+      <div class="formula">p: Carlos é careca.</div>
+      <div class="formula">q: Pedro é estudante.</div>
+      <div class="formula">P: Carlos é careca e Pedro é estudante.</div>
+      <p>Na linguagem simbólica, a proposição composta pode ser representada por p ∧ q.</p>
+      <div class="slide-ref">Fonte: Slide 02, slides 12 a 17</div>
+    </article>
+    <article class="card">
+      <h2>Conectivos e valores lógicos</h2>
+      <div class="table-wrap"><table><thead><tr><th>Conectivo</th><th>Símbolo</th><th>Leitura</th></tr></thead><tbody>
+        <tr><td>Negação</td><td>¬</td><td>não P</td></tr><tr><td>Conjunção</td><td>∧</td><td>P e Q</td></tr><tr><td>Disjunção</td><td>∨</td><td>P ou Q</td></tr><tr><td>Condicional</td><td>→</td><td>se P, então Q</td></tr><tr><td>Bicondicional</td><td>↔</td><td>P se e somente se Q</td></tr>
+      </tbody></table></div>
+      <p>Os valores lógicos são V e F. As combinações possíveis de duas proposições são 2² = 4.</p>
+      <div class="slide-ref">Fonte: Slide 02, slides 17 a 19 e 35 a 36</div>
+    </article>
+  </div>
+  <article class="card">
+    <h2>Interruptores: a ligação entre lógica e circuitos</h2>
+    <p>Nos slides, um interruptor pode estar aberto (0) ou fechado (1). Em uma ligação em paralelo, a corrente passa quando pelo menos um interruptor está fechado. Em série, a corrente passa quando ambos estão fechados.</p>
+    <div class="grid-2">
+      <div class="concept-box green"><h3>Paralelo - OU (∨)</h3><p>Basta um interruptor fechado para a corrente passar.</p><div class="formula">a ∨ b</div></div>
+      <div class="concept-box amber"><h3>Série - E (∧)</h3><p>Os dois interruptores precisam estar fechados para a corrente passar.</p><div class="formula">a ∧ b</div></div>
+    </div>
+    <p>O material também relaciona os operadores à linguagem C: E corresponde a <code>&amp;&amp;</code>, OU a <code>||</code> e NÃO a <code>!</code>.</p>
+    <div class="slide-ref">Fonte: Slide 02, slides 20 a 34</div>
+  </article>
+</section>
+
+<section id="operacoes-prop" class="tab-content">
+  <div class="concept-box">
+    <h2>2. Operações lógicas sobre proposições</h2>
+    <p>As operações lógicas são operações realizadas sobre proposições. Cada conectivo tem uma regra para determinar o valor lógico da proposição composta.</p>
+    <div class="slide-ref">Fonte: LogMat Slide 03 - Operações Lógicas sobre Proposições, slides 2 a 24</div>
+  </div>
+  <article class="card">
+    <h2>Calculadora de conectivos</h2>
+    <p class="desc">Altere os valores de P e Q. Os resultados são calculados de acordo com as tabelas-verdade apresentadas nos slides.</p>
+    <div class="control-row"><label for="truthP"><strong>P:</strong></label><select id="truthP" onchange="updateConnectiveCalculator()"><option value="1">Verdadeiro (V)</option><option value="0">Falso (F)</option></select><label for="truthQ"><strong>Q:</strong></label><select id="truthQ" onchange="updateConnectiveCalculator()"><option value="1">Verdadeiro (V)</option><option value="0">Falso (F)</option></select></div>
+    <div class="table-wrap"><table><thead><tr><th>Expressão</th><th>Resultado</th><th>Regra</th></tr></thead><tbody id="connectiveResults"></tbody></table></div>
+    <div class="slide-ref">Resumo dos conectivos dos Slides 02 e 03</div>
+  </article>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Negação ¬ (NÃO)</h2>
+      <p>A negação apresenta o valor lógico contrário ao da proposição original.</p>
+      <div class="table-wrap"><table><thead><tr><th>P</th><th>¬P</th></tr></thead><tbody><tr><td>V</td><td>F</td></tr><tr><td>F</td><td>V</td></tr></tbody></table></div>
+      <p>Exemplo de exercício dos slides: se “O mar é salgado” for verdadeira, sua negação será falsa: “O mar não é salgado”.</p>
+      <div class="slide-ref">Fonte: slide 3</div>
+    </article>
+    <article class="card">
+      <h2>Conjunção ∧ (E)</h2>
+      <p>A conjunção só é verdadeira quando todas as proposições que a compõem são verdadeiras.</p>
+      <div class="formula">P ∧ Q</div>
+      <p>Exemplo: “O Sol é uma estrela e a Lua é um satélite da Terra.” A conjunção depende de ambas as afirmações serem verdadeiras.</p>
+      <div class="slide-ref">Fonte: slide 5</div>
+    </article>
+    <article class="card">
+      <h2>Disjunção ∨ (OU inclusivo)</h2>
+      <p>A disjunção é verdadeira quando pelo menos uma proposição é verdadeira. Também é verdadeira quando P e Q são ambas verdadeiras.</p>
+      <div class="formula">P ∨ Q</div>
+      <div class="slide-ref">Fonte: slide 7</div>
+    </article>
+    <article class="card">
+      <h2>Disjunção exclusiva ⊕ (OU exclusivo)</h2>
+      <p>O “ou” exclusivo significa “um ou outro, mas não ambos”. É verdadeiro quando exatamente uma das duas proposições é verdadeira.</p>
+      <div class="table-wrap"><table><thead><tr><th>P</th><th>Q</th><th>P ⊕ Q</th></tr></thead><tbody><tr><td>V</td><td>V</td><td>F</td></tr><tr><td>V</td><td>F</td><td>V</td></tr><tr><td>F</td><td>V</td><td>V</td></tr><tr><td>F</td><td>F</td><td>F</td></tr></tbody></table></div>
+      <p>O slide contrasta o OU inclusivo (“Carlos é médico ou professor”) com o OU exclusivo (“Mário é alagoano ou gaúcho”).</p>
+      <div class="slide-ref">Fonte: slides 9 a 16</div>
+    </article>
+    <article class="card">
+      <h2>Condicional → (SE... ENTÃO)</h2>
+      <p>A condicional só é falsa quando o antecedente P é verdadeiro e o consequente Q é falso.</p>
+      <div class="formula">P → Q</div>
+      <p>Exemplo dos slides: “Se eu me formar na primavera, vou tirar férias na Flórida”. Se a pessoa se formar e não tirar férias na Flórida, a condicional será falsa.</p>
+      <div class="slide-ref">Fonte: slides 17 a 20</div>
+    </article>
+    <article class="card">
+      <h2>Bicondicional ↔ (SE E SOMENTE SE)</h2>
+      <p>A bicondicional é verdadeira quando P e Q possuem o mesmo valor lógico: ambas V ou ambas F.</p>
+      <div class="formula">P ↔ Q ⇔ (P → Q) ∧ (Q → P)</div>
+      <p>Na tabela-verdade do exemplo, p ↔ q é verdadeira quando as duas proposições têm o mesmo valor lógico: ambas são V ou ambas são F. Quando uma é V e a outra é F, o resultado é falso.</p>
+      <div class="slide-ref">Fonte: slides 22 e 23</div>
+    </article>
+  </div>
+</section>
+
+
+<section id="tabelas-tv" class="tab-content">
+  <div class="concept-box">
+    <h2>3. Construção de tabelas-verdade</h2>
+    <p>A tabela-verdade apresenta todos os valores lógicos possíveis de uma proposição composta. O resultado de cada linha depende dos valores atribuídos às proposições simples que aparecem na expressão.</p>
+    <p>Quando não recebemos valores específicos para as proposições, precisamos analisar todas as combinações possíveis de V e F.</p>
+    <div class="slide-ref">📚 Fonte: LogMat Slide 04 - Construção de Tabelas-verdade, slides 2 a 17 e 22 a 23</div>
+  </div>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Quantas linhas a tabela precisa ter?</h2>
+      <p>Se a expressão possui <strong>n proposições simples diferentes</strong>, a tabela-verdade completa possui 2ⁿ linhas.</p>
+      <div class="formula">Número de linhas = 2ⁿ</div>
+      <div class="control-row">
+        <label for="numVariables"><strong>Número de proposições simples:</strong></label>
+        <input id="numVariables" type="number" min="1" max="12" value="3" style="width:90px">
+        <button class="btn" onclick="updatePossibilities()">Calcular</button>
+      </div>
+      <div id="possibilitiesResult" class="result good">Com 3 proposições simples: 2³ = 8 linhas.</div>
+      <div class="slide-ref">Fonte: slides 3 a 6</div>
+    </article>
+    <article class="card">
+      <h2>Exemplo com duas proposições</h2>
+      <p>Para p e q, existem quatro combinações possíveis:</p>
+      <div class="table-wrap"><table><thead><tr><th>Linha</th><th>p</th><th>q</th></tr></thead><tbody>
+        <tr><td>1</td><td>V</td><td>V</td></tr><tr><td>2</td><td>V</td><td>F</td></tr><tr><td>3</td><td>F</td><td>V</td></tr><tr><td>4</td><td>F</td><td>F</td></tr>
+      </tbody></table></div>
+      <p>Com três proposições simples (p, q e r), temos 2³ = 8 combinações.</p>
+      <div class="slide-ref">Fonte: slide 3</div>
+    </article>
+  </div>
+  <article class="card">
+    <h2>Como organizar as colunas?</h2>
+    <p>Para três proposições, a primeira coluna muda mais lentamente; a última alterna V e F a cada linha. Esse padrão garante que todas as combinações apareçam uma única vez.</p>
+    <div class="table-wrap"><table><thead><tr><th>Linha</th><th>p</th><th>q</th><th>r</th></tr></thead><tbody>
+      <tr><td>1</td><td>V</td><td>V</td><td>V</td></tr><tr><td>2</td><td>V</td><td>V</td><td>F</td></tr><tr><td>3</td><td>V</td><td>F</td><td>V</td></tr><tr><td>4</td><td>V</td><td>F</td><td>F</td></tr><tr><td>5</td><td>F</td><td>V</td><td>V</td></tr><tr><td>6</td><td>F</td><td>V</td><td>F</td></tr><tr><td>7</td><td>F</td><td>F</td><td>V</td></tr><tr><td>8</td><td>F</td><td>F</td><td>F</td></tr>
+    </tbody></table></div>
+    <div class="callout">Com n = 3: a coluna de p apresenta quatro V seguidos de quatro F; a coluna de q alterna blocos de dois; a coluna de r alterna a cada linha.</div>
+    <div class="slide-ref">Fonte: slides 3 a 5</div>
+  </article>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Ordem de precedência dos conectivos</h2>
+      <p>Os parênteses são resolvidos primeiro. Dentro de cada escopo, os slides apresentam esta ordem:</p>
+      <div class="table-wrap"><table><thead><tr><th>Ordem</th><th>Conectivo</th><th>Leitura</th></tr></thead><tbody>
+        <tr><td>1ª</td><td>¬</td><td>Negação</td></tr><tr><td>2ª</td><td>∧</td><td>Conjunção (E)</td></tr><tr><td>3ª</td><td>⊕</td><td>Disjunção exclusiva</td></tr><tr><td>4ª</td><td>∨</td><td>Disjunção (OU)</td></tr><tr><td>5ª</td><td>→</td><td>Condicional</td></tr><tr><td>6ª</td><td>↔</td><td>Bicondicional</td></tr>
+      </tbody></table></div>
+      <div class="callout warn">A presença de parênteses altera o escopo: resolva primeiro tudo o que estiver dentro deles.</div>
+      <div class="slide-ref">Fonte: slides 7 a 9</div>
+    </article>
+    <article class="card">
+      <h2>A condicional é associativa à direita</h2>
+      <p>Quando duas condicionais aparecem seguidas no mesmo escopo, a leitura é feita da direita para a esquerda:</p>
+      <div class="formula">p → q → r</div>
+      <div class="formula">p → (q → r)</div>
+      <p>Primeiro calculamos q → r. Depois usamos esse resultado para avaliar p → (resultado).</p>
+      <div class="callout">Não interprete automaticamente como (p → q) → r. Os parênteses deixam explícita a associação correta.</div>
+      <div class="slide-ref">Fonte: slide 8 e quadro de associatividade do slide 10</div>
+    </article>
+  </div>
+  <article class="card">
+    <h2>Exemplo completo dos slides: (p ∧ q) ∨ ¬r</h2>
+    <p>Primeiro calculamos p ∧ q; depois ¬r; por fim, aplicamos a disjunção ∨. A última coluna apresenta o valor lógico final.</p>
+    <div class="formula">P(p,q,r) = (p ∧ q) ∨ ¬r</div>
+    <div class="table-wrap"><table id="constructionTruthTable"><thead><tr><th>Linha</th><th>p</th><th>q</th><th>r</th><th>p ∧ q</th><th>¬r</th><th>(p ∧ q) ∨ ¬r</th></tr></thead><tbody></tbody></table></div>
+    <div id="constructionTruthSummary" class="result good">A última coluna é o resultado final da proposição composta.</div>
+    <div class="slide-ref">Fonte: slides 13 e 14</div>
+  </article>
+  <article class="card" id="truthPracticeCard">
+    <h2>Pratique: construa sua própria tabela-verdade</h2>
+    <p>Escolha uma expressão e preencha as células da tabela. Digite <strong>V</strong> para verdadeiro ou <strong>F</strong> para falso. Você deverá completar tanto as combinações das proposições simples quanto as colunas intermediárias e o resultado final.</p>
+    <div class="control-row">
+      <label for="truthPracticeChoice"><strong>Expressão para praticar:</strong></label>
+      <select id="truthPracticeChoice" onchange="loadTruthPractice()">
+        <option value="implication">1. p → q (duas proposições)</option>
+        <option value="slideExample" selected>2. (p ∧ q) ∨ ¬r (exemplo dos slides 13 e 14)</option>
+        <option value="demorgan">3. ¬(p ∨ q) ↔ (¬p ∧ ¬q) (exercício do slide 22)</option>
+        <option value="precedence">4. p → q ↔ r (exercício do slide 15)</option>
+      </select>
+    </div>
+    <div id="truthPracticePrompt" class="callout">Expressão: (p ∧ q) ∨ ¬r. Calcule primeiro p ∧ q, depois ¬r e, por último, a disjunção.</div>
+    <p class="truth-practice-note">Dica: mantenha a ordem das combinações como nos slides: para três variáveis, p muda a cada quatro linhas, q a cada duas e r a cada linha. Preencha com V ou F em todas as células.</p>
+    <div class="table-wrap">
+      <table id="truthPracticeTable" class="truth-practice-table">
+        <thead></thead><tbody></tbody>
+      </table>
+    </div>
+    <div class="truth-practice-actions">
+      <button class="btn green" type="button" onclick="checkTruthPractice()">Verificar tabela</button>
+      <button class="btn secondary" type="button" onclick="clearTruthPractice()">Limpar campos</button>
+      <button class="btn amber" type="button" onclick="showTruthPracticeAnswers()">Mostrar gabarito</button>
+    </div>
+    <div id="truthPracticeResult" class="result" aria-live="polite">Preencha a tabela e clique em “Verificar tabela”.</div>
+    <div id="truthPracticeExplanation" class="callout" style="display:none"></div>
+    <div class="slide-ref">Exemplos e exercícios: Aula 04, slides 13–18 e 22–23</div>
+  </article>
+
+  <article class="card">
+    <h2>Exercício dos slides: substitua p = V e q = F</h2>
+    <p>O enunciado fornece os valores das proposições simples. Nesse caso, não precisamos montar todas as combinações: basta substituir os valores indicados e calcular cada expressão.</p>
+    <div class="table-wrap"><table><thead><tr><th>Item</th><th>Expressão</th><th>Resultado</th></tr></thead><tbody>
+      <tr><td>a)</td><td>¬(p ∨ q) ↔ (¬p ∧ ¬q)</td><td id="given-a">V</td></tr>
+      <tr><td>b)</td><td>(p → q) → (p → (p ∧ q))</td><td id="given-b">V</td></tr>
+      <tr><td>c)</td><td>p ∨ (q ∧ p)</td><td id="given-c">V</td></tr>
+    </tbody></table></div>
+    <div class="callout good">Com p = V e q = F, as três expressões têm resultado V.</div>
+    <div class="slide-ref">Fonte: slides 22 e 23</div>
+  </article>
+  <details class="exercise-item">
+    <summary>Formalização de sentenças em linguagem natural (exercício dos slides)</summary>
+    <div class="exercise-body">
+      <p><strong>1. “O gato é branco e tem olhos azuis, mas não tem medo de cães.”</strong></p>
+      <p>p: o gato é branco; q: tem olhos azuis; r: tem medo de cães.</p>
+      <div class="formula">(p ∧ q) ∧ ¬r</div>
+      <p><strong>2. “Se o cachorro latiu, então ele viu algo diferente ou o ladrão pulou o muro.”</strong></p>
+      <p>p: o cachorro latiu; q: viu algo diferente; r: o ladrão pulou o muro.</p>
+      <div class="formula">p → (q ∨ r)</div>
+      <p><strong>3. “Se ele estuda, então vai bem na prova; se vai bem, pode viajar; isso implica que, se estuda, pode viajar.”</strong></p>
+      <p>p: estuda; q: vai bem na prova; r: pode viajar.</p>
+      <div class="formula">((p → q) ∧ (q → r)) → (p → r)</div>
+      <div class="slide-ref">Fonte: slides 15 a 21</div>
+    </div>
+  </details>
+</section>
+
+<section id="classificacoes-tv" class="tab-content">
+  <div class="concept-box">
+    <h2>4. Tautologias, contradições e contingências</h2>
+    <p>Depois de construir a tabela-verdade, analisamos a última coluna para classificar a proposição composta. O resultado pode ser sempre verdadeiro, sempre falso ou depender dos valores das proposições simples.</p>
+    <div class="slide-ref">📚 Fonte: LogMat Slide 05 - Tautologias, Contradições e Contingências, slides 2 a 29</div>
+  </div>
+  <div class="grid-3">
+    <article class="card">
+      <h2>Tautologia</h2>
+      <div class="concept-box green"><strong>Regra: sempre verdadeira.</strong><p>É uma proposição composta cuja última coluna apresenta V em todas as possibilidades.</p></div>
+      <p><strong>Exemplos:</strong></p>
+      <div class="formula">p → p</div><div class="formula">p ↔ p</div><div class="formula">p ∨ ¬p</div>
+      <p>O princípio do terceiro excluído afirma que uma proposição é verdadeira ou falsa.</p>
+      <div class="slide-ref">Fonte: slides 3, 5, 6 e 10</div>
+    </article>
+    <article class="card">
+      <h2>Contradição</h2>
+      <div class="concept-box red"><strong>Regra: nunca verdadeira.</strong><p>É uma proposição composta cuja última coluna apresenta F em todas as possibilidades.</p></div>
+      <p><strong>Exemplo:</strong></p>
+      <div class="formula">p ∧ ¬p</div>
+      <p>O princípio da não contradição afirma que uma proposição não pode ser simultaneamente verdadeira e falsa.</p>
+      <div class="slide-ref">Fonte: slides 6 e 19 a 20</div>
+    </article>
+    <article class="card">
+      <h2>Contingência</h2>
+      <div class="concept-box amber"><strong>Regra: depende da situação.</strong><p>Tem pelo menos um V e um F na última coluna. Não é tautologia nem contradição.</p></div>
+      <p><strong>Exemplo:</strong></p>
+      <div class="formula">p → ¬p</div>
+      <p>O resultado varia conforme o valor lógico de p.</p>
+      <div class="slide-ref">Fonte: slide 23</div>
+    </article>
+  </div>
+  <article class="card">
+    <h2>Experimente classificar uma proposição</h2>
+    <p>Escolha uma das expressões dos slides. O guia monta a tabela-verdade e classifica a expressão pela última coluna.</p>
+    <div class="control-row"><label for="classFormula"><strong>Proposição:</strong></label><select id="classFormula" onchange="renderClassFormula()">
+      <option value="pimpP">p → p</option>
+      <option value="excluded">p ∨ ¬p</option>
+      <option value="nonContradiction">¬(p ∧ ¬p)</option>
+      <option value="contradiction">p ∧ ¬p</option>
+      <option value="tautA">p ∨ ¬(p ∧ q)</option>
+      <option value="tautB">(p ∨ (q ∧ ¬q)) ↔ p</option>
+      <option value="notTaut">(p ∨ (q ∧ r)) → p</option>
+      <option value="contingency">p → ¬p</option>
+      <option value="exerciseContradiction">(p ∧ q) ∧ ¬(p ∨ q)</option>
+    </select></div>
+    <div id="classFormulaDescription" class="result">Selecione uma expressão para ver sua tabela.</div>
+    <div class="table-wrap"><table id="classFormulaTable"><thead></thead><tbody></tbody></table></div>
+    <div id="classFormulaResult" class="callout good">A classificação será apresentada aqui.</div>
+    <div class="slide-ref">Exercício 1 (slides 11 a 17); exercício 2 (slide 22); exemplos dos slides 3, 6, 19 e 23</div>
+  </article>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Aplicações em programação</h2>
+      <h3>Tautologia: condição sempre verdadeira</h3>
+      <pre class="formula" style="text-align:left;white-space:pre-wrap">if (idade >= 18 || idade < 18) {
+    processar();
+}</pre>
+      <p>Para qualquer idade, a condição é verdadeira. Ela não filtra nada e pode indicar uma condição redundante.</p>
+      <div class="slide-ref">Fonte: slide 18</div>
+      <h3>Contradição: condição nunca verdadeira</h3>
+      <pre class="formula" style="text-align:left;white-space:pre-wrap">if (idade >= 18 && idade < 18) {
+    printf("Acesso permitido");
+}</pre>
+      <p>Nenhuma idade satisfaz simultaneamente as duas condições. O bloco não será executado.</p>
+      <div class="slide-ref">Fonte: slide 21</div>
+    </article>
+    <article class="card">
+      <h2>Contingência: regra que depende das entradas</h2>
+      <pre class="formula" style="text-align:left;white-space:pre-wrap">if (idade >= 18 && possui_carteira) {
+    permitir_direcao();
+}</pre>
+      <p>Com idade = 25 e possui_carteira = true, a condição é V. Com idade = 25 e possui_carteira = false, a condição é F.</p>
+      <div class="callout">A regra funciona em algumas situações e não em outras, de acordo com os valores recebidos.</div>
+      <div class="slide-ref">Fonte: slide 26</div>
+    </article>
+  </div>
+  <article class="card">
+    <h2>Exemplo de validação de regras e requisitos</h2>
+    <p>O requisito dos slides diz: “O usuário pode acessar se for Funcionário (F) OU Administrador (A)”.</p>
+    <div class="formula">F ∨ A</div>
+    <div class="table-wrap"><table><thead><tr><th>Funcionário (F)</th><th>Administrador (A)</th><th>Acesso permitido (F ∨ A)</th></tr></thead><tbody>
+      <tr><td>V</td><td>V</td><td><strong>V</strong></td></tr><tr><td>V</td><td>F</td><td><strong>V</strong></td></tr><tr><td>F</td><td>V</td><td><strong>V</strong></td></tr><tr><td>F</td><td>F</td><td><strong>F</strong></td></tr>
+    </tbody></table></div>
+    <p>É uma contingência: permite o acesso em três combinações e o bloqueia quando o usuário não pertence a nenhum dos dois grupos.</p>
+    <div class="slide-ref">Fonte: slides 27 a 29</div>
+  </article>
+  <article class="card">
+    <h2>Resumo para reconhecer cada classificação</h2>
+    <div class="table-wrap"><table><thead><tr><th>Classificação</th><th>Última coluna</th><th>Interpretação</th></tr></thead><tbody>
+      <tr><td><strong>Tautologia</strong></td><td>Somente V</td><td>A proposição é verdadeira em todas as possibilidades.</td></tr>
+      <tr><td><strong>Contradição</strong></td><td>Somente F</td><td>A proposição é falsa em todas as possibilidades.</td></tr>
+      <tr><td><strong>Contingência</strong></td><td>V e F</td><td>O resultado depende da combinação dos valores lógicos.</td></tr>
+    </tbody></table></div>
+    <div class="slide-ref">Fonte: síntese dos slides 2, 3, 19, 23 e 29</div>
+  </article>
+</section>
+
+<section id="implicacao" class="tab-content">
+  <div class="concept-box">
+    <h2>5. Implicação lógica</h2>
+    <p>O material diferencia a condicional P → Q, que é uma proposição composta com valor lógico, da implicação lógica P ⟹ Q, que é uma relação entre proposições: Q é consequência lógica de P.</p>
+    <div class="slide-ref">Fonte: LogMat Slide 06 - Implicação lógica, slides 2 a 20; regras de inferência, slides 21 a 34</div>
+  </div>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Condicional × implicação lógica</h2>
+      <table><thead><tr><th>Condicional</th><th>Implicação lógica</th></tr></thead><tbody><tr><td>P → Q</td><td>P ⟹ Q</td></tr><tr><td>É uma proposição.</td><td>É uma relação entre proposições.</td></tr><tr><td>Possui valor lógico V ou F.</td><td>Indica consequência lógica.</td></tr><tr><td>Lê-se “Se P, então Q”.</td><td>Lê-se “P implica Q”.</td></tr></tbody></table>
+      <div class="callout">Não são a mesma coisa. Para verificar P ⟹ Q, o slide propõe analisar se P → Q é uma tautologia.</div>
+      <div class="slide-ref">Fonte: slides 2, 10 e 17</div>
+    </article>
+    <article class="card">
+      <h2>Exemplo de implicação lógica</h2>
+      <div class="formula">P: o número é múltiplo de 4.</div><div class="formula">Q: o número é par.</div>
+      <p>Todo múltiplo de 4 é par. Portanto, P ⟹ Q.</p>
+      <div class="formula">P ∧ Q ⟹ P</div>
+      <p>Também vale: se P ∧ Q é verdadeira, P necessariamente é verdadeira.</p>
+      <div class="slide-ref">Fonte: slides 3 e 11</div>
+    </article>
+  </div>
+  <article class="card">
+    <h2>Regra fundamental: procure P = V e Q = F</h2>
+    <p>Para P implicar Q, não pode existir nenhuma situação em que P seja verdadeira e Q seja falsa. Uma única linha com P = V e Q = F impede a implicação.</p>
+    <div class="table-wrap"><table><thead><tr><th>P</th><th>Q</th><th>O que acontece?</th></tr></thead><tbody><tr><td>V</td><td>V</td><td>Não refuta a implicação.</td></tr><tr><td>V</td><td>F</td><td><strong>Contraexemplo: P ⟹ Q não vale.</strong></td></tr><tr><td>F</td><td>V</td><td>Não refuta a implicação.</td></tr><tr><td>F</td><td>F</td><td>Não refuta a implicação.</td></tr></tbody></table></div>
+    <div class="control-row"><label for="impP"><strong>Teste P:</strong></label><select id="impP" onchange="checkImplicationRow()"><option value="1">V</option><option value="0">F</option></select><label for="impQ"><strong>Teste Q:</strong></label><select id="impQ" onchange="checkImplicationRow()"><option value="0">F</option><option value="1">V</option></select><button class="btn" onclick="checkImplicationRow()">Verificar linha</button></div>
+    <div id="impRowResult" class="result bad">P = V e Q = F: foi encontrado um contraexemplo. P não implica Q.</div>
+    <div class="slide-ref">Fonte: slides 5 a 10 e 19 a 20</div>
+  </article>
+  <article class="card">
+    <h2>A direção importa</h2>
+    <div class="grid-2"><div class="concept-box green"><h3>Implicação válida</h3><div class="formula">P ⟹ P ∨ Q</div><p>Se P é verdadeira, a disjunção P ∨ Q também é verdadeira.</p></div><div class="concept-box red"><h3>O sentido inverso não vale</h3><div class="formula">P ∨ Q ⇏ P</div><p>P ∨ Q pode ser verdadeira porque Q é verdadeira, mesmo quando P é falsa.</p></div></div>
+    <p>O exemplo dos slides usa “O sistema está conectado ou está desligado”. Saber que uma dessas condições vale não permite concluir, sem informação adicional, que o sistema está conectado.</p>
+    <div class="slide-ref">Fonte: slides 12 a 14</div>
+  </article>
+  <article class="card">
+    <h2>Regras de inferência introduzidas junto à implicação</h2>
+    <div class="table-wrap"><table><thead><tr><th>Regra</th><th>Premissas</th><th>Conclusão</th></tr></thead><tbody>
+      <tr><td>Modus Ponens</td><td>P → Q; P</td><td>Q</td></tr>
+      <tr><td>Modus Tollens</td><td>P → Q; ¬Q</td><td>¬P</td></tr>
+      <tr><td>Silogismo Hipotético</td><td>P → Q; Q → R</td><td>P → R</td></tr>
+      <tr><td>Silogismo Disjuntivo</td><td>P ∨ Q; ¬P</td><td>Q</td></tr>
+    </tbody></table></div>
+    <p><strong>Exemplo de Modus Ponens:</strong> se o usuário forneceu a senha correta, o sistema permite acesso. O usuário forneceu a senha correta. Logo, o sistema permite acesso.</p>
+    <p><strong>Exemplo de Silogismo Disjuntivo:</strong> o sistema utiliza MySQL ou PostgreSQL; não utiliza MySQL; logo, utiliza PostgreSQL.</p>
+    <div class="slide-ref">Fonte: slides 21 a 34</div>
+  </article>
+</section>
+
+<section id="equivalencia" class="tab-content">
+  <div class="concept-box">
+    <h2>6. Equivalência lógica</h2>
+    <p>Duas proposições são logicamente equivalentes quando suas tabelas-verdade são idênticas. A notação usada é P ⇔ Q. Isso significa que cada combinação de valores lógicos produz o mesmo resultado nas duas expressões.</p>
+    <div class="slide-ref">Fonte: LogMat Slide 07 - Equivalência Lógica, slides 2 a 11; complementos no Slide 06</div>
+  </div>
+  <article class="card">
+    <h2>Exemplo clássico: condicional e disjunção</h2>
+    <div class="formula">P → Q ⇔ ¬P ∨ Q</div>
+    <div class="table-wrap"><table><thead><tr><th>P</th><th>Q</th><th>P → Q</th><th>¬P ∨ Q</th></tr></thead><tbody><tr><td>V</td><td>V</td><td>V</td><td>V</td></tr><tr><td>V</td><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>V</td><td>V</td><td>V</td></tr><tr><td>F</td><td>F</td><td>V</td><td>V</td></tr></tbody></table></div>
+    <p>Como as duas últimas colunas são iguais em todas as linhas, as proposições são equivalentes.</p>
+    <div class="slide-ref">Fonte: slide 2</div>
+  </article>
+  <div class="grid-2">
+    <article class="card"><h2>Propriedades da equivalência</h2><ul style="margin-left:1.2rem;color:#53657d"><li><strong>Reflexiva:</strong> P ⇔ P.</li><li><strong>Simétrica:</strong> se P ⇔ Q, então Q ⇔ P.</li><li><strong>Transitiva:</strong> se P ⇔ Q e Q ⇔ R, então P ⇔ R.</li></ul><div class="slide-ref">Fonte: slide 3</div></article>
+    <article class="card"><h2>Equivalência e tautologia</h2><p>P ⇔ Q se, e somente se, a bicondicional P ↔ Q for uma tautologia. Ou seja, a coluna de P ↔ Q fica toda verdadeira.</p><div class="formula">P ⇔ Q  ⇔  P ↔ Q é tautologia</div><div class="slide-ref">Fonte: slides 5 e 6</div></article>
+  </div>
+  <article class="card">
+    <h2>Proposições associadas a uma condicional</h2>
+    <p>Dada a condicional direta P → Q, os slides apresentam:</p>
+    <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Forma</th><th>Relação destacada no slide</th></tr></thead><tbody><tr><td>Direta</td><td>P → Q</td><td>Condicional original</td></tr><tr><td>Recíproca</td><td>Q → P</td><td>Não é necessariamente equivalente à direta</td></tr><tr><td>Contrária</td><td>¬P → ¬Q</td><td>Equivalente à recíproca</td></tr><tr><td>Contrapositiva</td><td>¬Q → ¬P</td><td>Equivalente à direta</td></tr></tbody></table></div>
+    <div class="callout warn">Atenção: a recíproca não deve ser confundida com a contrapositiva. A condicional e sua contrapositiva são equivalentes; a recíproca pode ter outro valor lógico.</div>
+    <p>Exemplo do slide: “Se T é equilátero, então T é isósceles”. A recíproca pergunta se todo triângulo isósceles é equilátero. Não é a mesma afirmação.</p>
+    <div class="slide-ref">Fonte: slides 8 e 9</div>
+  </article>
+  <article class="card">
+    <h2>Conectivos de Sheffer apresentados nos slides</h2>
+    <div class="grid-2"><div class="concept-box"><h3>Negação conjunta ↓</h3><div class="formula">P ↓ Q ⇔ ¬P ∧ ¬Q</div><p>É verdadeira somente quando P e Q são ambas falsas.</p></div><div class="concept-box purple"><h3>Negação disjunta ↑</h3><div class="formula">P ↑ Q ⇔ ¬P ∨ ¬Q</div><p>É falsa somente quando P e Q são ambas verdadeiras.</p></div></div>
+    <div class="slide-ref">Fonte: slides 10 e 11</div>
+  </article>
+</section>
+
+<section id="algebra" class="tab-content">
+  <div class="concept-box">
+    <h2>7. Álgebra das proposições</h2>
+    <p>A álgebra das proposições reúne leis e propriedades lógicas que permitem transformar, simplificar e demonstrar equivalências. Cada lei permite substituir uma expressão por outra que mantém o mesmo valor lógico.</p>
+    <div class="slide-ref">Fonte: LogMat Slide 08 - Álgebra das Proposições, slides 2 a 25</div>
+  </div>
+  <article class="card">
+    <h2>Leis mais usadas</h2>
+    <div class="table-wrap"><table><thead><tr><th>Propriedade</th><th>Conjunção</th><th>Disjunção</th></tr></thead><tbody>
+      <tr><td>Idempotente</td><td>P ∧ P ⇔ P</td><td>P ∨ P ⇔ P</td></tr>
+      <tr><td>Comutativa</td><td>P ∧ Q ⇔ Q ∧ P</td><td>P ∨ Q ⇔ Q ∨ P</td></tr>
+      <tr><td>Associativa</td><td>(P ∧ Q) ∧ R ⇔ P ∧ (Q ∧ R)</td><td>(P ∨ Q) ∨ R ⇔ P ∨ (Q ∨ R)</td></tr>
+      <tr><td>Identidade</td><td>P ∧ V ⇔ P</td><td>P ∨ F ⇔ P</td></tr>
+      <tr><td>Dominação</td><td>P ∧ F ⇔ F</td><td>P ∨ V ⇔ V</td></tr>
+      <tr><td>Absorção</td><td>P ∧ (P ∨ Q) ⇔ P</td><td>P ∨ (P ∧ Q) ⇔ P</td></tr>
+    </tbody></table></div>
+    <div class="slide-ref">Fonte: slides 5 a 11</div>
+  </article>
+  <div class="grid-2">
+    <article class="card"><h2>Propriedades distributivas</h2><div class="formula">P ∧ (Q ∨ R) ⇔ (P ∧ Q) ∨ (P ∧ R)</div><div class="formula">P ∨ (Q ∧ R) ⇔ (P ∨ Q) ∧ (P ∨ R)</div><p>A conjunção distribui sobre a disjunção e a disjunção distribui sobre a conjunção.</p><div class="slide-ref">Fonte: slide 9</div></article>
+    <article class="card"><h2>Leis de De Morgan</h2><div class="formula">¬(P ∧ Q) ⇔ ¬P ∨ ¬Q</div><div class="formula">¬(P ∨ Q) ⇔ ¬P ∧ ¬Q</div><p>Ao negar uma expressão composta, o conectivo é trocado e cada proposição é negada.</p><p><strong>Exemplo dos slides:</strong> “Não é verdade que fui ao banco E paguei a conta” equivale a “Não fui ao banco OU não paguei a conta”.</p><div class="slide-ref">Fonte: slides 12 e 13</div></article>
+    <article class="card"><h2>Negação da condicional</h2><div class="formula">¬(P → Q) ⇔ P ∧ ¬Q</div><p>Uma condicional é falsa exatamente quando P é verdadeira e Q é falsa. Portanto, sua negação expressa esse caso.</p><div class="slide-ref">Fonte: slides 17 e 18</div></article>
+    <article class="card"><h2>Negação da bicondicional</h2><div class="formula">¬(P ↔ Q) ⇔ (P ∧ ¬Q) ∨ (¬P ∧ Q)</div><p>A bicondicional é verdadeira quando P e Q têm o mesmo valor lógico. Sua negação é verdadeira quando os valores são diferentes.</p><div class="slide-ref">Fonte: slides 23 e 24</div></article>
+  </div>
+  <article class="card">
+    <h2>Experimente uma transformação</h2>
+    <p>Selecione uma expressão e veja a forma equivalente indicada pelas leis apresentadas na aula.</p>
+    <div class="control-row"><label for="lawChoice"><strong>Expressão:</strong></label><select id="lawChoice" onchange="showLaw()"><option value="idem">P ∧ P</option><option value="demorgan">¬(P ∧ Q)</option><option value="conditional">P → Q</option><option value="notconditional">¬(P → Q)</option><option value="absorb">P ∧ (P ∨ Q)</option><option value="iff">¬(P ↔ Q)</option></select></div>
+    <div id="lawResult" class="result good">P ∧ P ⇔ P - propriedade idempotente.</div>
+    <div class="slide-ref">Resumo baseado nos slides 5 a 25</div>
+  </article>
+</section>
+
+<section id="dedutivo" class="tab-content">
+  <div class="concept-box">
+    <h2>8. Método dedutivo</h2>
+    <p>O método dedutivo parte de informações conhecidas, chamadas premissas, e usa o raciocínio lógico para obter uma conclusão que decorre delas. Regras de inferência são formas específicas de realizar esse raciocínio.</p>
+    <div class="slide-ref">Fonte: LogMat Slide 09 - Método Dedutivo, slides 2 a 34; Slide 06, slides 21 a 34</div>
+  </div>
+  <div class="grid-2">
+    <article class="card"><h2>Estrutura de um argumento</h2><div class="grid-3"><div class="concept-box"><h3>Premissas</h3><p>Informações consideradas verdadeiras no argumento.</p></div><div class="concept-box purple"><h3>Raciocínio</h3><p>Aplicação de regras lógicas.</p></div><div class="concept-box green"><h3>Conclusão</h3><p>Proposição obtida a partir das premissas.</p></div></div><div class="slide-ref">Fonte: slides 3, 7 e 8</div></article>
+    <article class="card"><h2>Exemplo cotidiano dos slides</h2><p>Premissa 1: Se chover, a rua ficará molhada.</p><p>Premissa 2: Está chovendo.</p><p>Conclusão: a rua ficará molhada.</p><div class="formula">P → Q, P ⊢ Q</div><p>Mas, se a rua está molhada, não podemos concluir necessariamente que choveu: alguém pode tê-la lavado ou um cano pode ter estourado.</p><div class="slide-ref">Fonte: slides 5 a 7</div></article>
+  </div>
+  <article class="card">
+    <h2>Principais regras de inferência</h2>
+    <div class="table-wrap"><table><thead><tr><th>Regra</th><th>Premissas</th><th>Conclusão</th><th>Exemplo citado nos slides</th></tr></thead><tbody>
+      <tr><td>Modus Ponens</td><td>P → Q; P</td><td>Q</td><td>Senha correta → acesso; senha correta; acesso.</td></tr>
+      <tr><td>Modus Tollens</td><td>P → Q; ¬Q</td><td>¬P</td><td>Não consegue acessar o servidor; então não está conectado (dadas as premissas).</td></tr>
+      <tr><td>Silogismo Hipotético</td><td>P → Q; Q → R</td><td>P → R</td><td>Autenticado → acessa sistema → consulta dados.</td></tr>
+      <tr><td>Silogismo Disjuntivo</td><td>P ∨ Q; ¬P</td><td>Q</td><td>MySQL ou PostgreSQL; não MySQL; então PostgreSQL.</td></tr>
+      <tr><td>Simplificação</td><td>P ∧ Q</td><td>P ou Q</td><td>Se está conectado e funcionando, está conectado.</td></tr>
+      <tr><td>Adição</td><td>P</td><td>P ∨ Q</td><td>Se P é verdadeira, P ou Q também é verdadeira.</td></tr>
+    </tbody></table></div>
+    <div class="slide-ref">Fonte: Slide 09, slides 14 a 22 e 27 a 31; Slide 06, slides 26 a 34</div>
+  </article>
+  <article class="card">
+    <h2>Simule uma dedução por etapas</h2>
+    <p>Argumento: se o usuário estiver autenticado, poderá acessar o sistema. Se puder acessar o sistema, poderá consultar seus dados. Logo, se estiver autenticado, poderá consultar seus dados.</p>
+    <div class="formula">1. P → Q &nbsp;&nbsp; 2. Q → R &nbsp;&nbsp; ∴ P → R</div>
+    <div class="btn-row"><button class="btn secondary" onclick="stepDeduction(-1)">← Anterior</button><button class="btn" onclick="stepDeduction(1)">Próxima etapa →</button><button class="btn secondary" onclick="stepDeduction(0)">Reiniciar</button></div>
+    <div id="deductionStep" class="step">Etapa 1: Identifique as premissas P → Q e Q → R. A primeira liga P a Q; a segunda liga Q a R.</div>
+    <div class="slide-ref">Fonte: slides 19 e 20</div>
+  </article>
+  <article class="card">
+    <h2>Redução do número de conectivos</h2>
+    <p>O slide apresenta a motivação da redução: em uma fábrica de chips, pode ser mais barato e rápido fabricar muitas cópias de poucas portas lógicas básicas do que criar componentes físicos diferentes para cada conectivo.</p>
+    <div class="callout">A aula usa essa ideia para conectar equivalências lógicas à implementação de circuitos digitais. A demonstração algébrica de exemplos também aparece nos slides 25 a 30.</div>
+    <div class="slide-ref">Fonte: slides 25 a 32</div>
+  </article>
+</section>
+
+<section id="validade-tv" class="tab-content">
+  <div class="concept-box">
+    <h2>9. Validade mediante tabelas-verdade</h2>
+    <p>Para verificar a validade de um argumento, construímos a tabela-verdade e procuramos uma linha em que todas as premissas sejam verdadeiras e a conclusão seja falsa. Se existir essa linha, o argumento não é válido. Se não existir, o argumento é válido.</p>
+    <div class="slide-ref">Fontes: LogMat Slide 10 - Validade Mediante Tabelas Verdade; LogMat Slide 11 - Validade Mediante Tabelas Verdade, slides 2 a 12</div>
+  </div>
+  <article class="card">
+    <h2>Critério de validade</h2>
+    <div class="formula">P₁, P₂, …, Pₙ ⊢ Q</div>
+    <div class="callout good">Argumento válido: toda combinação que torna todas as premissas verdadeiras também torna a conclusão verdadeira.</div>
+    <div class="callout bad">Argumento não válido: basta uma combinação com todas as premissas verdadeiras e a conclusão falsa.</div>
+  </article>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Exemplo válido</h2>
+      <div class="formula">P → Q, ¬Q ⊢ ¬P</div>
+      <div class="table-wrap"><table><thead><tr><th>P</th><th>Q</th><th>P → Q</th><th>¬Q</th><th>¬P</th></tr></thead><tbody><tr><td>V</td><td>V</td><td>V</td><td>F</td><td>F</td></tr><tr><td>V</td><td>F</td><td>F</td><td>V</td><td>F</td></tr><tr><td>F</td><td>V</td><td>V</td><td>F</td><td>V</td></tr><tr><td>F</td><td>F</td><td>V</td><td>V</td><td>V</td></tr></tbody></table></div>
+      <p>Não há linha em que as duas premissas sejam V e a conclusão seja F. O argumento é válido.</p><div class="slide-ref">Fonte: slide 5</div>
+    </article>
+    <article class="card">
+      <h2>Exemplo não válido</h2>
+      <div class="formula">P → Q, ¬P ⊢ ¬Q</div>
+      <div class="table-wrap"><table><thead><tr><th>P</th><th>Q</th><th>P → Q</th><th>¬P</th><th>¬Q</th></tr></thead><tbody><tr><td>V</td><td>V</td><td>V</td><td>F</td><td>F</td></tr><tr><td>V</td><td>F</td><td>F</td><td>F</td><td>V</td></tr><tr><td>F</td><td>V</td><td>V</td><td>V</td><td>F</td></tr><tr><td>F</td><td>F</td><td>V</td><td>V</td><td>V</td></tr></tbody></table></div>
+      <p>Na linha P = F e Q = V, as premissas são verdadeiras, mas a conclusão ¬Q é falsa. O argumento não é válido.</p><div class="slide-ref">Fonte: slide 4</div>
+    </article>
+  </div>
+
+  <article class="card">
+    <h2>Aula 11 - como saber se um argumento é válido?</h2>
+    <p>Os slides retomam um exemplo cotidiano:</p>
+    <ul style="margin:.45rem 0 .6rem 1.25rem;color:#53657d"><li>Se está chovendo, a rua fica molhada.</li><li>Está chovendo.</li><li>Logo, a rua fica molhada.</li></ul>
+    <p>Representando p: “Está chovendo” e q: “A rua fica molhada”, o argumento é:</p>
+    <div class="formula">p → q, &nbsp; p &nbsp; ⊢ &nbsp; q</div>
+    <p>Se as duas premissas forem verdadeiras, a conclusão não poderá ser falsa. O objetivo é verificar a estrutura lógica, não discutir se está realmente chovendo.</p>
+    <div class="slide-ref">Fonte: Slide 11, slides 2 e 3</div>
+  </article>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Exemplo não válido do Slide 11</h2>
+      <p>Considere p → q, ¬p ⊢ ¬q.</p>
+      <p>p: o sistema está conectado; q: o serviço responde.</p>
+      <div class="table-wrap"><table><thead><tr><th>p</th><th>q</th><th>p → q</th><th>¬p</th><th>¬q</th></tr></thead><tbody>
+        <tr><td>V</td><td>V</td><td>V</td><td>F</td><td>F</td></tr>
+        <tr><td>V</td><td>F</td><td>F</td><td>F</td><td>V</td></tr>
+        <tr style="background:#fff0ee"><td>F</td><td>V</td><td>V</td><td>V</td><td><strong>F</strong></td></tr>
+        <tr><td>F</td><td>F</td><td>V</td><td>V</td><td>V</td></tr>
+      </tbody></table></div>
+      <div class="callout bad">Na terceira linha, as duas premissas são V e a conclusão é F. O argumento não é válido. O sistema pode não estar conectado e, ainda assim, o serviço responder por outro caminho ou mecanismo.</div>
+      <div class="slide-ref">Fonte: Slide 11, slide 6</div>
+    </article>
+    <article class="card">
+      <h2>Exemplo válido do Slide 11</h2>
+      <p>Considere p → q, ¬q ⊢ ¬p.</p>
+      <p>p: o sistema está conectado; q: o serviço responde.</p>
+      <div class="table-wrap"><table><thead><tr><th>p</th><th>q</th><th>p → q</th><th>¬q</th><th>¬p</th></tr></thead><tbody>
+        <tr><td>V</td><td>V</td><td>V</td><td>F</td><td>F</td></tr>
+        <tr><td>V</td><td>F</td><td>F</td><td>V</td><td>F</td></tr>
+        <tr><td>F</td><td>V</td><td>V</td><td>F</td><td>V</td></tr>
+        <tr><td>F</td><td>F</td><td>V</td><td>V</td><td>V</td></tr>
+      </tbody></table></div>
+      <div class="callout good">Não existe linha com as duas premissas verdadeiras e a conclusão falsa. O argumento é válido.</div>
+      <div class="slide-ref">Fonte: Slide 11, slide 7</div>
+    </article>
+  </div>
+  <article class="card">
+    <h2>Explore os argumentos apresentados no Slide 11</h2>
+    <p>Escolha um argumento para gerar a tabela-verdade completa. O guia destaca qualquer linha em que todas as premissas sejam V e a conclusão seja F.</p>
+    <div class="control-row"><label for="validityExample"><strong>Argumento:</strong></label><select id="validityExample" onchange="renderValidityExample()">
+      <option value="mp">p → q, p ⊢ q</option>
+      <option value="affirming">p → q, ¬p ⊢ ¬q</option>
+      <option value="mt">p → q, ¬q ⊢ ¬p</option>
+      <option value="bicond">p ↔ q, q ⊢ p</option>
+      <option value="disj">p ∨ q, ¬q, p → r ⊢ r</option>
+      <option value="four">(p → q) ∨ ¬(r ∧ s), p ∨ s ⊢ r → q</option>
+    </select></div>
+    <div id="validityExampleDescription" class="result">Selecione um argumento para analisar.</div>
+    <div class="table-wrap"><table id="validityExampleTable"><thead></thead><tbody></tbody></table></div>
+    <div id="validityExampleResult" class="callout good">A análise de validade aparecerá aqui.</div>
+    <div class="slide-ref">Fonte: Slide 11, slides 3 a 11</div>
+  </article>
+
+  <article class="card">
+    <h2>Teste uma combinação para encontrar um contraexemplo</h2>
+    <p>O slide 8 usa o argumento (P → Q) ∨ ¬(R ∧ S), P ∨ S ⊢ R → Q. Com P = F, Q = F, R = V e S = V, as duas premissas são verdadeiras e a conclusão é falsa.</p>
+    <div class="control-row"><label for="vP"><strong>P</strong></label><select id="vP"><option value="0">F</option><option value="1">V</option></select><label for="vQ"><strong>Q</strong></label><select id="vQ"><option value="0">F</option><option value="1">V</option></select><label for="vR"><strong>R</strong></label><select id="vR"><option value="1">V</option><option value="0">F</option></select><label for="vS"><strong>S</strong></label><select id="vS"><option value="1">V</option><option value="0">F</option></select><button class="btn" onclick="testInvalidAssignment()">Avaliar atribuição</button></div>
+    <div id="invalidAssignmentResult" class="result good">Com P = F, Q = F, R = V e S = V: premissa 1 = V; premissa 2 = V; conclusão = F. Foi encontrado um contraexemplo.</div>
+    <div class="slide-ref">Fonte: Slide 10, slide 8; Slide 11, slides 10 a 12</div>
+  </article>
+</section>
+
+<section id="validade-regras" class="tab-content">
+  <div class="concept-box">
+    <h2>10. Validade mediante regras de inferência e equivalências</h2>
+    <p>Há argumentos que não são demonstrados com facilidade usando apenas as regras de inferência. A regra de substituição permite trocar uma proposição, ou parte dela, por outra logicamente equivalente.</p>
+    <div class="slide-ref">Fontes: LogMat Slides 12 e 13 - Validade Mediante Regras de Inferência e Equivalências, slides 2 a 16</div>
+  </div>
+  <article class="card">
+    <h2>Regra da substituição</h2>
+    <p>Uma proposição qualquer P, ou apenas uma parte de P, pode ser substituída por uma proposição equivalente. O objetivo é reescrever uma expressão para tornar possível a aplicação de uma regra de inferência.</p>
+    <div class="grid-2"><div class="concept-box"><h3>Regras de inferência</h3><p>Permitem obter novas proposições a partir de proposições conhecidas.</p><div class="formula">P → Q, P ⊢ Q</div></div><div class="concept-box green"><h3>Equivalências lógicas</h3><p>Permitem reescrever proposições sem alterar o significado lógico.</p><div class="formula">P → Q ⇔ ¬P ∨ Q</div></div></div>
+    <div class="slide-ref">Fonte: Slides 12 e 13, slides 2 e 3</div>
+  </article>
+  <article class="card">
+    <h2>Equivalências notáveis reunidas nos slides</h2>
+    <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Equivalência</th></tr></thead><tbody>
+      <tr><td>Condicional</td><td>P → Q ⇔ ¬P ∨ Q</td></tr><tr><td>Comutativa</td><td>P ∧ Q ⇔ Q ∧ P; P ∨ Q ⇔ Q ∨ P</td></tr><tr><td>Associativa</td><td>P ∧ (Q ∧ R) ⇔ (P ∧ Q) ∧ R; P ∨ (Q ∨ R) ⇔ (P ∨ Q) ∨ R</td></tr><tr><td>Identidade</td><td>P ∧ V ⇔ P; P ∨ F ⇔ P</td></tr><tr><td>Distributiva</td><td>P ∧ (Q ∨ R) ⇔ (P ∧ Q) ∨ (P ∧ R); P ∨ (Q ∧ R) ⇔ (P ∨ Q) ∧ (P ∨ R)</td></tr><tr><td>Dupla negação</td><td>¬¬P ⇔ P</td></tr><tr><td>Contrapositiva</td><td>P → Q ⇔ ¬Q → ¬P</td></tr><tr><td>De Morgan</td><td>¬(P ∨ Q) ⇔ ¬P ∧ ¬Q; ¬(P ∧ Q) ⇔ ¬P ∨ ¬Q</td></tr><tr><td>Bicondicional</td><td>P ↔ Q ⇔ (P → Q) ∧ (Q → P)</td></tr><tr><td>Disjunção exclusiva</td><td>P ⊕ Q ⇔ ¬(P ↔ Q)</td></tr><tr><td>Idempotente</td><td>P ∧ P ⇔ P; P ∨ P ⇔ P</td></tr></tbody></table></div>
+    <div class="slide-ref">Fonte: Slides 12 e 13, slide 4</div>
+  </article>
+  <div class="grid-2">
+    <article class="card"><h2>Exemplo 1 - laboratório de informática</h2><p>Premissas: P → ¬Q; Q. Conclusão: ¬P.</p><div class="formula">P → ¬Q, Q ⊢ ¬P</div><ol style="margin-left:1.2rem;color:#53657d"><li>Aplicamos a contrapositiva à primeira premissa: Q → ¬P.</li><li>Aplicamos Modus Ponens usando Q.</li><li>Obtemos ¬P.</li></ol><p>No contexto do slide: se o aluno está autorizado a acessar o laboratório, então não possui pendências disciplinares. O aluno possui pendências. Logo, não está autorizado.</p><div class="slide-ref">Fonte: Slide 13, slides 5 a 9</div></article>
+    <article class="card"><h2>Exemplo 2 - sistema de autenticação</h2><p>Premissas: P → Q; R → ¬Q. Conclusão: P → ¬R.</p><div class="formula">P → Q, R → ¬Q ⊢ P → ¬R</div><ol style="margin-left:1.2rem;color:#53657d"><li>Transformamos R → ¬Q pela contrapositiva: Q → ¬R.</li><li>Temos P → Q e Q → ¬R.</li><li>Aplicamos Silogismo Hipotético.</li><li>Concluímos P → ¬R.</li></ol><div class="slide-ref">Fonte: Slide 13, slides 10 a 14</div></article>
+  </div>
+  <article class="card">
+    <h2>Inconsistência lógica</h2>
+    <p>Se, a partir de um conjunto de premissas, conseguimos deduzir uma proposição R e sua negação ¬R, chegamos a uma contradição. O slide ilustra isso com as afirmações “Está chovendo” e “Não está chovendo”, consideradas para o mesmo lugar e momento.</p>
+    <div class="formula">R ∧ ¬R</div>
+    <div class="callout warn">Uma proposição não pode ser verdadeira e falsa ao mesmo tempo. A obtenção de R e ¬R sinaliza inconsistência no conjunto de premissas, dentro da lógica clássica utilizada na aula.</div>
+    <div class="slide-ref">Fonte: Slide 13, slides 15 e 16</div>
+  </article>
+</section>
+
+<section id="demonstracoes" class="tab-content">
+  <div class="concept-box">
+    <h2>11. Demonstração condicional e demonstração indireta</h2>
+    <p>Na demonstração condicional, assumimos temporariamente o antecedente e tentamos obter o consequente. Na demonstração indireta, assumimos temporariamente a negação da conclusão e procuramos deduzir uma contradição.</p>
+    <div class="slide-ref">Fonte: LogMat Slide 14 - Demonstração Condicional e Demonstração Indireta, slides 2 a 20</div>
+  </div>
+  <div class="grid-2">
+    <article class="card"><h2>Demonstração condicional (DC)</h2><p>Para demonstrar uma conclusão A → B, introduzimos A como premissa adicional e tentamos deduzir B.</p><div class="formula">P₁, P₂, …, Pₙ, A ⊢ B</div><p>Se conseguirmos deduzir B, podemos concluir A → B com base nas premissas originais.</p><div class="slide-ref">Fonte: slides 3 a 5</div></article>
+    <article class="card"><h2>Demonstração indireta (DI)</h2><p>Também chamada demonstração por absurdo. Para demonstrar Q, admitimos temporariamente ¬Q e tentamos obter uma contradição C.</p><div class="formula">P₁, P₂, …, Pₙ, ¬Q ⊢ C</div><p>Ao chegar à contradição, rejeitamos a hipótese temporária ¬Q e concluímos Q.</p><div class="slide-ref">Fonte: slide 13</div></article>
+  </div>
+  <article class="card">
+    <h2>Simulador - demonstração condicional</h2>
+    <p>Exemplo dos slides: se o usuário informa a senha correta, o sistema permite avançar; se permite avançar, o usuário acessa a área restrita. Queremos demonstrar que, se informa a senha correta, acessa a área restrita.</p>
+    <div class="formula">1. P → Q &nbsp;&nbsp; 2. Q → R &nbsp;&nbsp; ∴ P → R</div>
+    <div class="btn-row"><button class="btn secondary" onclick="stepProof('dc',-1)">← Anterior</button><button class="btn" onclick="stepProof('dc',1)">Próxima etapa →</button><button class="btn secondary" onclick="stepProof('dc',0)">Reiniciar</button></div>
+    <div id="dcStep" class="step">Passo 1: Para demonstrar P → R, assumimos temporariamente P como premissa adicional.</div>
+    <div class="slide-ref">Fonte: slides 6 a 11</div>
+  </article>
+  <article class="card">
+    <h2>Simulador - demonstração indireta</h2>
+    <p>O exemplo formal dos slides demonstra ¬(P ∧ R) a partir de P → ¬Q e R → Q. Para isso, assumimos P ∧ R e obtemos Q e ¬Q.</p>
+    <div class="formula">1. P → ¬Q &nbsp;&nbsp; 2. R → Q &nbsp;&nbsp; ∴ ¬(P ∧ R)</div>
+    <div class="btn-row"><button class="btn secondary" onclick="stepProof('di',-1)">← Anterior</button><button class="btn" onclick="stepProof('di',1)">Próxima etapa →</button><button class="btn secondary" onclick="stepProof('di',0)">Reiniciar</button></div>
+    <div id="diStep" class="step">Passo 1: Negamos temporariamente a conclusão. Assumimos P ∧ R.</div>
+    <div class="slide-ref">Fonte: slides 13 e 14</div>
+  </article>
+  <article class="card">
+    <h2>Comparação entre DC e DI</h2>
+    <div class="table-wrap"><table><thead><tr><th>Característica</th><th>Demonstração condicional</th><th>Demonstração indireta</th></tr></thead><tbody><tr><td>Objetivo</td><td>Demonstrar P → Q</td><td>Demonstrar uma proposição P</td></tr><tr><td>Hipótese temporária</td><td>P</td><td>¬P</td></tr><tr><td>O que procuramos?</td><td>Chegar a Q</td><td>Chegar a uma contradição</td></tr><tr><td>Conclusão</td><td>P → Q</td><td>P</td></tr></tbody></table></div>
+    <div class="slide-ref">Fonte: slide 20</div>
+  </article>
+</section>
+
+<section id="abertas" class="tab-content">
+  <div class="concept-box">
+    <h2>12. Sentenças abertas</h2>
+    <p>Uma sentença aberta possui uma ou mais variáveis e seu valor lógico depende dos valores atribuídos a elas. Para analisá-la, precisamos saber quais valores a variável pode assumir.</p>
+    <div class="slide-ref">📚 Fonte: LogMat_Slide-15 - Sentenças Abertas · slides 3 a 21</div>
+  </div>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Proposição ou sentença aberta?</h2>
+      <p class="desc">Uma proposição já pode ser classificada como verdadeira ou falsa. Na sentença aberta, o valor lógico depende da variável.</p>
+      <div class="table-wrap"><table><thead><tr><th>Expressão</th><th>Classificação</th></tr></thead><tbody>
+        <tr><td>5 é maior que 3.</td><td><span class="pill">Proposição verdadeira</span></td></tr>
+        <tr><td>2 é maior que 8.</td><td><span class="pill">Proposição falsa</span></td></tr>
+        <tr><td>x > 3</td><td><span class="pill">Sentença aberta</span></td></tr>
+        <tr><td>x + 2 = 10</td><td><span class="pill">Sentença aberta</span></td></tr>
+        <tr><td>y é um número par.</td><td><span class="pill">Sentença aberta</span></td></tr>
+      </tbody></table></div>
+      <div class="callout">No exemplo P(x): x > 5, se x = 8, a sentença é verdadeira; se x = 3, é falsa.</div>
+      <div class="slide-ref">Fonte: slide 6; exemplo P(x): x > 5 no slide 2</div>
+    </article>
+    <article class="card">
+      <h2>Exemplo do aluno e da loja de celulares</h2>
+      <p><strong>“Este aluno foi aprovado.”</strong> A frase depende de quem está sendo representado por x. João, Maria e Pedro podem produzir valores lógicos diferentes.</p>
+      <p><strong>Loja de celulares:</strong> a expressão x > 2000 depende do preço do celular. No slide, o Celular B custa R$ 2.500, então 2500 > 2000 é verdadeiro.</p>
+      <div class="concept-box green"><strong>Ideia para guardar:</strong> a variável representa um elemento que ainda precisa ser especificado. Quando atribuímos um valor, conseguimos avaliar a sentença.</div>
+      <div class="slide-ref">Fonte: slides 4 e 5</div>
+    </article>
+  </div>
+  <article class="card">
+    <h2>Teste uma sentença aberta</h2>
+    <p class="desc">Use o mesmo exemplo dos slides: P(x): x > 5. Digite um valor para x e veja o resultado.</p>
+    <div class="control-row"><label for="valorX"><strong>Valor de x:</strong></label><input id="valorX" type="number" value="8" step="any"><button class="btn" onclick="testarX()">Avaliar P(x)</button></div>
+    <div id="resultadoX" class="result good">x = 8. Como 8 > 5, P(x) é verdadeira.</div>
+    <div class="slide-ref">Fonte: exemplo do slide 2 do PDF de Sentenças Abertas</div>
+  </article>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Conjunto universo e conjunto-verdade</h2>
+      <p>O <strong>conjunto universo</strong> reúne os valores que podem ser atribuídos à variável. O <strong>conjunto-verdade</strong> reúne os elementos desse universo que tornam a sentença verdadeira.</p>
+      <div class="formula">P(x): x > 5</div>
+      <div class="control-row"><label for="universoSelect"><strong>Escolha o universo:</strong></label><select id="universoSelect" onchange="atualizarUniverso()"><option value="u1">U = {1, 2, 3, 4, 5, 6, 7, 8}</option><option value="u2">U = {2, 4, 6, 8, 10}</option></select></div>
+      <div id="universoResult" class="result good">V = {6, 7, 8}</div>
+      <p class="small">Perceba que a sentença é a mesma, mas o conjunto-verdade depende do universo escolhido.</p>
+      <div class="slide-ref">Fonte: slides 7 e 8</div>
+    </article>
+    <article class="card">
+      <h2>Conjuntos numéricos usados nos slides</h2>
+      <div class="pills"><span class="pill"><strong>ℕ</strong> naturais</span><span class="pill"><strong>ℤ</strong> inteiros</span><span class="pill"><strong>ℚ</strong> racionais</span><span class="pill"><strong>ℝ</strong> reais</span></div>
+      <p>Os slides relacionam os conjuntos assim:</p>
+      <div class="formula">ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ</div>
+      <ul style="margin-left:1.25rem;color:#53657d"><li>Todo número natural é inteiro.</li><li>Todo número inteiro é racional.</li><li>Todo número racional é real.</li></ul>
+      <div class="callout">ℚ inclui frações e decimais finitos ou periódicos. ℝ inclui números racionais e irracionais.</div>
+      <div class="slide-ref">Fonte: slides 10 a 14</div>
+    </article>
+  </div>
+  <article class="card">
+    <h2>Três classificações de uma sentença aberta</h2>
+    <div class="grid-3">
+      <div class="concept-box green"><h3>Universal</h3><p>Todos os elementos do universo tornam a sentença verdadeira.</p><p><strong>Exemplo:</strong> P(x): 2x ≥ x, considerando x ∈ ℕ.</p><div class="pills"><span class="pill">Vₚ = ℕ</span></div></div>
+      <div class="concept-box amber"><h3>Possível</h3><p>Alguns elementos satisfazem a condição, mas outros não.</p><p><strong>Exemplo:</strong> “Um número natural é múltiplo de 3.”</p><div class="pills"><span class="pill">Alguns satisfazem</span></div></div>
+      <div class="concept-box red"><h3>Impossível</h3><p>Nenhum elemento do universo satisfaz a condição.</p><p><strong>Exemplo:</strong> P(x): x < 0, considerando x ∈ ℕ.</p><div class="pills"><span class="pill">Vₚ = ∅</span></div></div>
+    </div>
+    <div class="slide-ref">Fonte: slides 16 a 19</div>
+  </article>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Sentenças abertas com duas variáveis</h2>
+      <p>Com duas variáveis, x e y, o universo é formado por pares ordenados. Nos slides:</p>
+      <div class="formula">A = {1, 2, 3, 4, 5}</div>
+      <div class="formula">A × A = {(x, y) | x ∈ A e y ∈ A}</div>
+      <p>O produto cartesiano A × A reúne todos os pares possíveis em que o primeiro e o segundo elemento pertencem a A.</p>
+      <div class="callout">O slide apresenta exemplos de P(x,y): x + y = 10 e P(x,y): x > y. No primeiro caso, o conjunto-verdade em A × A é {(5,5)}.</div>
+      <div class="slide-ref">Fonte: slide 20</div>
+    </article>
+    <article class="card">
+      <h2>Visualize P(x,y): x > y</h2>
+      <p class="desc">Na tabela, as linhas representam x e as colunas representam y. Marque ✓ quando x > y.</p>
+      <div class="table-wrap"><table id="xyTable"><thead><tr><th>x \ y</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead><tbody></tbody></table></div>
+      <div class="result good" id="xyResult">V = {(2,1), (3,1), (3,2), …, (5,4)}</div>
+      <p class="small">No slide seguinte, o exemplo usa A = {1, 2, 3} e P(x,y,z): x + y = z. O universo A × A × A possui 27 trios ordenados; o conjunto-verdade é {(1,1,2), (1,2,3), (2,1,3)}.</p>
+      <div class="slide-ref">Fonte: slides 20 e 21</div>
+    </article>
+  </div>
+</section>
+
+<section id="operacoes" class="tab-content">
+  <div class="concept-box">
+    <h2>13. Operações lógicas sobre sentenças abertas</h2>
+    <p>Assim como combinamos proposições, também podemos combinar sentenças abertas. Nos exemplos da aula, P(x) e Q(x) representam condições sobre o mesmo elemento x.</p>
+    <p><strong>Exemplo introdutório:</strong> P(x): x está matriculado; Q(x): x foi aprovado. Podemos expressar “matriculado E aprovado”, “matriculado OU aprovado”, “não matriculado” e “se está matriculado, então foi aprovado”.</p>
+    <div class="slide-ref">📚 Fonte: LogMat_Slide-16 - Operações Lógicas sobre Sentenças Abertas · slides 2 a 6</div>
+  </div>
+  <article class="card">
+    <h2>Resumo dos conectivos</h2>
+    <div class="table-wrap"><table><thead><tr><th>Símbolo</th><th>Nome</th><th>Leitura</th><th>Quando é verdadeira?</th></tr></thead><tbody>
+      <tr><td><strong>¬P(x)</strong></td><td>Negação</td><td>Não P(x)</td><td>Quando P(x) é falsa.</td></tr>
+      <tr><td><strong>P(x) ∧ Q(x)</strong></td><td>Conjunção</td><td>P e Q</td><td>Quando ambas são verdadeiras.</td></tr>
+      <tr><td><strong>P(x) ∨ Q(x)</strong></td><td>Disjunção</td><td>P ou Q</td><td>Quando pelo menos uma é verdadeira; pode ser ambas.</td></tr>
+      <tr><td><strong>P(x) → Q(x)</strong></td><td>Condicional</td><td>Se P, então Q</td><td>É falsa somente quando P é verdadeira e Q é falsa.</td></tr>
+      <tr><td><strong>P(x) ↔ Q(x)</strong></td><td>Bicondicional</td><td>P se, e somente se, Q</td><td>Quando as duas têm o mesmo valor lógico.</td></tr>
+    </tbody></table></div>
+    <div class="slide-ref">Revisão dos conectivos nos slides 4 e 5; operações nos slides 7 a 31</div>
+  </article>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Negação ¬ (NÃO)</h2>
+      <p>A negação inverte a condição. Observe os exemplos usados na aula:</p>
+      <ul style="margin-left:1.2rem;color:#53657d">
+        <li>P(x): x tem menos de 21 anos. Então ¬P(x): x tem 21 anos ou mais, isto é, x ≥ 21.</li>
+        <li>P(x): x tirou nota maior ou igual a 7. Então ¬P(x): x tirou nota menor que 7.</li>
+        <li>P(x): x > 30. Então ¬P(x): x ≤ 30.</li>
+      </ul>
+      <div class="callout warn">Atenção aos limites: a negação de x > 30 é x ≤ 30, incluindo o 30.</div>
+      <div class="slide-ref">Fonte: slides 7 a 9</div>
+    </article>
+    <article class="card">
+      <h2>Conjunção ∧ (E)</h2>
+      <p>As duas condições precisam ser verdadeiras ao mesmo tempo.</p>
+      <p><strong>Exemplos da aula:</strong></p>
+      <ul style="margin-left:1.2rem;color:#53657d">
+        <li>João é médico E professor.</li>
+        <li>2 < x e x < 8. Uma pessoa com 5 anos satisfaz as duas condições.</li>
+        <li>Temperatura x > 18 e x < 25. Um ambiente a 22 °C está na faixa.</li>
+      </ul>
+      <div class="slide-ref">Fonte: slides 10 a 12</div>
+    </article>
+    <article class="card">
+      <h2>Disjunção ∨ (OU)</h2>
+      <p>Basta que pelo menos uma condição seja verdadeira. Na lógica usada na aula, o OU é inclusivo: as duas condições também podem ser verdadeiras.</p>
+      <ul style="margin-left:1.2rem;color:#53657d">
+        <li>João é médico OU professor universitário. Se exercer as duas profissões, também satisfaz.</li>
+        <li>Um equipamento alerta se a temperatura fica abaixo de 2 °C OU acima de 8 °C.</li>
+        <li>Um sistema permite até 5 tentativas: x = 5 OU x < 5, equivalente a x ≤ 5 no contexto de contagem de tentativas.</li>
+      </ul>
+      <div class="slide-ref">Fonte: slides 15 a 17</div>
+    </article>
+    <article class="card">
+      <h2>Condicional → (SE... ENTÃO)</h2>
+      <p>A condicional só é falsa quando a primeira condição é verdadeira e a segunda é falsa.</p>
+      <ul style="margin-left:1.2rem;color:#53657d">
+        <li>Se a temperatura ultrapassar 28 °C, o ar-condicionado será acionado.</li>
+        <li>Se uma pessoa tem 18 anos ou mais, atende ao requisito de idade para obter a CNH.</li>
+        <li>Se o usuário informar uma senha correta, o sistema permitirá o acesso.</li>
+      </ul>
+      <div class="callout warn">Idade mínima é um requisito para a CNH, não significa por si só que a pessoa já tenha habilitação.</div>
+      <div class="slide-ref">Fonte: slides 22 a 24</div>
+    </article>
+    <article class="card">
+      <h2>Bicondicional ↔ (SE, E SOMENTE SE)</h2>
+      <p>As duas condições precisam apresentar o mesmo valor lógico: ambas verdadeiras ou ambas falsas.</p>
+      <ul style="margin-left:1.2rem;color:#53657d">
+        <li>Um aluno é aprovado se, e somente se, obtém nota maior ou igual a 7 (considerando essa regra de aprovação).</li>
+        <li>Em uma via com limite de 80 km/h, um veículo está acima do limite se, e somente se, ultrapassa 80 km/h.</li>
+      </ul>
+      <div class="callout">Não basta que as condições sejam parecidas. A equivalência precisa valer nos dois sentidos e no universo considerado.</div>
+      <div class="slide-ref">Fonte: slides 27 a 29</div>
+    </article>
+    <article class="card">
+      <h2>Conjunto-verdade: exemplo integrado</h2>
+      <p>Os slides usam um único universo e duas sentenças:</p>
+      <div class="formula">A = {2, 4, 6, 9}</div>
+      <div class="formula">P(x): x > 3 &nbsp;&nbsp; Q(x): x < 8</div>
+      <div class="pills"><span class="pill">Vₚ = {4, 6, 9}</span><span class="pill">V<sub>Q</sub> = {2, 4, 6}</span></div>
+      <p>Escolha uma operação e observe o conjunto-verdade:</p>
+      <div class="control-row"><label for="setOp"><strong>Operação:</strong></label><select id="setOp" onchange="atualizarSetOp()"><option value="not">¬P(x)</option><option value="and">P(x) ∧ Q(x)</option><option value="or">P(x) ∨ Q(x)</option><option value="imp">P(x) → Q(x)</option><option value="iff">P(x) ↔ Q(x)</option></select></div>
+      <div id="setOpResult" class="result good">¬P(x): {2}</div>
+      <div class="slide-ref">Fonte: slide 32 (na tabela visual, o segundo conjunto apresentado corresponde a Vᵩ)</div>
+    </article>
+  </div>
+  <article class="card">
+    <h2>Resolva os exemplos dos slides passo a passo</h2>
+    <details class="exercise-item"><summary>Conjunção: A = {1, 2, …, 10}; x é par ∧ x + 2 ≤ 10</summary><div class="exercise-body"><p>Primeira condição: os pares de 1 a 10 são {2, 4, 6, 8, 10}. Segunda condição: x + 2 ≤ 10, portanto x ≤ 8. Como as duas precisam ser verdadeiras, retiramos o 10.</p><div class="formula">V = {2, 4, 6, 8}</div><span class="slide-ref">Fonte: slides 13 e 14</span></div></details>
+    <details class="exercise-item"><summary>Disjunção: A = {0, 1, 2, 3, 4, 5}; x − 3 = 0 ∨ x + 1 = 2</summary><div class="exercise-body"><p>x − 3 = 0 tem solução x = 3. x + 1 = 2 tem solução x = 1. O conectivo OU reúne os valores que satisfazem pelo menos uma das condições.</p><div class="formula">V = {1, 3}</div><span class="slide-ref">Fonte: slides 18 e 19</span></div></details>
+    <details class="exercise-item"><summary>Negação: A = {0, 1, 2, 3, 4, 5}; ¬(x ≤ 3)</summary><div class="exercise-body"><p>Não é verdade que x ≤ 3 significa que x > 3. Dentro do universo dado, os valores são 4 e 5.</p><div class="formula">V = {4, 5}</div><span class="slide-ref">Fonte: slides 20 e 21</span></div></details>
+    <details class="exercise-item"><summary>Condicional: A = {1, 2, 3, 4}; x > 2 → x = 4</summary><div class="exercise-body"><p>A condicional só falha quando a primeira parte é verdadeira e a segunda é falsa. Isso acontece para x = 3. Os demais elementos tornam a condicional verdadeira.</p><div class="formula">V = {1, 2, 4}</div><span class="slide-ref">Fonte: slides 25 e 26</span></div></details>
+    <details class="exercise-item"><summary>Bicondicional: A = {0, 1, 2, 3, 4}; x > 2 ↔ x + 1 > 3</summary><div class="exercise-body"><p>Para x = 0, 1 e 2, as duas condições são falsas. Para x = 3 e 4, as duas são verdadeiras. Portanto, todos os elementos satisfazem a bicondicional.</p><div class="formula">V = {0, 1, 2, 3, 4}</div><span class="slide-ref">Fonte: slides 30 e 31</span></div></details>
+  </article>
+  <article class="card">
+    <h2>Condições universal e impossível nas operações</h2>
+    <p>O slide 33 relaciona operações com o conjunto universo U e o conjunto vazio ∅:</p>
+    <div class="table-wrap"><table><thead><tr><th>Operação</th><th>Resultado</th><th>Leitura</th></tr></thead><tbody>
+    <tr><td>P ∧ U</td><td>P</td><td>A conjunção de P com uma condição universal mantém P.</td></tr>
+    <tr><td>P ∧ ∅</td><td>∅</td><td>A conjunção de P com uma condição impossível não possui soluções.</td></tr>
+    <tr><td>P ∨ ∅</td><td>P</td><td>A disjunção de P com uma condição impossível mantém P.</td></tr>
+    <tr><td>P ∨ U</td><td>U</td><td>A disjunção de P com uma condição universal é verdadeira para todo o universo.</td></tr>
+    </tbody></table></div>
+    <div class="slide-ref">Fonte: slide 33</div>
+  </article>
+</section>
+
+<section id="quantificadores" class="tab-content">
+  <div class="concept-box">
+    <h2>14. Quantificadores</h2>
+    <p>Os quantificadores permitem transformar sentenças abertas em afirmações sobre todos os elementos de um conjunto ou sobre pelo menos um elemento.</p>
+    <div class="slide-ref">📚 Fonte: LogMat_Slide-17 - Quantificadores · slides 2 a 24</div>
+  </div>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Por que precisamos de quantificadores?</h2>
+      <div class="formula">P(x): x > 5</div>
+      <p>Considerando o conjunto dos números naturais, podemos fazer duas perguntas diferentes:</p>
+      <ol style="margin:.5rem 0 .5rem 1.35rem;color:#53657d"><li>Todos os números naturais são maiores que 5?</li><li>Existe algum número natural maior que 5?</li></ol>
+      <p>A primeira pergunta trata de todos os elementos. A segunda pergunta verifica se pelo menos um elemento satisfaz a condição.</p>
+      <div class="slide-ref">Fonte: slides 2 e 3</div>
+    </article>
+    <article class="card">
+      <h2>Quantificador universal ∀</h2>
+      <div class="formula">∀x ∈ A, P(x)</div>
+      <p>Lê-se “para todo x pertencente a A, P(x)”. A propriedade precisa ser verdadeira para todos os elementos do conjunto considerado.</p>
+      <p><strong>Exemplo dos slides:</strong> em uma turma de programação com 30 alunos, “Todos os alunos estão matriculados na disciplina”.</p>
+      <div class="callout warn">Se apenas um aluno não estiver matriculado, a afirmação universal será falsa. Um único contraexemplo basta.</div>
+      <div class="slide-ref">Fonte: slides 4 e 5</div>
+    </article>
+    <article class="card">
+      <h2>Quantificador existencial ∃</h2>
+      <div class="formula">∃x ∈ A, P(x)</div>
+      <p>Lê-se “existe pelo menos um x pertencente a A que satisfaz P(x)”. Não é necessário que todos satisfaçam.</p>
+      <p><strong>Exemplo dos slides:</strong> “Existe pelo menos um aluno que foi aprovado em todas as avaliações.”</p>
+      <div class="callout good">Basta encontrar um aluno que satisfaça a condição para que a afirmação existencial seja verdadeira.</div>
+      <div class="slide-ref">Fonte: slide 6</div>
+    </article>
+    <article class="card">
+      <h2>Comparando os quantificadores</h2>
+      <p>O slide apresenta uma turma com cinco alunos:</p>
+      <div class="table-wrap"><table><thead><tr><th>Aluno</th><th>Matriculado?</th></tr></thead><tbody><tr><td>Ana</td><td>Sim</td></tr><tr><td>Bruno</td><td>Sim</td></tr><tr><td>Carlos</td><td>Não</td></tr><tr><td>Diana</td><td>Sim</td></tr><tr><td>Eduardo</td><td>Sim</td></tr></tbody></table></div>
+      <p>“Todos foram matriculados” é falso, pois Carlos não foi matriculado. “Existe pelo menos um aluno matriculado” é verdadeiro.</p>
+      <div class="slide-ref">Fonte: slide 7</div>
+    </article>
+  </div>
+  <article class="card">
+    <h2>Explore o efeito dos quantificadores</h2>
+    <p class="desc">Clique nos nomes para alternar a propriedade “está matriculado” e observe o resultado das duas afirmações.</p>
+    <div class="memory-grid" id="studentGrid"></div>
+    <div class="btn-row"><button class="btn" onclick="resetStudents()">Restaurar situação dos slides</button></div>
+    <div class="grid-2"><div id="universalStatus" class="result bad">∀x ∈ A, P(x): Falso. Há pelo menos um aluno que não está matriculado.</div><div id="existentialStatus" class="result good">∃x ∈ A, P(x): Verdadeiro. Pelo menos um aluno está matriculado.</div></div>
+    <div class="slide-ref">Exemplo interativo baseado na tabela do slide 7</div>
+  </article>
+  <article class="card">
+    <h2>Negação dos quantificadores</h2>
+    <div class="grid-2">
+      <div class="concept-box purple"><h3>Negação do universal</h3><div class="formula">¬(∀x ∈ A, P(x)) ⇔ ∃x ∈ A, ¬P(x)</div><p>“Não é verdade que todos satisfazem” significa “existe pelo menos um que não satisfaz”.</p><p><strong>Exemplo:</strong> “Todos os alunos entregaram a atividade.” Negação: “Existe pelo menos um aluno que não entregou a atividade.”</p></div>
+      <div class="concept-box amber"><h3>Negação do existencial</h3><div class="formula">¬(∃x ∈ A, P(x)) ⇔ ∀x ∈ A, ¬P(x)</div><p>“Não existe nenhum elemento que satisfaz” significa “todos deixam de satisfazer”.</p><p><strong>Exemplo:</strong> “Existe algum aluno que faltou.” Negação: “Todos os alunos compareceram.”</p></div>
+    </div>
+    <div class="callout warn"><strong>Cuidado:</strong> a negação de “todos entregaram” não é “todos não entregaram”. Basta existir pelo menos um aluno que não entregou.</div>
+    <div class="slide-ref">Fonte: slides 8 a 11</div>
+  </article>
+  <article class="card">
+    <h2>Contraexemplo</h2>
+    <p>Para mostrar que uma afirmação universal é falsa, basta encontrar um único elemento do conjunto que não satisfaça a propriedade.</p>
+    <div class="formula">∀x ∈ A, P(x) é falsa quando ∃x ∈ A, ¬P(x)</div>
+    <p><strong>Exemplo cotidiano:</strong> “Todos os alunos da turma entregaram a atividade.” Encontrar um aluno que não entregou é suficiente para refutar a afirmação.</p>
+    <div class="grid-2">
+      <div class="concept-box"><h3>Exercício A</h3><p>A = {2, 3, 4, 5, 6, 7, 8, 9}</p><p>∀x ∈ A, x + 5 < 12</p><p><strong>Contraexemplos:</strong> x = 7, 8 ou 9, pois x + 5 não é menor que 12.</p></div>
+      <div class="concept-box"><h3>Exercício B</h3><p>A = {2, 3, 4, 5, 6, 7, 8, 9}</p><p>∀x ∈ A, x² > 4</p><p><strong>Contraexemplo:</strong> x = 2, pois 2² = 4 e 4 não é maior que 4.</p></div>
+    </div>
+    <div class="slide-ref">Fonte: slides 12 a 16</div>
+  </article>
+  <div class="grid-2">
+    <article class="card">
+      <h2>Variável livre e variável aparente</h2>
+      <p><strong>Variável livre:</strong> não está sob o alcance de um quantificador.</p>
+      <p><strong>Variável aparente (ou ligada):</strong> está sob o alcance de um quantificador.</p>
+      <div class="formula">x + 1 > x &nbsp; → x é livre</div>
+      <div class="formula">∀x ∈ ℝ, x + 1 > x &nbsp; → x é ligada</div>
+      <div class="callout">O que determina a classificação é o alcance do quantificador, e não apenas a presença do símbolo na expressão.</div>
+     </article>
+    <article class="card">
+      <h2>Existência e unicidade ∃!</h2>
+      <p>O símbolo ∃! significa “existe exatamente um elemento” que satisfaz a propriedade, no universo considerado.</p>
+      <div class="formula">∃!x ∈ ℝ, x³ = 8</div>
+      <p>A equação x³ = 8 tem uma única solução real: x = 2. Portanto, a afirmação é verdadeira.</p>
+      <div class="formula">x² = 16 → x = 4 ou x = −4</div>
+      <p>Há soluções, mas não há unicidade: ∃ é verdadeiro e ∃! é falso.</p>
+     </article>
+  </div>
+</section>
+
+<section id="pratica" class="tab-content">
+  <div class="concept-box">
+    <h2>Pratique e confira a explicação</h2>
+    <p>As questões abaixo usam os mesmos exemplos e conjuntos trabalhados nos slides enviados. Escolha uma alternativa e clique em “Conferir”. A explicação aparece logo abaixo.</p>
+  </div>
+  <div class="card">
+    <div class="control-row"><strong>Seu progresso</strong><span id="quizProgressText" class="small">0 de 10 questões conferidas</span><div class="progress"><span id="quizProgressBar"></span></div></div>
+    <div id="practiceQuiz"></div>
+    <div class="btn-row"><button class="btn secondary" onclick="resetQuiz()">Limpar respostas e tentar novamente</button></div>
+  </div>
+</section>
+</main>
+<footer>
+  <strong>Guia idealizado e organizado pelo Prof. Alexandre Adler.</strong><br>
+  Material baseado no livro <em>Iniciação à Lógica Matemática</em>, de Edgar de Alencar Filho (Nobel, 2002), e nos materiais de aula de Lógica Computacional I, elaborados pelo Prof. Alexandre Adler a partir de adaptações dos slides do Prof. Jacson Rodrigues Correia da Silva (UFES, CCENS, 2026).<br>
+  <span>Guia em construção. O conteúdo pode conter erros ou omissões e receber atualizações.</span><br>
+  <span>DCOMP · CCENS · UFES</span>
+</footer>
+<script>
+function openTab(id,btn){
+  document.querySelectorAll('.tab-content').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function testarX(){
+  const x=Number(document.getElementById('valorX').value);const el=document.getElementById('resultadoX');
+  if(document.getElementById('valorX').value===''){el.className='result bad';el.textContent='Informe um valor para x.';return;}
+  const ok=x>5;el.className='result '+(ok?'good':'bad');el.textContent=`x = ${x}. Como ${x} ${ok?'>':'não é maior que'} 5, P(x) é ${ok?'verdadeira':'falsa'}.`;
+}
+function atualizarUniverso(){
+  const v=document.getElementById('universoSelect').value;const el=document.getElementById('universoResult');
+  el.textContent=v==='u1'?'U = {1, 2, 3, 4, 5, 6, 7, 8} → V = {6, 7, 8}':'U = {2, 4, 6, 8, 10} → V = {6, 8, 10}';
+}
+function montarXY(){
+ const body=document.querySelector('#xyTable tbody');const pairs=[];
+ for(let x=1;x<=5;x++){const tr=document.createElement('tr');const th=document.createElement('th');th.textContent=x;tr.appendChild(th);
+  for(let y=1;y<=5;y++){const td=document.createElement('td');const ok=x>y;td.textContent=ok?'✓':'×';td.style.textAlign='center';td.style.fontWeight='700';td.style.color=ok?'#347454':'#a65a54';td.style.background=ok?'#eaf6f0':'#fff3f1';if(ok)pairs.push(`(${x},${y})`);tr.appendChild(td);}body.appendChild(tr);}
+ document.getElementById('xyResult').textContent='V = {'+pairs.join(', ')+'}';
+}
+function atualizarSetOp(){
+ const op=document.getElementById('setOp').value;const data={not:'¬P(x): {2}',and:'P(x) ∧ Q(x): {4, 6}',or:'P(x) ∨ Q(x): {2, 4, 6, 9}',imp:'P(x) → Q(x): {2, 4, 6}',iff:'P(x) ↔ Q(x): {4, 6}'};
+ document.getElementById('setOpResult').textContent=data[op];
+}
+const students=[{n:'Ana',v:true},{n:'Bruno',v:true},{n:'Carlos',v:false},{n:'Diana',v:true},{n:'Eduardo',v:true}];
+function renderStudents(){
+ const grid=document.getElementById('studentGrid');grid.innerHTML='';
+ students.forEach((s,i)=>{const b=document.createElement('button');b.className='memory-cell '+(s.v?'yes':'no');b.innerHTML=`<strong>${s.n}</strong><br>${s.v?'Matriculado ✓':'Não matriculado ✕'}`;b.onclick=()=>{students[i].v=!students[i].v;renderStudents();};grid.appendChild(b);});
+ const all=students.every(s=>s.v),some=students.some(s=>s.v);const u=document.getElementById('universalStatus'),e=document.getElementById('existentialStatus');
+ u.className='result '+(all?'good':'bad');u.textContent=`∀x ∈ A, P(x): ${all?'Verdadeiro. Todos os alunos estão matriculados.':'Falso. Existe pelo menos um aluno que não está matriculado.'}`;
+ e.className='result '+(some?'good':'bad');e.textContent=`∃x ∈ A, P(x): ${some?'Verdadeiro. Pelo menos um aluno está matriculado.':'Falso. Nenhum aluno está matriculado.'}`;
+}
+function resetStudents(){students.forEach((s,i)=>s.v=[true,true,false,true,true][i]);renderStudents();}
+const quizItems=[
+ {q:'No exemplo P(x): x > 5, qual é o valor lógico quando x = 8?',o:['Verdadeiro.','Falso.','Não é possível determinar.','A expressão é impossível.'],a:0,e:'Substituímos x por 8. Como 8 > 5, a sentença é verdadeira.'},
+ {q:'Considere U = {1, 2, 3, 4, 5, 6, 7, 8} e P(x): x > 5. Qual é o conjunto-verdade?',o:['{1, 2, 3, 4, 5}','{6, 7, 8}','{5, 6, 7, 8}','U inteiro'],a:1,e:'Selecionamos somente os elementos do universo que são maiores que 5: 6, 7 e 8.'},
+ {q:'Em ℕ, como classificamos P(x): x < 0?',o:['Universal.','Possível.','Impossível.','Bicondicional.'],a:2,e:'Nenhum número natural é negativo. O conjunto-verdade é vazio: ∅.'},
+ {q:'A = {1, 2, …, 10}. Determine o conjunto-verdade de “x é par ∧ x + 2 ≤ 10”.',o:['{2, 4, 6, 8, 10}','{2, 4, 6}','{2, 4, 6, 8}','{1, 2, 3, 4, 5, 6, 7, 8}'],a:2,e:'Os pares são {2, 4, 6, 8, 10}. A condição x + 2 ≤ 10 exige x ≤ 8. A conjunção mantém apenas {2, 4, 6, 8}.'},
+ {q:'Em A = {0, 1, 2, 3, 4, 5}, qual é o conjunto-verdade de x − 3 = 0 ∨ x + 1 = 2?',o:['∅','{1, 3}','{2, 3}','{0, 1, 3}'],a:1,e:'A primeira igualdade é satisfeita por x = 3; a segunda por x = 1. O OU reúne os valores: {1, 3}.'},
+ {q:'Em A = {0, 1, 2, 3, 4, 5}, qual é o conjunto-verdade de ¬(x ≤ 3)?',o:['{0, 1, 2, 3}','{3, 4, 5}','{0, 1, 2}','{4, 5}'],a:3,e:'A negação de x ≤ 3 é x > 3. No universo dado, os valores são 4 e 5.'},
+ {q:'Em A = {1, 2, 3, 4}, qual é o conjunto-verdade de x > 2 → x = 4?',o:['{4}','{3, 4}','{1, 2, 4}','{1, 2, 3, 4}'],a:2,e:'A condicional só é falsa quando a primeira parte é verdadeira e a segunda falsa. Isso ocorre em x = 3. Portanto, V = {1, 2, 4}.'},
+ {q:'Em A = {0, 1, 2, 3, 4}, qual é o conjunto-verdade de x > 2 ↔ x + 1 > 3?',o:['{3, 4}','{1, 2, 3, 4}','{0, 1, 2}','{0, 1, 2, 3, 4}'],a:3,e:'Para x = 0, 1 e 2, as duas condições são falsas. Para x = 3 e 4, as duas são verdadeiras. Assim, todos os elementos satisfazem a bicondicional.'},
+ {q:'Qual é a negação correta de ∀x ∈ A, P(x)?',o:['∀x ∈ A, ¬P(x)','∃x ∈ A, ¬P(x)','∃x ∈ A, P(x)','∀x ∈ A, P(x)'],a:1,e:'Negar “todos satisfazem” é afirmar que existe pelo menos um elemento que não satisfaz.'},
+ {q:'Para refutar ∀x ∈ A, P(x), o que basta encontrar?',o:['Um elemento que satisfaz P(x).','Todos os elementos que satisfazem P(x).','Um elemento que não satisfaz P(x).','O conjunto universo vazio, necessariamente.'],a:2,e:'Um único elemento que não satisfaz P(x) é um contraexemplo e torna falsa a afirmação universal.'}
+];
+
+quizItems.push(
+ {q:'Uma tabela-verdade completa com 5 proposições simples possui quantas linhas?',o:['5','10','25','32'],a:3,e:'O número de linhas é 2ⁿ. Com 5 proposições simples: 2⁵ = 32 possibilidades.'},
+ {q:'Na expressão (p ∧ q) ∨ ¬r, qual operação deve ser calculada antes da disjunção final?',o:['A bicondicional.','A conjunção p ∧ q e a negação ¬r.','A disjunção final.','Nenhuma: todos os conectivos têm a mesma precedência.'],a:1,e:'Os parênteses definem o escopo. Calculamos p ∧ q e ¬r; depois aplicamos a disjunção ∨.'},
+ {q:'Como classificamos p ∨ ¬p?',o:['Tautologia.','Contradição.','Contingência.','Sentença aberta.'],a:0,e:'Em qualquer valor de p, p ou ¬p é verdadeiro. A última coluna fica toda V: é uma tautologia.'},
+ {q:'Como classificamos p ∧ ¬p?',o:['Tautologia.','Contradição.','Contingência.','Equivalência.'],a:1,e:'p e ¬p nunca podem ser verdadeiros ao mesmo tempo. A última coluna fica toda F: é uma contradição.'},
+ {q:'Uma proposição composta que apresenta pelo menos um V e um F na última coluna é:',o:['Tautologia.','Contradição.','Contingência.','Implicação lógica.'],a:2,e:'A contingência tem resultados V e F, dependendo dos valores das proposições simples.'},
+ {q:'Qual é o critério para identificar que um argumento não é válido pela tabela-verdade?',o:['Encontrar uma linha com todas as premissas V e a conclusão F.','Encontrar uma linha com todas as premissas F.','A última coluna precisa ser sempre V.','O argumento precisa ter quatro proposições simples.'],a:0,e:'Basta uma combinação em que todas as premissas sejam verdadeiras e a conclusão seja falsa. Essa linha é um contraexemplo à validade.'}
+);
+
+function renderQuiz(){
+ const root=document.getElementById('practiceQuiz');root.innerHTML='';
+ quizItems.forEach((q,i)=>{const card=document.createElement('article');card.className='quiz-card';card.id='quiz-card-'+i;
+  const h=document.createElement('h3');h.textContent=`Questão ${i+1}. ${q.q}`;card.appendChild(h);
+  q.o.forEach((opt,j)=>{const label=document.createElement('label');label.className='option';const radio=document.createElement('input');radio.type='radio';radio.name='practice-'+i;radio.value=j;const span=document.createElement('span');span.textContent=String.fromCharCode(65+j)+') '+opt;label.append(radio,span);card.appendChild(label);});
+  const actions=document.createElement('div');actions.className='quiz-actions';const b=document.createElement('button');b.className='btn';b.textContent='Conferir';b.onclick=()=>checkQuiz(i);const status=document.createElement('span');status.className='small';status.id='quiz-status-'+i;actions.append(b,status);card.appendChild(actions);
+  const exp=document.createElement('div');exp.className='explain';exp.id='quiz-explain-'+i;card.appendChild(exp);root.appendChild(card);
+ });updateQuizProgress();
+}
+function checkQuiz(i){
+ const chosen=document.querySelector(`input[name="practice-${i}"]:checked`);const exp=document.getElementById('quiz-explain-'+i);const status=document.getElementById('quiz-status-'+i);const q=quizItems[i];
+ if(!chosen){status.textContent='Selecione uma alternativa.';return;}
+ const ok=Number(chosen.value)===q.a;status.textContent=ok?'Resposta correta.':'Resposta incorreta.';status.style.color=ok?'#347454':'#a04e48';
+ exp.className='explain show';exp.innerHTML=`<strong>${ok?'Correto!':'Não foi dessa vez.'}</strong><br>Alternativa correta: <strong>${String.fromCharCode(65+q.a)}</strong>.<br>${q.e}`;
+ updateQuizProgress();
+}
+function updateQuizProgress(){const n=quizItems.filter((q,i)=>document.getElementById('quiz-explain-'+i)?.classList.contains('show')).length;document.getElementById('quizProgressText').textContent=`${n} de ${quizItems.length} questões conferidas`;document.getElementById('quizProgressBar').style.width=(n/quizItems.length*100)+'%';}
+function resetQuiz(){document.querySelectorAll('#practiceQuiz input').forEach(i=>i.checked=false);document.querySelectorAll('#practiceQuiz .explain').forEach(e=>{e.className='explain';e.innerHTML='';});document.querySelectorAll('#practiceQuiz .quiz-status').forEach(s=>s.textContent='');document.querySelectorAll('#practiceQuiz .quiz-actions .small').forEach(s=>s.textContent='');updateQuizProgress();}
+
+function goTab(id){const btn=document.querySelector(`.tab-btn[data-target="${id}"]`);openTab(id,btn);}
+function updateCarDecision(){
+ const d=Number(document.getElementById('distCar').value),s=Number(document.getElementById('speedCar').value);
+ const p=d<2,q=s>40,el=document.getElementById('carDecision');
+ if(document.getElementById('distCar').value===''||document.getElementById('speedCar').value===''){el.className='result bad';el.textContent='Informe distância e velocidade.';return;}
+ const stop=p&&q;el.className='result '+(stop?'bad':'good');
+ el.textContent=`P (distância < 2 m) = ${p?'V':'F'}; Q (velocidade > 40 km/h) = ${q?'V':'F'}. P ∧ Q = ${stop?'V':'F'}. ${stop?'A regra determina: frear.':'A condição conjunta não foi satisfeita; a regra apresentada não aciona a frenagem.'}`;
+}
+function updateConnectiveCalculator(){
+ const p=document.getElementById('truthP').value==='1',q=document.getElementById('truthQ').value==='1';
+ const v=b=>b?'V':'F';
+ const rows=[['¬P',!p,'Inverte o valor lógico de P.'],['P ∧ Q',p&&q,'V somente quando ambos são V.'],['P ∨ Q',p||q,'V quando pelo menos um é V.'],['P ⊕ Q',p!==q,'V quando exatamente um é V.'],['P → Q',(!p)||q,'F somente quando P = V e Q = F.'],['P ↔ Q',p===q,'V quando os valores são iguais.']];
+ document.getElementById('connectiveResults').innerHTML=rows.map(r=>`<tr><td><strong>${r[0]}</strong></td><td><strong>${v(r[1])}</strong></td><td>${r[2]}</td></tr>`).join('');
+}
+function checkImplicationRow(){
+ const p=document.getElementById('impP').value==='1',q=document.getElementById('impQ').value==='1',el=document.getElementById('impRowResult');
+ if(p&&!q){el.className='result bad';el.textContent='P = V e Q = F: foi encontrado um contraexemplo. Essa linha impede P ⟹ Q.';}
+ else{el.className='result good';el.textContent=`P = ${p?'V':'F'} e Q = ${q?'V':'F'}: esta linha, isoladamente, não refuta P ⟹ Q. Para confirmar a implicação, é preciso verificar todas as combinações.`;}
+}
+function showLaw(){
+ const data={idem:['P ∧ P ⇔ P','Propriedade idempotente: repetir a mesma proposição na conjunção não altera o resultado.'],demorgan:['¬(P ∧ Q) ⇔ ¬P ∨ ¬Q','Lei de De Morgan: negamos cada proposição e trocamos a conjunção por disjunção.'],conditional:['P → Q ⇔ ¬P ∨ Q','Equivalência do condicional: um condicional é verdadeiro quando P é falsa ou Q é verdadeira.'],notconditional:['¬(P → Q) ⇔ P ∧ ¬Q','A negação da condicional descreve exatamente a linha em que P é V e Q é F.'],absorb:['P ∧ (P ∨ Q) ⇔ P','Absorção: a expressão completa tem o mesmo valor lógico de P.'],iff:['¬(P ↔ Q) ⇔ (P ∧ ¬Q) ∨ (¬P ∧ Q)','A negação da bicondicional ocorre quando os valores lógicos de P e Q são diferentes.']};
+ const r=data[document.getElementById('lawChoice').value];document.getElementById('lawResult').innerHTML=`<strong>${r[0]}</strong><br>${r[1]}`;
+}
+let deductionIndex=0;
+const deductionSteps=[
+ 'Etapa 1: Identifique as premissas P → Q e Q → R. A primeira liga P a Q; a segunda liga Q a R.',
+ 'Etapa 2: A conclusão pretendida é P → R. Pela demonstração condicional, adicionamos P temporariamente como premissa.',
+ 'Etapa 3: De P → Q e P, aplicamos Modus Ponens e obtemos Q.',
+ 'Etapa 4: De Q → R e Q, aplicamos Modus Ponens e obtemos R.',
+ 'Etapa 5: Como partimos da hipótese temporária P e deduzimos R, concluímos P → R.'
+];
+function stepDeduction(delta){deductionIndex=delta===0?0:Math.max(0,Math.min(deductionSteps.length-1,deductionIndex+delta));document.getElementById('deductionStep').textContent=deductionSteps[deductionIndex];}
+function testInvalidAssignment(){
+ const p=document.getElementById('vP').value==='1',q=document.getElementById('vQ').value==='1',r=document.getElementById('vR').value==='1',s=document.getElementById('vS').value==='1';
+ const imp=(a,b)=>(!a)||b;
+ const prem1=imp(p,q)||!(r&&s),prem2=p||s,conclusion=imp(r,q);
+ const el=document.getElementById('invalidAssignmentResult');
+ const validCounter=prem1&&prem2&&!conclusion;
+ el.className='result '+(validCounter?'bad':'good');
+ el.textContent=`P=${p?'V':'F'}, Q=${q?'V':'F'}, R=${r?'V':'F'}, S=${s?'V':'F'}. Premissa 1=${prem1?'V':'F'}; premissa 2=${prem2?'V':'F'}; conclusão=${conclusion?'V':'F'}. ${validCounter?'Contraexemplo encontrado: todas as premissas são V e a conclusão é F. O argumento não é válido.':'Esta combinação não é um contraexemplo. Procure outra atribuição em que as premissas sejam V e a conclusão seja F.'}`;
+}
+const proofSteps={
+ dc:[
+ 'Passo 1: Para demonstrar P → R, assumimos temporariamente P como premissa adicional.',
+ 'Passo 2: Temos P → Q e assumimos P. Pelo Modus Ponens, obtemos Q.',
+ 'Passo 3: Temos Q → R e acabamos de obter Q. Pelo Modus Ponens, obtemos R.',
+ 'Passo 4: A partir da hipótese temporária P, deduzimos R. Portanto, concluímos P → R.'
+ ],
+ di:[
+ 'Passo 1: Negamos temporariamente a conclusão. Para demonstrar ¬(P ∧ R), assumimos P ∧ R.',
+ 'Passo 2: Da conjunção P ∧ R, extraímos P e R pela regra da simplificação.',
+ 'Passo 3: De P → ¬Q e P, aplicamos Modus Ponens e obtemos ¬Q.',
+ 'Passo 4: De R → Q e R, aplicamos Modus Ponens e obtemos Q.',
+ 'Passo 5: Obtivemos Q e ¬Q, uma contradição. Rejeitamos a hipótese P ∧ R e concluímos ¬(P ∧ R).'
+ ]
+};
+const proofIndex={dc:0,di:0};
+function stepProof(kind,delta){const arr=proofSteps[kind];proofIndex[kind]=delta===0?0:Math.max(0,Math.min(arr.length-1,proofIndex[kind]+delta));document.getElementById(kind==='dc'?'dcStep':'diStep').textContent=arr[proofIndex[kind]];}
+const extendedQuizItems=[
+ {q:'Considere P: “O número é múltiplo de 4” e Q: “O número é par”. Qual relação lógica é apresentada nos slides?',o:['P ⟹ Q, pois todo múltiplo de 4 é par.','Q ⟹ P, pois todo número par é múltiplo de 4.','P ⇔ Q, pois as duas afirmações são sempre iguais.','P ⟹ ¬Q.'],a:0,e:'Todo múltiplo de 4 é par. O sentido contrário não vale para todos os números, pois há números pares que não são múltiplos de 4.'},
+ {q:'Qual combinação impede a implicação lógica P ⟹ Q?',o:['P = V e Q = V.','P = V e Q = F.','P = F e Q = V.','P = F e Q = F.'],a:1,e:'A única linha que torna a condicional P → Q falsa é P = V e Q = F. Se essa linha existir, P não implica Q.'},
+ {q:'Qual é a contrapositiva de P → Q?',o:['Q → P','¬P → ¬Q','¬Q → ¬P','P → ¬Q'],a:2,e:'Na contrapositiva, invertemos a ordem das proposições e negamos ambas: P → Q ⇔ ¬Q → ¬P.'},
+ {q:'Qual expressão é logicamente equivalente a P → Q?',o:['P ∧ ¬Q','¬P ∨ Q','P ∨ Q','¬P ∧ Q'],a:1,e:'A equivalência do condicional é P → Q ⇔ ¬P ∨ Q. O slide demonstra que as duas colunas da tabela-verdade são idênticas.'},
+ {q:'Qual é a negação correta de P → Q?',o:['¬P → Q','P ∧ ¬Q','¬P ∨ Q','P ↔ Q'],a:1,e:'A condicional só é falsa quando P é verdadeira e Q é falsa. Portanto, ¬(P → Q) ⇔ P ∧ ¬Q.'},
+ {q:'A partir de P → Q e P, qual conclusão pode ser obtida?',o:['¬Q','¬P','Q','P ∧ Q'],a:2,e:'É a regra Modus Ponens: se P implica Q e P é verdadeira, concluímos Q.'},
+ {q:'A partir de P → Q e ¬Q, qual conclusão pode ser obtida?',o:['P','¬P','Q','P ∨ Q'],a:1,e:'É a regra Modus Tollens: se P implica Q e Q é falsa, então P também é falsa.'},
+ {q:'Qual é a conclusão do Silogismo Hipotético a partir de P → Q e Q → R?',o:['P → R','R → P','P ∧ R','Q → P'],a:0,e:'A primeira condicional liga P a Q; a segunda liga Q a R. Portanto, P leva a R: P → R.'},
+ {q:'Um argumento é não válido quando:',o:['Todas as linhas têm premissas falsas.','Existe uma linha com todas as premissas verdadeiras e a conclusão falsa.','A conclusão repete uma premissa.','Há pelo menos duas premissas.'],a:1,e:'O critério de não validade é encontrar uma atribuição que torne todas as premissas V e a conclusão F.'},
+ {q:'Na demonstração condicional para provar P → Q, o que assumimos temporariamente?',o:['¬P','P','¬Q','P ∧ ¬Q'],a:1,e:'Assumimos P como premissa adicional e tentamos deduzir Q. Se conseguirmos, concluímos P → Q.'},
+ {q:'Na demonstração indireta para provar Q, qual hipótese temporária é utilizada?',o:['Q','P → Q','¬Q','P ∧ Q'],a:2,e:'Assumimos temporariamente a negação da conclusão, ¬Q, e tentamos chegar a uma contradição.'},
+ {q:'Se uma demonstração deduz R e ¬R a partir das premissas, o que foi encontrado?',o:['Uma tautologia.','Uma equivalência.','Uma contradição, indicando inconsistência lógica.','Uma proposição simples.'],a:2,e:'R e ¬R não podem ser verdadeiras ao mesmo tempo, no mesmo contexto. A derivação de ambas indica uma inconsistência no conjunto de premissas.'},
+ {q:'Qual lei de De Morgan corresponde à negação de P ∧ Q?',o:['¬P ∧ ¬Q','¬P ∨ ¬Q','P ∨ Q','P → Q'],a:1,e:'Pela lei de De Morgan, ¬(P ∧ Q) ⇔ ¬P ∨ ¬Q: negamos cada proposição e trocamos E por OU.'},
+ {q:'Quando a disjunção exclusiva P ⊕ Q é verdadeira?',o:['Quando P e Q são ambas verdadeiras.','Quando P e Q são ambas falsas.','Quando exatamente uma entre P e Q é verdadeira.','Sempre que P é verdadeira.'],a:2,e:'A disjunção exclusiva significa “um ou outro, mas não ambos”. Portanto, é verdadeira quando os valores lógicos são diferentes.'},
+ {q:'Qual é a regra de simplificação apresentada no método dedutivo?',o:['P ⊢ P ∨ Q','P → Q, P ⊢ Q','P ∧ Q ⊢ P ou Q, separadamente','P → Q, ¬Q ⊢ ¬P'],a:2,e:'A partir de uma conjunção P ∧ Q, podemos concluir P ou, separadamente, Q.'}
+];
+quizItems.push(...extendedQuizItems);
+
+
+function updatePossibilities(){
+ const raw=document.getElementById('numVariables').value;const n=Number(raw);const el=document.getElementById('possibilitiesResult');
+ if(!Number.isInteger(n)||n<1||n>12){el.className='result bad';el.textContent='Informe um número inteiro entre 1 e 12.';return;}
+ const rows=2**n;el.className='result good';el.textContent=`Com ${n} proposições simples: 2^${n} = ${rows.toLocaleString('pt-BR')} ${rows===1?'linha':'linhas'} na tabela-verdade completa.`;
+}
+const truthPracticeExercises = {
+ implication: {
+  expression:'p → q',
+  vars:['p','q'],
+  prompt:'Preencha as quatro combinações de p e q e calcule a coluna p → q. Lembre-se: a condicional só é falsa quando p = V e q = F.',
+  columns:[
+   {key:'p',label:'p',fn:v=>v.p},
+   {key:'q',label:'q',fn:v=>v.q},
+   {key:'final',label:'p → q',fn:v=>(!v.p)||v.q,final:true}
+  ],
+  explanation:'A condicional p → q é falsa somente na linha em que p é V e q é F. Nas outras três combinações, o resultado é V.'
+ },
+ slideExample: {
+  expression:'(p ∧ q) ∨ ¬r',
+  vars:['p','q','r'],
+  prompt:'Este é o exemplo trabalhado nos slides 13 e 14. Complete as colunas das variáveis, depois p ∧ q, ¬r e, por último, (p ∧ q) ∨ ¬r.',
+  columns:[
+   {key:'p',label:'p',fn:v=>v.p},
+   {key:'q',label:'q',fn:v=>v.q},
+   {key:'r',label:'r',fn:v=>v.r},
+   {key:'pq',label:'p ∧ q',fn:v=>v.p&&v.q},
+   {key:'notr',label:'¬r',fn:v=>!v.r},
+   {key:'final',label:'(p ∧ q) ∨ ¬r',fn:v=>(v.p&&v.q)||!v.r,final:true}
+  ],
+  explanation:'A ordem é: primeiro p ∧ q; depois ¬r; por último, a disjunção entre os dois resultados. A última coluna reúne o valor lógico final nas oito possibilidades.'
+ },
+ demorgan: {
+  expression:'¬(p ∨ q) ↔ (¬p ∧ ¬q)',
+  vars:['p','q'],
+  prompt:'Complete as colunas seguindo a ordem: p ∨ q; sua negação; ¬p e ¬q; a conjunção ¬p ∧ ¬q; e, por fim, compare os dois lados pelo bicondicional.',
+  columns:[
+   {key:'p',label:'p',fn:v=>v.p},
+   {key:'q',label:'q',fn:v=>v.q},
+   {key:'porq',label:'p ∨ q',fn:v=>v.p||v.q},
+   {key:'notporq',label:'¬(p ∨ q)',fn:v=>!(v.p||v.q)},
+   {key:'notp',label:'¬p',fn:v=>!v.p},
+   {key:'notq',label:'¬q',fn:v=>!v.q},
+   {key:'notpandnotq',label:'¬p ∧ ¬q',fn:v=>(!v.p)&&(!v.q)},
+   {key:'final',label:'¬(p ∨ q) ↔ (¬p ∧ ¬q)',fn:v=>(!(v.p||v.q))===((!v.p)&&(!v.q)),final:true}
+  ],
+  explanation:'A última coluna fica V em todas as linhas: os dois lados apresentam o mesmo valor lógico em cada combinação. É o exemplo da lei de De Morgan apresentado no exercício do slide 22.'
+ },
+ precedence: {
+  expression:'p → q ↔ r',
+  vars:['p','q','r'],
+  prompt:'Pela ordem de precedência dos slides, resolva primeiro a condicional p → q e depois o bicondicional entre esse resultado e r. Assim, a expressão corresponde a (p → q) ↔ r.',
+  columns:[
+   {key:'p',label:'p',fn:v=>v.p},
+   {key:'q',label:'q',fn:v=>v.q},
+   {key:'r',label:'r',fn:v=>v.r},
+   {key:'imp',label:'p → q',fn:v=>(!v.p)||v.q},
+   {key:'final',label:'(p → q) ↔ r',fn:v=>((!v.p)||v.q)===v.r,final:true}
+  ],
+  explanation:'A condicional tem precedência sobre o bicondicional. Por isso, calculamos p → q primeiro e comparamos esse resultado com r na última coluna.'
+ }
+};
+function truthPracticeRows(exercise){
+ const rows=[];const n=exercise.vars.length;
+ for(let mask=0;mask<2**n;mask++){
+  const values={};exercise.vars.forEach((name,i)=>values[name]=Boolean(!(mask & (1 << (n-1-i)))));
+  rows.push(values);
+ }
+ return rows;
+}
+function loadTruthPractice(){
+ const select=document.getElementById('truthPracticeChoice');if(!select)return;
+ const ex=truthPracticeExercises[select.value];if(!ex)return;
+ document.getElementById('truthPracticePrompt').textContent=`Expressão: ${ex.expression}. ${ex.prompt}`;
+ const table=document.getElementById('truthPracticeTable');
+ const thead=table.querySelector('thead');
+ thead.innerHTML='<tr><th>Possibilidade</th>'+ex.columns.map(c=>`<th>${c.label}</th>`).join('')+'</tr>';
+ const tbody=table.querySelector('tbody');tbody.innerHTML='';
+ const rows=truthPracticeRows(ex);
+ rows.forEach((values,rowIndex)=>{
+  const tr=document.createElement('tr');
+  const label=document.createElement('th');label.className='row-label';label.textContent=`${rowIndex+1}ª`;tr.appendChild(label);
+  ex.columns.forEach((column,colIndex)=>{
+   const td=document.createElement('td');if(column.final)td.className='final-cell';
+   const input=document.createElement('input');input.type='text';input.maxLength=1;input.autocomplete='off';input.spellcheck=false;input.inputMode='text';input.className='truth-input';input.placeholder='V/F';input.setAttribute('aria-label',`Possibilidade ${rowIndex+1}, coluna ${column.label}`);input.dataset.row=String(rowIndex);input.dataset.col=column.key;
+   input.addEventListener('input',()=>{input.value=input.value.toUpperCase().replace(/[^VF]/g,'').slice(0,1);input.classList.remove('correct','incorrect','revealed');document.getElementById('truthPracticeResult').textContent='Tabela alterada. Clique em “Verificar tabela” para conferir novamente.';document.getElementById('truthPracticeResult').className='result';document.getElementById('truthPracticeExplanation').style.display='none';});
+   td.appendChild(input);tr.appendChild(td);
+  });
+  tbody.appendChild(tr);
+ });
+ const result=document.getElementById('truthPracticeResult');result.className='result';result.textContent=`Tabela pronta: ${rows.length} possibilidades e ${ex.columns.length} colunas para preencher.`;
+ document.getElementById('truthPracticeExplanation').style.display='none';
+}
+function checkTruthPractice(){
+ const ex=truthPracticeExercises[document.getElementById('truthPracticeChoice').value];if(!ex)return;
+ const rows=truthPracticeRows(ex);let correct=0,total=0,missing=0;
+ rows.forEach((values,rowIndex)=>ex.columns.forEach(column=>{
+  const input=document.querySelector(`.truth-input[data-row="${rowIndex}"][data-col="${column.key}"]`);if(!input)return;
+  const expected=column.fn(values)?'V':'F';const actual=input.value.trim().toUpperCase();total++;
+  input.classList.remove('correct','incorrect','revealed');
+  if(!actual){missing++;input.classList.add('incorrect');}
+  else if(actual===expected){correct++;input.classList.add('correct');}
+  else input.classList.add('incorrect');
+ }));
+ const result=document.getElementById('truthPracticeResult');
+ if(correct===total){result.className='result good';result.textContent=`Muito bem! Você acertou todas as ${total} células da tabela.`;}
+ else {result.className='result '+(correct>=total*.7?'':'bad');result.textContent=`Você acertou ${correct} de ${total} células.${missing?` Há ${missing} campo(s) em branco.`:''} Os campos verdes estão corretos; os campos em vermelho precisam ser revistos.`;}
+ const explanation=document.getElementById('truthPracticeExplanation');explanation.style.display='block';explanation.textContent=ex.explanation;
+}
+function clearTruthPractice(){
+ document.querySelectorAll('#truthPracticeTable .truth-input').forEach(input=>{input.value='';input.classList.remove('correct','incorrect','revealed');});
+ const ex=truthPracticeExercises[document.getElementById('truthPracticeChoice').value];const result=document.getElementById('truthPracticeResult');result.className='result';result.textContent='Campos limpos. Preencha novamente e clique em “Verificar tabela”.';document.getElementById('truthPracticeExplanation').style.display='none';
+}
+function showTruthPracticeAnswers(){
+ const ex=truthPracticeExercises[document.getElementById('truthPracticeChoice').value];if(!ex)return;const rows=truthPracticeRows(ex);
+ rows.forEach((values,rowIndex)=>ex.columns.forEach(column=>{const input=document.querySelector(`.truth-input[data-row="${rowIndex}"][data-col="${column.key}"]`);if(input){input.value=column.fn(values)?'V':'F';input.classList.remove('correct','incorrect');input.classList.add('revealed');}}));
+ const result=document.getElementById('truthPracticeResult');result.className='result good';result.textContent='Gabarito preenchido. Compare cada coluna com a sua resolução.';
+ const explanation=document.getElementById('truthPracticeExplanation');explanation.style.display='block';explanation.textContent=ex.explanation;
+}
+
+function renderConstructionTable(){
+ const body=document.querySelector('#constructionTruthTable tbody');if(!body)return;body.innerHTML='';
+ const vals=[true,false];let finalValues=[];
+ for(const p of vals)for(const q of vals)for(const r of vals){
+  const pq=p&&q,nr=!r,out=pq||nr;finalValues.push(out);
+  const tr=document.createElement('tr');
+  [finalValues.length,p?'V':'F',q?'V':'F',r?'V':'F',pq?'V':'F',nr?'V':'F',out?'V':'F'].forEach((v,i)=>{const td=document.createElement(i===0?'th':'td');td.textContent=v;if(i===6){td.style.fontWeight='800';td.style.background=out?'#eaf6f0':'#fff0ee';}tr.appendChild(td);});body.appendChild(tr);
+ }
+ const sum=document.getElementById('constructionTruthSummary');sum.className='result';sum.textContent='Última coluna: '+finalValues.map(v=>v?'V':'F').join(', ')+'. Ela apresenta o valor lógico final em cada uma das oito combinações.';
+}
+function renderClassFormula(){
+ const key=document.getElementById('classFormula')?.value;const table=document.getElementById('classFormulaTable');if(!table)return;
+ const data={
+  pimpP:{expr:'p → p',vars:['p'],fn:({p})=>(!p)||p},
+  excluded:{expr:'p ∨ ¬p',vars:['p'],fn:({p})=>p||!p},
+  nonContradiction:{expr:'¬(p ∧ ¬p)',vars:['p'],fn:({p})=>!(p&&!p)},
+  contradiction:{expr:'p ∧ ¬p',vars:['p'],fn:({p})=>p&&!p},
+  tautA:{expr:'p ∨ ¬(p ∧ q)',vars:['p','q'],fn:({p,q})=>p||!(p&&q)},
+  tautB:{expr:'(p ∨ (q ∧ ¬q)) ↔ p',vars:['p','q'],fn:({p,q})=>(p||(q&&!q))===p},
+  notTaut:{expr:'(p ∨ (q ∧ r)) → p',vars:['p','q','r'],fn:({p,q,r})=>(!(p||(q&&r)))||p},
+  contingency:{expr:'p → ¬p',vars:['p'],fn:({p})=>(!p)||(!p)},
+  exerciseContradiction:{expr:'(p ∧ q) ∧ ¬(p ∨ q)',vars:['p','q'],fn:({p,q})=>(p&&q)&&!(p||q)}
+ };
+ const d=data[key];if(!d)return;
+ const combos=[];for(let mask=0;mask<2**d.vars.length;mask++){const obj={};d.vars.forEach((v,i)=>obj[v]=Boolean(mask&(1<<(d.vars.length-1-i))));combos.push(obj);}
+ const results=combos.map(c=>Boolean(d.fn(c)));const allV=results.every(Boolean),allF=results.every(v=>!v);const classification=allV?'Tautologia':allF?'Contradição':'Contingência';
+ document.getElementById('classFormulaDescription').textContent=`Expressão analisada: ${d.expr}. A tabela tem ${combos.length} ${combos.length===1?'combinação':'combinações'} porque aparecem ${d.vars.length} proposiç${d.vars.length===1?'ão simples':'ões simples'}.`;
+ table.querySelector('thead').innerHTML='<tr>'+d.vars.map(v=>`<th>${v}</th>`).join('')+'<th>'+d.expr+'</th></tr>';
+ const body=table.querySelector('tbody');body.innerHTML='';
+ combos.forEach((c,i)=>{const tr=document.createElement('tr');d.vars.forEach(v=>{const td=document.createElement('td');td.textContent=c[v]?'V':'F';tr.appendChild(td);});const result=document.createElement('td');result.textContent=results[i]?'V':'F';result.style.fontWeight='800';result.style.background=results[i]?'#eaf6f0':'#fff0ee';tr.appendChild(result);body.appendChild(tr);});
+ const el=document.getElementById('classFormulaResult');el.className='callout '+(allV?'good':allF?'bad':'warn');el.innerHTML=`<strong>${classification}.</strong> ${allV?'A última coluna apresenta apenas V.':allF?'A última coluna apresenta apenas F.':'A última coluna apresenta pelo menos um V e um F.'}`;
+}
+function renderValidityExample(){
+ const key=document.getElementById('validityExample')?.value;const table=document.getElementById('validityExampleTable');if(!table)return;
+ const imp=(a,b)=>(!a)||b;
+ const data={
+  mp:{vars:['p','q'],expr:'p → q, p ⊢ q',prem:['p → q','p'],fnPrem:[v=>imp(v.p,v.q),v=>v.p],concl:'q',fnCon:v=>v.q,desc:'Se p implica q e p é verdadeira, então q precisa ser verdadeira.'},
+  affirming:{vars:['p','q'],expr:'p → q, ¬p ⊢ ¬q',prem:['p → q','¬p'],fnPrem:[v=>imp(v.p,v.q),v=>!v.p],concl:'¬q',fnCon:v=>!v.q,desc:'O fato de p ser falsa não permite concluir que q também seja falsa.'},
+  mt:{vars:['p','q'],expr:'p → q, ¬q ⊢ ¬p',prem:['p → q','¬q'],fnPrem:[v=>imp(v.p,v.q),v=>!v.q],concl:'¬p',fnCon:v=>!v.p,desc:'Se p implica q e q é falsa, p também precisa ser falsa.'},
+  bicond:{vars:['p','q'],expr:'p ↔ q, q ⊢ p',prem:['p ↔ q','q'],fnPrem:[v=>v.p===v.q,v=>v.q],concl:'p',fnCon:v=>v.p,desc:'Se p e q têm o mesmo valor lógico e q é verdadeira, p também é verdadeira.'},
+  disj:{vars:['p','q','r'],expr:'p ∨ q, ¬q, p → r ⊢ r',prem:['p ∨ q','¬q','p → r'],fnPrem:[v=>v.p||v.q,v=>!v.q,v=>imp(v.p,v.r)],concl:'r',fnCon:v=>v.r,desc:'De p ∨ q e ¬q obtemos p; de p → r e p, concluímos r.'},
+  four:{vars:['p','q','r','s'],expr:'(p → q) ∨ ¬(r ∧ s), p ∨ s ⊢ r → q',prem:['(p → q) ∨ ¬(r ∧ s)','p ∨ s'],fnPrem:[v=>imp(v.p,v.q)||!(v.r&&v.s),v=>v.p||v.s],concl:'r → q',fnCon:v=>imp(v.r,v.q),desc:'É o exemplo de prova de não validade: há uma linha em que as duas premissas são V e a conclusão é F.'}
+ };
+ const d=data[key];if(!d)return;document.getElementById('validityExampleDescription').textContent=`${d.expr}. ${d.desc}`;
+ const combos=[];for(let mask=0;mask<2**d.vars.length;mask++){const v={};d.vars.forEach((name,i)=>v[name]=Boolean(mask&(1<<(d.vars.length-1-i))));combos.push(v);}
+ const headings=[...d.vars,...d.prem,d.concl];table.querySelector('thead').innerHTML='<tr>'+headings.map(h=>`<th>${h}</th>`).join('')+'</tr>';
+ const body=table.querySelector('tbody');body.innerHTML='';let counter=false,validRows=0;
+ combos.forEach(v=>{const premValues=d.fnPrem.map(fn=>Boolean(fn(v)));const c=Boolean(d.fnCon(v));const allPrem=premValues.every(Boolean);const hit=allPrem&&!c;if(allPrem)validRows++;if(hit)counter=true;
+  const tr=document.createElement('tr');if(hit)tr.style.background='#fff0ee';
+  d.vars.forEach(name=>{const td=document.createElement('td');td.textContent=v[name]?'V':'F';tr.appendChild(td);});
+  premValues.forEach(val=>{const td=document.createElement('td');td.textContent=val?'V':'F';if(hit)td.style.fontWeight='800';tr.appendChild(td);});
+  const td=document.createElement('td');td.textContent=c?'V':'F';td.style.fontWeight='800';td.style.background=c?'#eaf6f0':'#fff0ee';tr.appendChild(td);body.appendChild(tr);
+ });
+ const result=document.getElementById('validityExampleResult');result.className='callout '+(counter?'bad':'good');result.innerHTML=counter?'<strong>Argumento não válido.</strong> A tabela contém uma linha com todas as premissas verdadeiras e a conclusão falsa. Essa linha é um contraexemplo.':'<strong>Argumento válido.</strong> Não há linha com todas as premissas verdadeiras e a conclusão falsa.';
+}
+
+montarXY();renderStudents();renderQuiz();updateConnectiveCalculator();updateCarDecision();checkImplicationRow();showLaw();updatePossibilities();renderConstructionTable();loadTruthPractice();renderClassFormula();renderValidityExample();
+</script>
+</body>
+</html>
