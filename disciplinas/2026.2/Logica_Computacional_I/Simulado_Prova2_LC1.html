@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado Prova 2 - Lógica Computacional I</title>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--ink:#172033;--muted:#5d687b;--line:#dce2ea;--accent:#2457c5;--good:#16794a;--bad:#b42318}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Arial,Helvetica,sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);padding:28px 18px}
+.header-inner,main{max-width:980px;margin:auto}
+h1{font-size:clamp(24px,4vw,34px);margin:0 0 6px}
+.subtitle{color:var(--muted);margin:0}
+main{padding:22px 16px 50px}
+.toolbar{position:sticky;top:0;background:rgba(244,246,249,.96);backdrop-filter:blur(8px);padding:12px 0;z-index:5}
+.progress-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.progress{height:9px;background:#e0e6ef;border-radius:20px;overflow:hidden;flex:1;min-width:130px}
+.progress>span{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+.small{font-size:13px;color:var(--muted)}
+.section-title{font-size:21px;margin:30px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin:14px 0;box-shadow:0 2px 8px rgba(20,35,60,.035)}
+.card h3{font-size:17px;margin:0 0 12px}
+.slide{font-size:13px;color:var(--muted);font-weight:normal}
+.prompt{white-space:pre-wrap;margin:8px 0 14px}
+.options{display:grid;gap:9px}
+.option{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);border-radius:9px;padding:10px 12px;cursor:pointer}
+.option:hover{border-color:#9aafd9;background:#f8faff}
+.option input{margin-top:5px;accent-color:var(--accent)}
+textarea{width:100%;min-height:110px;resize:vertical;border:1px solid #cbd4e1;border-radius:9px;padding:12px;font:15px/1.5 Arial;color:var(--ink)}
+textarea:focus{outline:2px solid #b8c9f2;border-color:var(--accent)}
+.answer-status{margin-top:12px;padding:12px 14px;border-radius:8px;background:#f0f3f8;color:var(--ink);font-size:14px;white-space:pre-line;line-height:1.55}
+.correct{background:#eaf6ef;color:var(--good)}
+.incorrect{background:#fff0ef;color:var(--bad)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}
+button{border:0;border-radius:9px;padding:12px 18px;font-weight:700;font-size:15px;cursor:pointer}
+.primary{background:var(--accent);color:white}
+.secondary{background:#e7ebf2;color:#253047}
+button:disabled{opacity:.5;cursor:not-allowed}
+#result{display:none;background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;margin:22px 0}
+#result h2{margin-top:0}
+.result-number{font-size:34px;font-weight:700}
+.key{display:none;margin-top:12px;padding:12px;border-top:1px solid var(--line);font-size:14px;white-space:pre-line;line-height:1.6}
+.key strong{color:var(--good)}
+.note{font-size:13px;color:var(--muted)}
+@media print{body{background:#fff}.toolbar,.actions{display:none}.card{break-inside:avoid;box-shadow:none}.key{display:block}}
+</style>
+</head>
+<body>
+<header><div class="header-inner">
+<h1>Simulado da Prova 2</h1>
+<p class="subtitle">Lógica Computacional I</p>
+<p class="small">Leia cada questão com atenção. Cada questão apresenta as informações necessárias para ser respondida de forma independente. Selecione uma alternativa. Ao finalizar, você verá o resultado, a alternativa correta e uma explicação para cada questão.</p>
+</div></header>
+<main>
+<div class="toolbar">
+ <div class="progress-wrap"><span id="progressText" class="small">0 de 46 questões respondidas</span><div class="progress"><span id="progressBar"></span></div></div>
+</div>
+<div id="quiz"></div>
+<div class="actions">
+<button class="primary" id="finish">Finalizar simulado</button>
+<button class="secondary" id="reset">Limpar respostas</button>
+</div>
+<section id="result">
+<h2>Resultado</h2>
+<div class="result-number" id="score"></div>
+<p id="scoreText"></p>
+<p id="essayText"></p>
+<button class="secondary" id="toggleKey">Mostrar gabarito comentado</button>
+<div class="key" id="key"></div>
+</section>
+<p class="note">Todas as questões são de múltipla escolha e podem ser respondidas independentemente das demais. O gabarito é exibido após a finalização.</p>
+</main>
+<script>
+const sections = [
+{title:'Aula: Método Dedutivo | Material: LogMat_Slide-09-Método Dedutivo.pdf | Slides 33 e 34',items:[
+{type:'mc',q:'1. Considere o argumento:\n\nRegra: Se a Mimi for um gato, então ela é um mamífero.\nInformação: A Mimi é um gato.\n\nO que podemos concluir com base nas premissas?',opts:['A Mimi é um mamífero.','Se a Mimi for um mamífero, então ela é um gato.','Todos os mamíferos são gatos.','A Mimi não é um mamífero.'],a:0,exp:"A regra estabelece que, se Mimi é gato, então é mamífero. Como também sabemos que Mimi é gato, aplicamos Modus Ponens: a condição inicial é verdadeira e, portanto, concluímos que Mimi é mamífero."},
+{type:'mc',q:'2. Se todo algoritmo que termina produz uma saída, e o algoritmo A termina, o que podemos concluir?',opts:['O algoritmo A produz uma saída.','O algoritmo A é eficiente.','O algoritmo A não possui erros.','O algoritmo A nunca mais poderá ser executado.'],a:0,exp:"A regra afirma que todo algoritmo que termina produz uma saída. Como o algoritmo A termina, ele satisfaz a condição da regra. Logo, podemos concluir que A produz uma saída. Não há informação suficiente para concluir que ele é eficiente ou livre de erros."},
+{type:'mc',q:'3. Se chover, a rua ficará molhada. A rua ficou molhada. Podemos concluir que choveu?',opts:['Sim, necessariamente.','Não, pois existem outras causas possíveis.','Sim, porque a regra é uma implicação.','Não, porque a rua nunca fica molhada de verdade.'],a:1,exp:"Não. A implicação informa que chover é suficiente para a rua ficar molhada, mas não afirma que a chuva é a única causa. A rua pode ficar molhada por outros motivos. Concluir a chuva apenas porque a rua está molhada seria afirmar o consequente, uma inferência inválida."},
+{type:'mc',q:'4. Todos os alunos aprovados atingiram a nota mínima. Pedro foi aprovado. O que podemos concluir?',opts:['Pedro atingiu a nota mínima.','Pedro obteve a maior nota da turma.','Todos os alunos obtiveram a mesma nota.','Pedro foi aprovado por não atingir a nota mínima.'],a:0,exp:"A primeira premissa afirma que todo aluno aprovado atingiu a nota mínima. Pedro pertence ao grupo dos alunos aprovados. Portanto, pela aplicação do Modus Ponens à regra correspondente, Pedro atingiu a nota mínima."},
+{type:'mc',q:'5. Um programa executou corretamente em cinco testes. Isso prova que ele sempre executará corretamente?',opts:['Sim, cinco testes são suficientes.','Sim, se os testes forem diferentes.','Não, os testes não garantem, por si só, correção para todos os casos.','Sim, porque cinco testes cobrem todas as infinitas possibilidades de um software.'],a:2,exp:"Cinco testes corretos mostram que o programa funcionou corretamente nesses casos específicos. Eles não cobrem necessariamente todas as entradas e situações possíveis. Portanto, os testes, por si só, não provam que o programa sempre executará corretamente."}
+]},
+{title:'Aula: Argumentos e Regras de Inferência | Material: LogMat_Slide-10-Argumentos e Regras de Inferência.pdf | Slide 14',items:[
+{type:'mc',q:'Um sistema de segurança utiliza um sensor para controlar o acesso a uma sala. Considere o argumento:\n“Se o cartão de acesso for válido, a porta será liberada. O cartão de acesso é válido. Logo, a porta será liberada.”\n\n1. Identifique as duas premissas e a conclusão do argumento.',opts:['Premissas: c → p e c. Conclusão: p.','Premissas: p → c e p. Conclusão: c.','Premissas: c e p. Conclusão: c → p.','Premissas: ~c → p e c. Conclusão: ~p.'],a:0,exp:"A primeira premissa é c → p: se o cartão é válido, a porta é liberada. A segunda é c: o cartão é válido. A conclusão é p: a porta será liberada. Essa é a estrutura do Modus Ponens."},
+{type:'mc',q:'2. Considere o argumento: “Se o cartão de acesso for válido, a porta será liberada. O cartão de acesso é válido. Logo, a porta será liberada.”\n\nTraduza o argumento para a linguagem simbólica, utilizando:\n\n- (c): O cartão de acesso é válido.\n- (p): A porta será liberada.',opts:['c → p, c ⊢ p','p → c, p ⊢ c','c ∧ p ⊢ c → p','~c → p, c ⊢ ~p'],a:0,exp:"A proposição c representa “o cartão é válido” e p representa “a porta será liberada”. A frase “Se o cartão for válido, a porta será liberada” é c → p; a informação de que o cartão é válido é c; a conclusão é p. Portanto: c → p, c ⊢ p."},
+{type:'mc',q:'3. Considere o argumento: “Se o cartão de acesso for válido, a porta será liberada. O cartão de acesso é válido. Logo, a porta será liberada.”\n\nUtilize as proposições:\n- (c): O cartão de acesso é válido.\n- (p): A porta será liberada.\n\nEscreva o argumento utilizando o símbolo de consequência (⊢).',opts:['c → p, c ⊢ p','c → p ⊢ c','p → c, c ⊢ p','c, p ⊢ c → p'],a:0,exp:"O símbolo ⊢ indica que a conclusão é consequência lógica das premissas. As premissas são c → p e c; a conclusão é p. Assim, a representação completa é c → p, c ⊢ p."},
+{type:'mc',q:'4. Considere o argumento: “Se o cartão de acesso for válido, a porta será liberada. O cartão de acesso é válido. Logo, a porta será liberada.”\n\nUtilize as proposições:\n- (c): O cartão de acesso é válido.\n- (p): A porta será liberada.\n\nConstrua a condicional associada ao argumento.',opts:['[(c → p) ∧ c] → p','[(p → c) ∧ p] → c','(c → p) → c','(c ∧ p) → (c → p)'],a:0,exp:"A condicional associada a um argumento coloca a conjunção das premissas no antecedente e a conclusão no consequente. As premissas são (c → p) e c, e a conclusão é p. Portanto: [(c → p) ∧ c] → p."},
+{type:'mc',q:'5. Considere o argumento: “Se o cartão de acesso for válido, a porta será liberada. O cartão de acesso é válido. Logo, a porta será liberada.”\n\nUtilize as proposições:\n- (c): O cartão de acesso é válido.\n- (p): A porta será liberada.\n\nO argumento é válido ou inválido?',opts:['Válido, pela regra Modus Ponens.','Inválido, porque afirma o consequente.','Inválido, porque nega o antecedente.','Válido somente quando c é falsa.'],a:0,exp:"O argumento é válido porque aplica Modus Ponens: de c → p e c, conclui-se p. Não é necessário supor a conclusão; ela decorre das duas premissas."}
+]},
+{title:'Aula: Validade Mediante Tabelas-Verdade | Material: LogMat_Slide-11-Validade Mediante Tabelas Verdade.pdf | Slide 8',items:[
+{type:'mc',q:'1. Por meio do método da tabela verdade, teste a validade do argumento (a). Verifique se existe alguma linha onde todas as premissas são Verdadeiras (V) e a conclusão é Falsa (F):\n\n(a) p ↔ q, q ⊢ p',opts:['Válido: não existe linha com premissas verdadeiras e conclusão falsa.','Inválido: existe uma linha com premissas verdadeiras e conclusão falsa.','Válido somente quando p e q são falsas.','Inválido porque p ↔ q não é uma proposição.'],a:0,exp:"Para o argumento p ↔ q, q ⊢ p, considere uma linha em que as duas premissas sejam verdadeiras. Como q é verdadeira e p ↔ q é verdadeiro, p precisa ter o mesmo valor lógico de q. Logo, p é verdadeira. Não existe linha com premissas verdadeiras e conclusão falsa; o argumento é válido."},
+{type:'mc',q:'2. Por meio do método da tabela verdade, teste a validade do argumento (b). Verifique se existe alguma linha onde todas as premissas são Verdadeiras (V) e a conclusão é Falsa (F):\n\n(b) p ∨ q, ~q, p → r ⊢ r',opts:['Válido: não existe linha com premissas verdadeiras e conclusão falsa.','Inválido: existe uma linha com premissas verdadeiras e conclusão falsa.','Válido somente quando q é verdadeira.','Inválido porque a conclusão r não aparece nas premissas.'],a:0,exp:"A premissa ¬q informa que q é falsa. Como p ∨ q é verdadeira e q é falsa, p precisa ser verdadeira. Com p verdadeira e a premissa p → r verdadeira, r também precisa ser verdadeira. Portanto, não há caso com todas as premissas verdadeiras e conclusão falsa; o argumento é válido."}
+]},
+{title:'Aula: Validade Mediante Tabelas-Verdade | Material: LogMat_Slide-11-Validade Mediante Tabelas Verdade.pdf | Slide 11',items:[
+{type:'mc',q:'2. Para o argumento abaixo, encontre uma combinação de valores lógicos para p, q, r e s que torne todas as premissas Verdadeiras (V) e a conclusão Falsa (F), demonstrando assim que o argumento não é válido:\n\np ∨ ~q,   ~(~r ∧ s),   ~(~p ∧ ~s)   ⊢   ~q → r',opts:['p = V, q = F, r = F, s = F','p = F, q = V, r = V, s = V','p = V, q = V, r = F, s = V','p = F, q = F, r = V, s = F'],a:0,exp:"Na alternativa A, p = V, q = F, r = F e s = F. A primeira premissa p ∨ ¬q é verdadeira; a segunda ¬(¬r ∧ s) é verdadeira, pois ¬r é V e s é F; a terceira ¬(¬p ∧ ¬s) também é verdadeira, pois ¬p é F. Já a conclusão ¬q → r é falsa, porque ¬q é V e r é F. Assim, essa combinação demonstra a invalidade."}
+]},
+{title:'Aula: Validade Mediante Regras de Inferência | Material: LogMat_Slide-12-Validade Mediante Regras de Inferência.pdf | Slide 7',items:[
+{type:'mc',q:'Deduza as seguintes premissas à conclusão indicada:\n(1) p → q\n(2) q → r\n(3) p\n∴     r\n\nQual sequência de regras permite obter a conclusão r?',opts:['De (1) e (3), por Modus Ponens, obtemos q; de (2) e q, por Modus Ponens, obtemos r.','De (1) e (2), por Modus Tollens, obtemos p; depois concluímos r.','De (2) e (3), por silogismo disjuntivo, obtemos r.','De (1) e (3), por afirmação do consequente, obtemos r.'],a:0,exp:"Primeiro, aplicamos Modus Ponens às premissas (1) p → q e (3) p para obter q. Depois, aplicamos Modus Ponens novamente às premissas (2) q → r e à conclusão intermediária q para obter r."}
+]},
+{title:'Aula: Validade Mediante Regras de Inferência e Equivalências | Material: LogMat_Slide-13-Validade Mediante Regras de Inferência e Equivalências.pdf | Slides 15 e 17; respostas no slide 18',items:[
+{type:'mc',q:'1. Qual é a equivalência lógica da expressão p → q?',opts:['p ∨ q','~p ∨ q','p ∧ ~q','~p ∧ q'],a:1,exp:"A implicação p → q é logicamente equivalente a ¬p ∨ q. Se p for falsa, a implicação é verdadeira; se p for verdadeira, q também precisa ser verdadeira. A disjunção ¬p ∨ q representa exatamente esses casos."},
+{type:'mc',q:'2. Se temos p → q, qual é sua contrapositiva?',opts:['q → p','~p → ~q','~q → ~p','p → ~q'],a:2,exp:"A contrapositiva de p → q é ¬q → ¬p: negamos o consequente e o antecedente e trocamos suas posições. Uma implicação e sua contrapositiva são logicamente equivalentes."},
+{type:'mc',q:'3. Se conseguimos deduzir r e ~r a partir de um conjunto de premissas, o que demonstramos?',opts:['Que as premissas são inconsistentes.','Que as premissas são equivalentes.','Que o argumento é necessariamente inválido.','Que as premissas são tautologias.'],a:0,exp:"Obter r e ¬r a partir das mesmas premissas significa chegar a uma contradição. Isso mostra que o conjunto de premissas é inconsistente, pois não pode haver uma situação em que todas sejam verdadeiras simultaneamente."}
+]},
+{title:'Aula: Demonstração Condicional e Demonstração Indireta | Material: LogMat_Slide-14-Demonstração Condicional e Demonstração Indireta.pdf | Slide 20',items:[
+{type:'mc',q:'1. Na demonstração condicional, para demonstrar p → q, o que assumimos temporariamente?',opts:['~p','p','~q','p ∧ ~q'],a:1,exp:"Para demonstrar p → q pelo método da demonstração condicional, assumimos temporariamente o antecedente p. A partir dessa hipótese e das premissas disponíveis, procuramos deduzir q."},
+{type:'mc',q:'2. Na demonstração indireta de p, qual hipótese temporária utilizamos?',opts:['p','q','~p','p → q'],a:2,exp:"Para demonstrar p por demonstração indireta, assumimos temporariamente sua negação, ¬p. Se essa hipótese levar a uma contradição, concluímos que p é verdadeira."},
+{type:'mc',q:'3. Durante uma demonstração indireta, chegamos a r e ~r. O que isso significa?',opts:['A hipótese temporária levou a uma contradição.','A hipótese foi confirmada.','As duas proposições são equivalentes.','A demonstração deve continuar sem alterações.'],a:0,exp:"Em uma demonstração indireta, obter r e ¬r significa que a hipótese temporária conduziu a uma contradição. Portanto, a hipótese temporária deve ser rejeitada."}
+]},
+{title:'Aula: Sentenças Abertas | Material: LogMat_Slide-15 - Sentenças Abertas.pdf | Slides 22, 24 e 26',items:[
+{type:'mc',q:'1. O que caracteriza uma sentença aberta?',opts:['Uma frase que sempre é verdadeira.','Uma expressão que contém variável e cujo valor lógico depende dos valores atribuídos a ela.','Uma frase que sempre é falsa.','Uma expressão que não possui significado matemático.'],a:1,exp:"Uma sentença aberta contém uma ou mais variáveis cujo valor lógico depende dos valores atribuídos a elas. Sem atribuir um valor à variável ou quantificá-la, não temos ainda uma proposição com valor lógico definido."},
+{type:'mc',q:'2. Qual das alternativas apresenta uma sentença aberta?',opts:['5 é maior que 2.','Brasília é a capital do Brasil.','x + 3 = 10.','O número 8 é par.'],a:2,exp:"A expressão x + 3 = 10 contém a variável x. Seu valor lógico depende do valor atribuído a x: por exemplo, é verdadeira para x = 7 e falsa para outros valores, como x = 2. As demais alternativas já têm valor lógico definido."},
+{type:'mc',q:'3. Considere P(x): x > 5. Se x = 8, qual é o valor lógico de P(x)?',opts:['Verdadeiro.','Falso.','Não é possível determinar.','A expressão é impossível.'],a:0,exp:"Substituindo x por 8 em P(x): x > 5, obtemos 8 > 5. Essa desigualdade é verdadeira; portanto, P(8) é verdadeira."},
+{type:'mc',q:'4. O que representa o conjunto universo?',opts:['O conjunto dos elementos que tornam a sentença falsa.','O conjunto de todos os valores possíveis que podem ser atribuídos às variáveis.','O conjunto formado somente pelos números naturais.','O conjunto dos resultados de uma operação lógica.'],a:1,exp:"O conjunto universo reúne os valores que podem ser atribuídos à variável na análise da sentença aberta. A escolha desse conjunto delimita quais elementos serão considerados."},
+{type:'mc',q:'5. Considere P(x): x > 3 e o universo A = {1, 2, 3, 4, 5, 6}. Qual é o conjunto-verdade?',opts:['{1, 2, 3}','{3, 4, 5}','{4, 5, 6}','{1, 2, 3, 4, 5, 6}'],a:2,exp:"Precisamos selecionar, em A = {1, 2, 3, 4, 5, 6}, os valores maiores que 3. São 4, 5 e 6. Portanto, o conjunto-verdade é {4, 5, 6}."},
+{type:'mc',q:'6. Considere P(x): x < 0, com universo ℕ. Como classificamos essa condição?',opts:['Universal.','Possível.','Impossível.','Bicondicional.'],a:2,exp:"No universo dos números naturais, não há elemento negativo. Assim, nenhum elemento de ℕ satisfaz x < 0. A condição é impossível nesse universo e seu conjunto-verdade é vazio."},
+{type:'mc',q:'7. Considere P(x): x + 1 > x, com universo ℝ. Como classificamos essa condição?',opts:['Universal.','Possível.','Impossível.','Falsa para todos os reais.'],a:0,exp:"Para qualquer número real x, somar 1 produz um número maior que x. Portanto, x + 1 > x é verdadeira para todos os elementos de ℝ; a condição é universal."},
+{type:'mc',q:'8. Uma loja possui produtos com preços de R$ 20, R$ 35, R$ 50 e R$ 80. Considere P(x): x > 40. Qual é o conjunto-verdade?',opts:['{20, 35}','{35, 50}','{50, 80}','{20, 35, 50, 80}'],a:2,exp:"Entre os preços apresentados, apenas R$ 50 e R$ 80 são maiores que R$ 40. Logo, o conjunto-verdade é {50, 80}."},
+{type:'mc',q:'9. Considere P(x,y): x < y, com A = {1, 2} e B = {3, 4}. Qual é o conjunto-verdade em A × B?',opts:['{(1,3), (1,4), (2,3), (2,4)}','{(3,1), (4,1), (3,2), (4,2)}','{(1,2), (3,4)}','∅'],a:0,exp:"O produto cartesiano A × B contém os pares em que o primeiro elemento vem de A e o segundo de B: (1,3), (1,4), (2,3) e (2,4). Em todos eles, x < y. Portanto, os quatro pares pertencem ao conjunto-verdade."}
+]},
+{title:'Parte 1.1: Operações Lógicas sobre Sentenças Abertas | Aula: Operações Lógicas sobre Sentenças Abertas | Material: LogMat_Slide-16 - Operações Lógicas Sobre Sentenças Abertas.pdf | Slides 13, 18, 20, 25 e 30',items:[
+{type:'mc',q:'10. Determine o conjunto-verdade em A = {1, 2, …, 10}: x é par ∧ x + 2 ≤ 10.',opts:['V = {2, 4, 6, 8, 10}','V = {2, 4, 6}','V = {2, 4, 6, 8}','V = {1, 2, 3, 4, 5, 6, 7, 8}'],a:2,exp:"Primeiro, os números pares de A são 2, 4, 6, 8 e 10. A segunda condição, x + 2 ≤ 10, equivale a x ≤ 8. Como o conectivo ∧ exige que as duas condições sejam verdadeiras, retiramos o 10 e obtemos V = {2, 4, 6, 8}."},
+{type:'mc',q:'11. Determine o conjunto-verdade em A = {0, 1, 2, 3, 4, 5}: x − 3 = 0 ∨ x + 1 = 2.',opts:['V = ∅','V = {1, 3}','V = {2, 3}','V = {0, 1, 3}'],a:1,exp:"A equação x − 3 = 0 tem solução x = 3. A equação x + 1 = 2 tem solução x = 1. Como o conectivo ∨ significa OU inclusivo, reunimos os valores que satisfazem pelo menos uma das equações: V = {1, 3}."},
+{type:'mc',q:'12. Determine o conjunto-verdade em A = {0, 1, 2, 3, 4, 5}: ¬(x ≤ 3).',opts:['V = {0, 1, 2, 3}','V = {3, 4, 5}','V = {0, 1, 2}','V = {4, 5}'],a:3,exp:"A negação de x ≤ 3 é x > 3. No conjunto A = {0, 1, 2, 3, 4, 5}, os únicos valores maiores que 3 são 4 e 5. Portanto, V = {4, 5}."},
+{type:'mc',q:'13. Determine o conjunto-verdade em A = {1, 2, 3, 4}: x > 2 → x = 4.',opts:['V = {4}','V = {3, 4}','V = {1, 2, 4}','V = {1, 2, 3, 4}'],a:2,exp:"Uma condicional só é falsa quando o antecedente é verdadeiro e o consequente é falso. Isso ocorre em x = 3: 3 > 2 é verdadeiro, mas 3 = 4 é falso. Para x = 1 e x = 2, o antecedente é falso; para x = 4, as duas partes são verdadeiras. Logo, V = {1, 2, 4}."},
+{type:'mc',q:'14. Determine o conjunto-verdade em A = {0, 1, 2, 3, 4}: x > 2 ↔ x + 1 > 3.',opts:['V = {3, 4}','V = {1, 2, 3, 4}','V = {0, 1, 2}','V = {0, 1, 2, 3, 4}'],a:3,exp:"O bicondicional é verdadeiro quando as duas sentenças têm o mesmo valor lógico. Para x = 0, 1 e 2, ambas são falsas; para x = 3 e 4, ambas são verdadeiras. Portanto, todos os elementos de A satisfazem a expressão: V = {0, 1, 2, 3, 4}."}
+]},
+{title:'Parte 2: Quantificadores | Aula 17 - Quantificadores | Material: LogMat_Slide-17 - Quantificadores.pdf | Slides 4-6, 11-19 e 23-24',items:[
+{type:'mc',q:'15. Significado do quantificador universal: o que significa o símbolo ∀ na lógica matemática?',opts:['Existe pelo menos um elemento.','Para todos os elementos.','Nenhum elemento.','Existe exatamente um elemento.'],a:1,exp:"O símbolo ∀ é o quantificador universal e deve ser lido como “para todo” ou “para qualquer”. Ele afirma que a propriedade vale para todos os elementos do conjunto considerado."},
+{type:'mc',q:'16. Quantificador existencial. Considere A = {5} e P(x): x é par. Qual é o valor lógico de ∃x ∈ A, P(x)?',opts:['Verdadeiro, pois existe pelo menos um número par em A.','Falso, pois nem todos os elementos são pares.','Verdadeiro, pois todos os elementos são pares.','Falso, pois não existe nenhum número par em A.'],a:3,exp:"O conjunto A contém apenas o elemento 5. Como 5 não é par, nenhum elemento de A satisfaz P(x). Portanto, a afirmação existencial é falsa. A alternativa correta é D."},
+{type:'mc',q:'17. Quantificador universal. Considere A = {8} e P(x): x é par. Qual é o valor lógico de ∀x ∈ A, P(x)?',opts:['Falso, pois existe mais de um elemento no conjunto.','Falso, pois nem todos os elementos são pares.','Verdadeiro, pois existe pelo menos um elemento par.','Verdadeiro, pois todos os elementos são pares.'],a:3,exp:"O quantificador universal afirma que a propriedade deve ser verdadeira para todos os elementos de A. Na interpretação considerada para esta questão, todos os elementos do conjunto satisfazem P(x), pois são pares. Portanto, a afirmação universal é verdadeira."},
+{type:'mc',q:'18. Negação do universal: qual é a negação correta da afirmação ∀x ∈ A, P(x)?',opts:['∀x ∈ A, ¬P(x)','∃x ∈ A, ¬P(x)','∃x ∈ A, P(x)','∀x ∈ A, P(x)'],a:1,exp:"A negação de “para todo x, P(x)” é “existe pelo menos um x para o qual P(x) não vale”. Por isso, trocamos ∀ por ∃ e negamos a propriedade: ∃x ∈ A, ¬P(x)."},
+{type:'mc',q:'19. Negação do existencial. Considere A como o conjunto de alunos de uma turma. P(x): x entregou a atividade. Qual frase representa a negação de ∃x ∈ A, P(x)?',opts:['Todos os alunos entregaram a atividade.','Pelo menos um aluno não entregou a atividade.','Nenhum aluno entregou a atividade.','Exatamente um aluno entregou a atividade.'],a:2,exp:"A afirmação original diz que existe pelo menos um aluno que entregou a atividade. Sua negação diz que não existe nenhum aluno que a entregou, ou seja, todos os alunos não entregaram a atividade."},
+{type:'mc',q:'20. Interpretação em linguagem natural. Considere a afirmação: “Todos os computadores do laboratório possuem acesso à internet.” Considere A como o conjunto de computadores do laboratório e P(x): x possui acesso à internet. Qual expressão representa corretamente essa afirmação?',opts:['∃x ∈ A, P(x)','∀x ∈ A, P(x)','∀x ∈ A, ¬P(x)','∃x ∈ A, ¬P(x)'],a:1,exp:"A palavra “todos” indica o quantificador universal. Como P(x) representa “x possui acesso à internet”, a afirmação é representada por ∀x ∈ A, P(x)."},
+{type:'mc',q:'21. Identificação de contraexemplo. Considere A = {2, 3, 4, 5, 6, 7, 8, 9}. Qual elemento é um contraexemplo para a afirmação ∀x ∈ A, x² > 4?',opts:['x = 2', 'x = 3', 'x = 4', 'x = 5'],a:0,exp:"Para ser um contraexemplo, o elemento precisa pertencer a A e tornar falsa a propriedade x² > 4. Para x = 2, temos 2² = 4, e 4 não é maior que 4. Portanto, x = 2 é um contraexemplo."},
+{type:'mc',q:'22. Sentença existencial em linguagem natural. Considere a afirmação: “Existe pelo menos um aluno da turma que obteve nota superior a 9.” Considere A como o conjunto de alunos da turma e P(x): x obteve nota superior a 9. Qual alternativa representa corretamente essa afirmação?',opts:['Todos os alunos obtiveram nota superior a 9.','Nenhum aluno obteve nota superior a 9.','∃x ∈ A, P(x)','∀x ∈ A, P(x)'],a:2,exp:"A expressão “existe pelo menos um” corresponde ao quantificador existencial ∃. Como P(x) representa “x obteve nota superior a 9”, a tradução é ∃x ∈ A, P(x)."},
+{type:'mc',q:'23. Negação em linguagem natural. Considere a afirmação: “Todos os alunos foram aprovados.” Qual alternativa apresenta sua negação correta?',opts:['Nenhum aluno foi aprovado.','Todos os alunos foram reprovados.','Pelo menos um aluno não foi aprovado.','Pelo menos um aluno foi aprovado.'],a:2,exp:"A negação de “todos os alunos foram aprovados” é “existe pelo menos um aluno que não foi aprovado”. Basta um único aluno não satisfazer a propriedade para tornar falsa a afirmação universal."},
+{type:'mc',q:'24. Avaliação de uma afirmação existencial. Considere A = {9} e P(x): x é divisível por 2. Qual é o valor lógico de ∃x ∈ A, P(x)?',opts:['Verdadeiro, pois todos os elementos são ímpares.','Falso, pois nenhum elemento de A é divisível por 2.','Verdadeiro, pois existe pelo menos um elemento par.','Falso, pois todos os elementos são maiores que zero.'],a:1,exp:"O conjunto universo contém somente o elemento 9 (A = {9}). Como 9 não é divisível por 2, P(9) é falsa. Portanto, nenhum elemento de A satisfaz P(x). Como o quantificador existencial exige pelo menos um elemento que satisfaça a propriedade, a afirmação é falsa."},
+{type:'mc',q:'25. Variável livre e variável aparente. Considere as expressões: (I) x + 1 > x; (II) ∀x ∈ ℝ, x + 1 > x. Como a variável x é classificada, respectivamente, em cada expressão?',opts:['Livre em (I) e aparente (ou ligada) em (II).','Aparente (ou ligada) em (I) e livre em (II).','Aparente (ou ligada) nas duas expressões.','Livre nas duas expressões.'],a:0,exp:"Na expressão (I), x + 1 > x, não há quantificador associado à variável x; portanto, x é uma variável livre. Na expressão (II), ∀x ∈ ℝ, x + 1 > x, a variável x está associada ao quantificador universal ∀; portanto, é uma variável aparente (ou ligada)."},
+{type:'mc',q:'26. Existência e unicidade. Considere o conjunto universo ℝ e a equação x³ = 8. Qual representação expressa que existe exatamente um número real que satisfaz essa equação?',opts:['∀x ∈ ℝ, x³ = 8','∃x ∈ ℝ, x³ = 8','∃!x ∈ ℝ, x³ = 8','∃x ∈ ℝ, x³ ≠ 8'],a:2,exp:"O símbolo ∃! representa o quantificador de existência e unicidade: existe exatamente um elemento que satisfaz a propriedade. No conjunto dos números reais, x³ = 8 tem a solução x = 2, e não existe outro real que satisfaça a equação. Portanto, a representação correta é ∃!x ∈ ℝ, x³ = 8."}
+]}
+];
+
+const quiz=document.getElementById('quiz');
+let objectiveIndex=0;
+const objectiveQuestions=[];
+sections.forEach(section=>{
+ const heading=document.createElement('h2');heading.className='section-title';heading.textContent=section.title;quiz.appendChild(heading);
+ section.items.forEach(item=>{
+  const card=document.createElement('article');card.className='card';
+  const h=document.createElement('h3');
+  const cleanQuestion = item.q.replace(/^\d+\.\s*/, '');
+  h.textContent = 'Questão ' + (objectiveIndex + 1) + '. ' + cleanQuestion;
+  card.appendChild(h);
+  if(item.type==='essay'){
+   const p=document.createElement('div');p.className='prompt';p.textContent=item.q;card.appendChild(p);
+   const ta=document.createElement('textarea');ta.placeholder='Digite sua resposta ou resolução aqui...';ta.setAttribute('aria-label','Resposta discursiva');ta.style.minHeight=(item.min||115)+'px';card.appendChild(ta);
+   const n=document.createElement('div');n.className='small';n.textContent='Questão discursiva — avaliação manual.';card.appendChild(n);
+  }else{
+   objectiveQuestions.push(item);
+   const group=document.createElement('div');group.className='options';
+   item.opts.forEach((opt,j)=>{
+    const label=document.createElement('label');label.className='option';
+    const input=document.createElement('input');input.type='radio';input.name='q'+objectiveIndex;input.value=j;
+    input.addEventListener('change',updateProgress);
+    const span=document.createElement('span');span.textContent=String.fromCharCode(97+j)+'. '+opt;
+    label.append(input,span);group.appendChild(label);
+   });
+   card.appendChild(group);
+   const status=document.createElement('div');status.className='answer-status';status.id='status'+objectiveIndex;status.style.display='none';card.appendChild(status);
+   objectiveIndex++;
+  }
+  quiz.appendChild(card);
+ });
+});
+function updateProgress(){
+ const answered=document.querySelectorAll('.options input:checked').length;
+ document.getElementById('progressText').textContent=answered+' de '+objectiveQuestions.length+' questões respondidas';
+ document.getElementById('progressBar').style.width=(answered/objectiveQuestions.length*100)+'%';
+}
+document.getElementById('finish').addEventListener('click',()=>{
+ const answered=document.querySelectorAll('.options input:checked').length;
+ if(answered<objectiveQuestions.length && !confirm('Ainda há questões objetivas sem resposta. Deseja finalizar mesmo assim?'))return;
+ let score=0,details='';
+ objectiveQuestions.forEach((q,i)=>{
+  const selected=document.querySelector('input[name="q'+i+'"]:checked');
+  const status=document.getElementById('status'+i);
+  status.style.display='block';
+  if(selected && Number(selected.value)===q.a){score++;status.className='answer-status correct';status.textContent='Resposta registrada.';}
+  else{status.className='answer-status incorrect';status.textContent=selected?'Resposta registrada. Consulte o gabarito após a finalização.':'Não respondida.';}
+  details+=`<p>Questão ${i+1}: <strong>${String.fromCharCode(65+q.a)}</strong></p>`;
+ });
+ document.getElementById('score').textContent=score+' / '+objectiveQuestions.length;
+ document.getElementById('scoreText').textContent='Você acertou '+score+' das '+objectiveQuestions.length+' questões ('+Math.round(score/objectiveQuestions.length*100)+'%).';
+ document.getElementById('essayText').textContent='Todas as questões são objetivas e foram corrigidas automaticamente.';
+ let commented='GABARITO COMENTADO\n\n';
+ objectiveQuestions.forEach((q,i)=>{
+  const selected=document.querySelector('input[name="q'+i+'"]:checked');
+  const selectedText=selected ? String.fromCharCode(65+Number(selected.value))+') '+q.opts[Number(selected.value)] : 'Não respondida';
+  const correctText=String.fromCharCode(65+q.a)+') '+q.opts[q.a];
+  const status=document.getElementById('status'+i);
+  const verdict=(selected && Number(selected.value)===q.a) ? 'CORRETA' : 'INCORRETA';
+  status.textContent=verdict+'\nSua resposta: '+selectedText+'\nAlternativa correta: '+correctText+'\nExplicação: '+q.exp;
+  commented+='Questão '+(i+1)+' — '+correctText+'\nExplicação: '+q.exp+'\n\n';
+ });
+ document.getElementById('key').textContent=commented;
+ document.getElementById('essayText').textContent='Após a finalização, cada questão apresenta o resultado da sua resposta, a alternativa correta e a explicação correspondente.';
+ document.getElementById('result').style.display='block';
+ document.getElementById('result').scrollIntoView({behavior:'smooth'});
+ document.getElementById('finish').disabled=true;
+});
+document.getElementById('toggleKey').addEventListener('click',()=>{
+ const key=document.getElementById('key');key.style.display=key.style.display==='block'?'none':'block';
+ document.getElementById('toggleKey').textContent=key.style.display==='block'?'Ocultar gabarito comentado':'Mostrar gabarito comentado';
+});
+document.getElementById('reset').addEventListener('click',()=>{
+ if(!confirm('Deseja apagar todas as respostas e reiniciar o simulado?'))return;
+ document.querySelectorAll('input[type=radio]').forEach(x=>x.checked=false);
+ document.querySelectorAll('textarea').forEach(x=>x.value='');
+ document.querySelectorAll('.answer-status').forEach(x=>x.style.display='none');
+ document.getElementById('result').style.display='none';
+ document.getElementById('key').style.display='none';
+ document.getElementById('toggleKey').textContent='Mostrar gabarito comentado';
+ document.getElementById('finish').disabled=false;
+ updateProgress();window.scrollTo({top:0,behavior:'smooth'});
+});
+</script>
+</body>
+</html>
