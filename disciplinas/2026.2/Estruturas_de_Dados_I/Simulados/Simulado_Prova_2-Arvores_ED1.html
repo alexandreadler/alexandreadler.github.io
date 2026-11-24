@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Prova 2 - Estruturas de Dados I (Árvores)</title>
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-light: #eff6ff;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #475569;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #f0fdf4;
+            --error: #dc2626;
+            --error-bg: #fef2f2;
+            --warning: #d97706;
+            --warning-bg: #fffbeb;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-top: 6px solid var(--primary);
+            border-radius: 10px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .course-tag {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        h1 { font-size: 1.75rem; margin-bottom: 8px; color: var(--text); }
+        .subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px; }
+        .reference-note {
+            margin-top: -6px;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            border-left: 3px solid var(--primary);
+            padding: 6px 10px;
+            background: #f8fafc;
+            border-radius: 0 5px 5px 0;
+        }
+        .source-ref {
+            display: inline-block;
+            margin: -4px 0 12px 0;
+            padding: 5px 9px;
+            border-radius: 5px;
+            background: #eff6ff;
+            color: #1e40af;
+            font-size: 0.78rem;
+            line-height: 1.4;
+        }
+        .source-ref strong { font-weight: 700; }
+        .student-info {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .field-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+        .field-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+        .section-banner {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 14px 20px;
+            border-radius: 8px;
+            margin: 32px 0 16px 0;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .diagram-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .diagram-caption {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        .question-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 18px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            transition: border-color 0.2s;
+        }
+        .question-card.correct-card { border-left: 5px solid var(--success); }
+        .question-card.wrong-card { border-left: 5px solid var(--error); }
+        .question-card.unanswered-card { border-left: 5px solid var(--warning); }
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .q-num {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        .q-badge {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            display: none;
+        }
+        .q-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: var(--text);
+        }
+        .q-inline-diagram {
+            margin: 14px 0;
+            padding: 14px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .option-label:hover { background: var(--primary-light); border-color: #93c5fd; }
+        .option-label input[type="radio"] { margin-top: 4px; accent-color: var(--primary); }
+        .option-label.opt-correct {
+            background: var(--success-bg);
+            border-color: var(--success);
+            font-weight: 600;
+        }
+        .option-label.opt-wrong {
+            background: var(--error-bg);
+            border-color: var(--error);
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 16px;
+            padding: 14px 16px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            border-left: 4px solid var(--primary);
+            font-size: 0.92rem;
+            color: #1e293b;
+        }
+        .explanation-box strong { color: var(--primary); }
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 32px 0;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        button:active { transform: scale(0.99); }
+        .btn-submit { background: var(--primary); color: #fff; }
+        .btn-submit:hover { background: var(--primary-hover); }
+        .btn-reset { background: #e2e8f0; color: var(--text); }
+        .btn-reset:hover { background: #cbd5e1; }
+        #result-summary {
+            display: none;
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+        .score-big { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.9em;
+        }
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin: 30px 0 10px 0;
+        }
+        @media (max-width: 640px) {
+            .student-info { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <span class="course-tag">Estruturas de Dados I &bull; CCENS / UFES</span>
+        <h1>Simulado Prova 2: Árvores (36 Questões)</h1>
+        <p class="subtitle">Revisão sobre: Conceitos Iniciais, Árvores Binárias, Árvores Binárias de Busca (ABB) e Árvores Binárias Balanceadas (AVL). Marque todas as alternativas e clique em <strong>Enviar Respostas</strong> ao final para conferir sua pontuação e a explicação detalhada de cada questão.</p>
+        <p class="reference-note">Cada questão indica o arquivo da aula e os slides relacionados. Slide 12: conceitos; 13: árvores binárias; 14: ABB; 15: fator de balanceamento; 16: rotações simples; 17: rotações duplas.</p>
+        <div class="student-info">
+            <div class="field-group">
+                <label for="student-name">Nome do Aluno(a)</label>
+                <input type="text" id="student-name" placeholder="Digite seu nome...">
+            </div>
+            <div class="field-group">
+                <label for="student-id">Matrícula</label>
+                <input type="text" id="student-id" placeholder="Digite sua matrícula...">
+            </div>
+        </div>
+    </header>
+
+    <div id="result-summary"></div>
+
+    <form id="quiz-form">
+        <!-- PARTE 1 -->
+        <div class="section-banner">Parte 1: Conceitos Iniciais de Árvores (Questões 1 a 8)</div>
+        <div class="diagram-box">
+            <div class="diagram-caption">Analise a árvore abaixo para responder às questões 1 a 8:</div>
+            <svg width="320" height="190" viewBox="0 0 320 190">
+                <line x1="160" y1="30" x2="90" y2="95" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="160" y1="30" x2="230" y2="95" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="90" y1="95" x2="50" y2="160" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="90" y1="95" x2="130" y2="160" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="230" y1="95" x2="190" y2="160" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="230" y1="95" x2="270" y2="160" stroke="#94a3b8" stroke-width="2"/>
+                <circle cx="160" cy="30" r="18" fill="#fffbeb" stroke="#d97706" stroke-width="2.5"/>
+                <text x="160" y="35" text-anchor="middle" font-weight="bold" fill="#0f172a">A</text>
+                <circle cx="90" cy="95" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="90" y="100" text-anchor="middle" font-weight="bold" fill="#0f172a">B</text>
+                <circle cx="230" cy="95" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="230" y="100" text-anchor="middle" font-weight="bold" fill="#0f172a">C</text>
+                <circle cx="50" cy="160" r="18" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+                <text x="50" y="165" text-anchor="middle" font-weight="bold" fill="#0f172a">D</text>
+                <circle cx="130" cy="160" r="18" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+                <text x="130" y="165" text-anchor="middle" font-weight="bold" fill="#0f172a">E</text>
+                <circle cx="190" cy="160" r="18" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+                <text x="190" y="165" text-anchor="middle" font-weight="bold" fill="#0f172a">F</text>
+                <circle cx="270" cy="160" r="18" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+                <text x="270" y="165" text-anchor="middle" font-weight="bold" fill="#0f172a">G</text>
+            </svg>
+        </div>
+        <div id="part1-container"></div>
+
+        <!-- PARTE 2 -->
+        <div class="section-banner">Parte 2: Árvores Binárias e Percursos (Questões 9 a 17)</div>
+        <div id="part2-container"></div>
+
+        <!-- PARTE 3 -->
+        <div class="section-banner">Parte 3: Árvores Binárias de Busca - ABB (Questões 18 a 25)</div>
+        <div id="part3-container"></div>
+
+        <!-- PARTE 4 -->
+        <div class="section-banner">Parte 4: Árvores Binárias Balanceadas - AVL (Questões 26 a 36)</div>
+        <div id="part4-container"></div>
+
+        <div class="actions">
+            <button type="button" class="btn-submit" onclick="gradeQuiz()">Enviar Respostas e Ver Explicações</button>
+            <button type="button" class="btn-reset" onclick="resetQuiz()">Limpar Respostas</button>
+        </div>
+    </form>
+
+    <footer>
+        Prof. Alexandre Adler Cunha de Freitas &bull; Departamento de Computação, CCENS - UFES
+    </footer>
+</div>
+
+<script>
+const diagrams = {
+    abc: `<svg width="220" height="130" viewBox="0 0 220 130">
+        <line x1="110" y1="28" x2="55" y2="98" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="110" y1="28" x2="165" y2="98" stroke="#94a3b8" stroke-width="2"/>
+        <circle cx="110" cy="28" r="18" fill="#fffbeb" stroke="#d97706" stroke-width="2.5"/>
+        <text x="110" y="33" text-anchor="middle" font-weight="bold" fill="#0f172a">a</text>
+        <circle cx="55" cy="98" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="55" y="103" text-anchor="middle" font-weight="bold" fill="#0f172a">b</text>
+        <circle cx="165" cy="98" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="165" y="103" text-anchor="middle" font-weight="bold" fill="#0f172a">c</text>
+    </svg>`,
+    abcdef: `<svg width="300" height="190" viewBox="0 0 300 190">
+        <line x1="150" y1="30" x2="85" y2="95" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="150" y1="30" x2="215" y2="95" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="85" y1="95" x2="45" y2="160" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="85" y1="95" x2="125" y2="160" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="215" y1="95" x2="255" y2="160" stroke="#94a3b8" stroke-width="2"/>
+        <circle cx="150" cy="30" r="18" fill="#fffbeb" stroke="#d97706" stroke-width="2.5"/>
+        <text x="150" y="35" text-anchor="middle" font-weight="bold" fill="#0f172a">A</text>
+        <circle cx="85" cy="95" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="85" y="100" text-anchor="middle" font-weight="bold" fill="#0f172a">B</text>
+        <circle cx="215" cy="95" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="215" y="100" text-anchor="middle" font-weight="bold" fill="#0f172a">C</text>
+        <circle cx="45" cy="160" r="18" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+        <text x="45" y="165" text-anchor="middle" font-weight="bold" fill="#0f172a">D</text>
+        <circle cx="125" cy="160" r="18" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+        <text x="125" y="165" text-anchor="middle" font-weight="bold" fill="#0f172a">E</text>
+        <circle cx="255" cy="160" r="18" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+        <text x="255" y="165" text-anchor="middle" font-weight="bold" fill="#0f172a">F</text>
+    </svg>`,
+    abbSearch: `<svg width="280" height="225" viewBox="0 0 280 225">
+        <line x1="150" y1="28" x2="90" y2="85" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="150" y1="28" x2="210" y2="85" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="90" y1="85" x2="45" y2="142" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="90" y1="85" x2="135" y2="142" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="135" y1="142" x2="165" y2="198" stroke="#94a3b8" stroke-width="2"/>
+        <circle cx="150" cy="28" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="150" y="33" text-anchor="middle" font-weight="bold">50</text>
+        <circle cx="90" cy="85" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="90" y="90" text-anchor="middle" font-weight="bold">30</text>
+        <circle cx="210" cy="85" r="18" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+        <text x="210" y="90" text-anchor="middle" font-weight="bold">70</text>
+        <circle cx="45" cy="142" r="18" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+        <text x="45" y="147" text-anchor="middle" font-weight="bold">20</text>
+        <circle cx="135" cy="142" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="135" y="147" text-anchor="middle" font-weight="bold">40</text>
+        <circle cx="165" cy="198" r="18" fill="#fef2f2" stroke="#dc2626" stroke-width="2.5"/>
+        <text x="165" y="203" text-anchor="middle" font-weight="bold" fill="#dc2626">45</text>
+    </svg>`,
+    abbRemove: `<svg width="280" height="225" viewBox="0 0 280 225">
+        <line x1="150" y1="28" x2="90" y2="85" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="150" y1="28" x2="210" y2="85" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="90" y1="85" x2="45" y2="142" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="90" y1="85" x2="135" y2="142" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="45" y1="142" x2="75" y2="198" stroke="#94a3b8" stroke-width="2"/>
+        <circle cx="150" cy="28" r="18" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+        <text x="150" y="33" text-anchor="middle" font-weight="bold">50</text>
+        <circle cx="90" cy="85" r="18" fill="#fef2f2" stroke="#dc2626" stroke-width="2.5"/>
+        <text x="90" y="90" text-anchor="middle" font-weight="bold" fill="#dc2626">40</text>
+        <circle cx="210" cy="85" r="18" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+        <text x="210" y="90" text-anchor="middle" font-weight="bold">99</text>
+        <circle cx="45" cy="142" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="45" y="147" text-anchor="middle" font-weight="bold">10</text>
+        <circle cx="135" cy="142" r="18" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+        <text x="135" y="147" text-anchor="middle" font-weight="bold">45</text>
+        <circle cx="75" cy="198" r="18" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+        <text x="75" y="203" text-anchor="middle" font-weight="bold" fill="#16a34a">35</text>
+    </svg>`,
+    avl1a: `<svg width="320" height="225" viewBox="0 0 310 225">
+        <line x1="150" y1="28" x2="90" y2="85" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="150" y1="28" x2="210" y2="85" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="90" y1="85" x2="45" y2="142" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="90" y1="85" x2="135" y2="142" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="45" y1="142" x2="75" y2="198" stroke="#94a3b8" stroke-width="2"/>
+        <circle cx="150" cy="28" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="150" y="33" text-anchor="middle" font-weight="bold">30</text>
+        <text x="180" y="32" font-size="11" font-weight="bold" fill="#2563eb">FB: +1</text>
+        <circle cx="90" cy="85" r="18" fill="#fef2f2" stroke="#dc2626" stroke-width="2.5"/>
+        <text x="90" y="90" text-anchor="middle" font-weight="bold" fill="#dc2626">15</text>
+        <text x="115" y="89" font-size="11" font-weight="bold" fill="#dc2626">FB: +2</text>
+        <circle cx="210" cy="85" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="210" y="90" text-anchor="middle" font-weight="bold">50</text>
+        <text x="240" y="89" font-size="11" font-weight="bold" fill="#2563eb">FB: 0</text>
+        <circle cx="45" cy="142" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="45" y="147" text-anchor="middle" font-weight="bold">5</text>
+        <text x="-6" y="146" font-size="11" font-weight="bold" fill="#2563eb">FB: -1</text>
+        <circle cx="135" cy="142" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="135" y="147" text-anchor="middle" font-weight="bold">20</text>
+        <text x="160" y="146" font-size="11" font-weight="bold" fill="#2563eb">FB: 0</text>
+        <circle cx="75" cy="198" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="75" y="203" text-anchor="middle" font-weight="bold">10</text>
+        <text x="100" y="202" font-size="11" font-weight="bold" fill="#2563eb">FB: 0</text>
+    </svg>`,
+    avl1b: `<svg width="300" height="175" viewBox="0 0 300 175">
+        <line x1="150" y1="28" x2="80" y2="85" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="150" y1="28" x2="220" y2="85" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="80" y1="85" x2="40" y2="145" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="220" y1="85" x2="180" y2="145" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="220" y1="85" x2="260" y2="145" stroke="#94a3b8" stroke-width="2"/>
+        <circle cx="150" cy="28" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="150" y="33" text-anchor="middle" font-weight="bold">80</text>
+        <circle cx="80" cy="85" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="80" y="90" text-anchor="middle" font-weight="bold">40</text>
+        <circle cx="220" cy="85" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="220" y="90" text-anchor="middle" font-weight="bold">100</text>
+        <circle cx="40" cy="145" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="40" y="150" text-anchor="middle" font-weight="bold">30</text>
+        <circle cx="180" cy="145" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="180" y="150" text-anchor="middle" font-weight="bold">90</text>
+        <circle cx="260" cy="145" r="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="260" y="150" text-anchor="middle" font-weight="bold">120</text>
+    </svg>`
+};
+
+const questions = [
+    // PARTE 1: Conceitos Iniciais (1 a 8)
+    {
+        part: 1,
+        q: "1. Qual é a raiz da árvore?",
+        opts: ["a) A", "b) B", "c) E", "d) F"],
+        ans: 0,
+        exp: "A raiz é o nó no topo da hierarquia que não possui nó pai (nó A). Os nós B e C são seus filhos diretos, e E e F são folhas."
+    },
+    {
+        part: 1,
+        q: "2. Qual é o grau do nó A?",
+        opts: ["a) 1", "b) 2", "c) 3", "d) 4"],
+        ans: 1,
+        exp: "O grau de um nó corresponde ao número de filhos (subárvores) que ele possui. Como A possui dois filhos (B e C), seu grau é 2."
+    },
+    {
+        part: 1,
+        q: "3. Quais são as folhas?",
+        opts: ["a) A, B e C", "b) D, E, F e G", "c) B, C e D", "d) A e E"],
+        ans: 1,
+        exp: "Folhas (ou nós externos) são os nós de grau zero, ou seja, que não possuem filhos: D, E, F e G."
+    },
+    {
+        part: 1,
+        q: "4. Qual o comprimento do caminho A → B → D?",
+        opts: ["a) 1 aresta", "b) 2 arestas", "c) 3 arestas", "d) 4 arestas"],
+        ans: 1,
+        exp: "O comprimento de um caminho é medido pelo número de arestas percorridas: A → B (1 aresta) e B → D (1 aresta), totalizando 2 arestas."
+    },
+    {
+        part: 1,
+        q: "5. Quais nós são irmãos do nó C?",
+        opts: ["a) D e E", "b) Apenas B", "c) F e G", "d) Não tem irmãos"],
+        ans: 1,
+        exp: "Nós irmãos são aqueles que compartilham o mesmo nó pai. Como o pai de C é A, e o outro filho de A é B, apenas B é irmão de C (F e G são filhos de C)."
+    },
+    {
+        part: 1,
+        q: "6. Qual é a profundidade do nó E e a altura da árvore?",
+        opts: ["a) Profundidade 2, Altura 2", "b) Profundidade 3, Altura 3", "c) Profundidade 1, Altura 2", "d) Profundidade 2, Altura 3"],
+        ans: 0,
+        exp: "A profundidade de E é o número de arestas da raiz A até E (A → B → E = 2 arestas). A altura da árvore é a profundidade máxima entre todas as folhas, que também é 2."
+    },
+    {
+        part: 1,
+        q: "7. Quais são os nós internos desta árvore?",
+        opts: ["a) A, B e C", "b) D, E, F e G", "c) Apenas A", "d) Todos os nós"],
+        ans: 0,
+        exp: "Nós internos são todos os nós que possuem pelo menos um filho (grau ≥ 1), ou seja, os nós não-folha: A, B e C."
+    },
+    {
+        part: 1,
+        q: "8. Qual é o grau desta árvore?",
+        opts: ["a) 1", "b) 2", "c) 3", "d) 4"],
+        ans: 1,
+        exp: "O grau de uma árvore é definido como o maior grau encontrado entre todos os seus nós. Como A, B e C têm grau 2 e as folhas têm grau 0, o grau da árvore é 2."
+    },
+
+    // PARTE 2: Árvores Binárias (9 a 17)
+    {
+        part: 2,
+        q: "9. O que caracteriza uma árvore binária de forma geral?",
+        opts: [
+            "a) Todos os nós devem possuir obrigatoriamente dois filhos.",
+            "b) Cada nó pode ter, no máximo, dois filhos (zero, um ou dois).",
+            "c) Apenas as folhas da árvore podem conter ponteiros duplos.",
+            "d) O nó raiz deve sempre possuir ramificações balanceadas."
+        ],
+        ans: 1,
+        exp: "Em uma árvore binária, cada nó tem grau no máximo 2 (pode ter 0, 1 ou 2 filhos), distinguindo-se explicitamente entre subárvore esquerda (sae) e subárvore direita (sad)."
+    },
+    {
+        part: 2,
+        q: "10. Na travessia em pré-ordem (pre-order), qual é a ordem de visitação dos nós?",
+        opts: [
+            "a) Subárvore esquerda, subárvore direita, raiz.",
+            "b) Raiz, subárvore direita, subárvore esquerda.",
+            "c) Subárvore esquerda, raiz, subárvore direita.",
+            "d) Raiz, subárvore esquerda (sae), subárvore direita (sad)."
+        ],
+        ans: 3,
+        exp: "Na travessia Pré-Ordem (R-E-D), visita-se primeiro a Raiz, depois percorre-se recursivamente a subárvore esquerda (sae) e, por fim, a subárvore direita (sad)."
+    },
+    {
+        part: 2,
+        q: "11. Na travessia in-ordem (ordem simétrica), qual é a ordem de visitação?",
+        opts: [
+            "a) Subárvore esquerda, raiz, subárvore direita.",
+            "b) Raiz, subárvore esquerda, subárvore direita.",
+            "c) Subárvore direita, raiz, subárvore esquerda.",
+            "d) Subárvore esquerda, subárvore direita, raiz."
+        ],
+        ans: 0,
+        exp: "Na travessia In-Ordem / Ordem Simétrica (E-R-D), percorre-se primeiro a subárvore esquerda, visita-se a Raiz e, em seguida, a subárvore direita."
+    },
+    {
+        part: 2,
+        q: "12. Na travessia em pós-ordem (post-order), quando a raiz principal é visitada?",
+        opts: [
+            "a) No início de todo o processo recursivo.",
+            "b) Logo após visitar a subárvore esquerda.",
+            "c) Por último, após o percurso completo das subárvores esquerda e direita.",
+            "d) Apenas após a visita de todas as folhas do nível inferior."
+        ],
+        ans: 2,
+        exp: "Na travessia Pós-Ordem (E-D-R), a Raiz é sempre o último elemento a ser processado, somente após o término completo das chamadas recursivas na esquerda e na direita."
+    },
+    {
+        part: 2,
+        q: "13. Notação Textual de Árvores Binárias: Conforme visto em aula, uma árvore não vazia pode ser descrita textualmente no formato &lt;raiz sae sad&gt;, onde árvores vazias são representadas por &lt;&gt;. Qual alternativa representa corretamente a notação textual completa de uma árvore onde a é a raiz, b é filho esquerdo (sem filhos) e c é filho direito (sem filhos)?",
+        diagram: "abc",
+        opts: [
+            "a) <a<b><c>>",
+            "b) <a<b<><>><c<><>>>",
+            "c) <a, b, c>",
+            "d) <b> <a> <c>"
+        ],
+        ans: 1,
+        exp: "Cada nó não vazio segue a regra <raiz sae sad>. Como b e c são folhas, suas subárvores esquerda e direita são vazias (<>), gerando <b<><>> e <c<><>> dentro de <a ... >."
+    },
+    {
+        part: 2,
+        q: "14. Conceito de Altura de uma Árvore: A altura de uma árvore binária é definida na literatura como o comprimento (quantidade de arestas) do caminho mais longo que vai da raiz até uma das folhas. Com base nisso, se uma árvore possui apenas o nó raiz a (sem subárvores), qual é a sua altura?",
+        opts: [
+            "a) Altura igual a 1, pois possui um nó.",
+            "b) Altura igual a 0, pois o caminho da raiz até ela mesma possui zero arestas.",
+            "c) Altura igual a -1.",
+            "d) Altura indefinida, pois não há folhas."
+        ],
+        ans: 1,
+        exp: "Pela definição baseada em número de arestas, uma árvore com apenas um nó (a raiz) não possui arestas até a folha mais distante, tendo altura igual a 0 (enquanto a árvore vazia tem altura -1)."
+    },
+    {
+        part: 2,
+        q: "15. Utilize a árvore binária ilustrada abaixo para responder: Qual é a sequência exata gerada pela travessia em pré-ordem (Raiz → SAE → SAD)?",
+        diagram: "abcdef",
+        opts: [
+            "a) A, B, D, E, C, F",
+            "b) D, E, B, F, C, A",
+            "c) D, B, E, A, C, F",
+            "d) A, C, F, B, E, D"
+        ],
+        ans: 0,
+        exp: "Pré-ordem (R-E-D): visita A, vai para subárvore esquerda (visita B, depois D, depois E) e depois subárvore direita (visita C, depois F) → A, B, D, E, C, F."
+    },
+    {
+        part: 2,
+        q: "16. Utilizando a mesma árvore binária da questão anterior: Qual é a sequência exata gerada pela travessia in-ordem / ordem simétrica (SAE → Raiz → SAD)?",
+        opts: [
+            "a) D, E, B, F, C, A",
+            "b) D, B, E, A, C, F",
+            "c) A, B, D, E, C, F",
+            "d) A, B, C, D, E, F"
+        ],
+        ans: 1,
+        exp: "In-ordem (E-R-D): na subárvore esquerda de A, percorre D, raiz B, direita E; depois visita a raiz A; na subárvore direita de A, esquerda de C é vazia, visita C, depois F → D, B, E, A, C, F."
+    },
+    {
+        part: 2,
+        q: "17. Utilizando a mesma árvore binária da questão 15: Qual é a sequência exata gerada pela travessia em pós-ordem (SAE → SAD → Raiz)?",
+        opts: [
+            "a) A, C, F, B, E, D",
+            "b) D, B, E, A, C, F",
+            "c) D, E, B, F, C, A",
+            "d) F, C, E, D, B, A"
+        ],
+        ans: 2,
+        exp: "Pós-ordem (E-D-R): visita D, depois E, depois B (conclui SAE de A); depois visita F e C (conclui SAD de A); por último visita A → D, E, B, F, C, A."
+    },
+
+    // PARTE 3: ABB (18 a 25)
+    {
+        part: 3,
+        q: "18. Regra da Árvore Binária de Busca: Qual das opções a seguir define corretamente a propriedade principal que toda Árvore Binária de Busca deve respeitar para qualquer nó N?",
+        opts: [
+            "a) Todos os nós da subárvore esquerda de N devem ter chaves menores que N, e todos os nós da subárvore direita devem ter chaves maiores que N.",
+            "b) A subárvore esquerda precisa ter exatamente a mesma quantidade de nós que a subárvore direita.",
+            "c) O nó filho esquerdo é sempre maior que o pai, enquanto o nó filho direito é sempre menor.",
+            "d) Chaves pares devem ser obrigatoriamente inseridas no lado esquerdo e chaves ímpares no lado direito."
+        ],
+        ans: 0,
+        exp: "A propriedade fundamental da ABB garante que, para todo nó N, todas as chaves à esquerda são menores que N e todas as chaves à direita são maiores que N."
+    },
+    {
+        part: 3,
+        q: "19. Inserção em Árvore Vazia: Ao realizar a inserção de uma nova chave em uma Árvore Binária de Busca que se encontra completamente vazia (raiz == NULL), qual procedimento deve ser adotado?",
+        opts: [
+            "a) O elemento não pode ser inserido até que a estrutura inicial de níveis seja alocada.",
+            "b) O nó é inserido como filho esquerdo de um nó auxiliar nulo.",
+            "c) Cria-se um novo nó com a chave e faz-se o ponteiro da raiz apontar diretamente para ele (raiz = novo).",
+            "d) Deve-se obrigatoriamente inserir dois elementos simultaneamente para manter o equilíbrio da raiz."
+        ],
+        ans: 2,
+        exp: "Quando a árvore está vazia (raiz == NULL), aloca-se dinamicamente o novo nó com sae = NULL e sad = NULL, e retorna-se seu endereço para que raiz aponte para ele."
+    },
+    {
+        part: 3,
+        q: "20. Influência da Ordem de Inserção: Se inserirmos os mesmos 12 valores em uma Árvore Binária de Busca, porém em ordens totalmente opostas (por exemplo, na ordem original e depois na ordem inversa), o que ocorre com o formato final da árvore?",
+        opts: [
+            "a) A estrutura gerada será exatamente idêntica nas duas tentativas.",
+            "b) A estrutura resultante é diferente, pois a ordem de inserção determina qual chave será a raiz e a posição dos descendentes.",
+            "c) A inserção na ordem inversa fará com que a árvore se torne automaticamente balanceada.",
+            "d) O compilador rejeitará a ordem inversa por violar as regras de busca."
+        ],
+        ans: 1,
+        exp: "Em uma ABB sem balanceamento, o primeiro elemento inserido torna-se a raiz e os demais se posicionam conforme sua ordem de chegada. Alterar a sequência modifica a topologia da árvore."
+    },
+    {
+        part: 3,
+        q: "21. Algoritmo de Busca de Chave: Observe a Árvore Binária de Busca a seguir. Se executarmos o algoritmo para buscar o valor 45, qual será o caminho exato de nós visitados desde a raiz até encontrá-lo?",
+        diagram: "abbSearch",
+        opts: [
+            "a) 50 → 70 → 40 → 45",
+            "b) 50 → 30 → 40 → 45",
+            "c) 30 → 40 → 45",
+            "d) 50 → 30 → 20 → 40 → 45"
+        ],
+        ans: 1,
+        exp: "Começa na raiz 50 (45 < 50 → vai para esquerda: 30); em 30 (45 > 30 → vai para direita: 40); em 40 (45 > 40 → vai para direita: 45). Caminho: 50 → 30 → 40 → 45."
+    },
+    {
+        part: 3,
+        q: "22. Remoção de Nó Folha: Ao efetuar a operação de remoção sobre um nó que não possui nenhum filho (nó folha, grau zero), qual é o procedimento correto?",
+        opts: [
+            "a) Promover a raiz da subárvore para o seu lugar.",
+            "b) Ajustar o ponteiro correspondente do nó pai para NULL e liberar a memória do nó imediatamente.",
+            "c) Encontrar o menor elemento da subárvore direita para substituí-lo.",
+            "d) Transformar o nó em uma árvore vazia preservando seus ponteiros anteriores."
+        ],
+        ans: 1,
+        exp: "No Caso 1 de remoção (nó folha), basta atualizar o ponteiro do pai (sae ou sad) para NULL e chamar free() para liberar a memória alocada."
+    },
+    {
+        part: 3,
+        q: "23. Remoção de Nó com Apenas Um Filho: Deseja-se remover um nó N que possui exatamente um único filho (seja ele esquerdo ou direito). Como deve ser feita a reorganização dos ponteiros?",
+        opts: [
+            "a) O nó pai de N deve passar a apontar diretamente para o único filho de N, ignorando o nó N na cadeia.",
+            "b) O único filho de N deve ser removido primeiro antes que N possa ser apagado.",
+            "c) O nó N deve trocar de posição com a raiz principal da árvore.",
+            "d) É necessário rotacionar toda a subárvore atingida para a esquerda."
+        ],
+        ans: 0,
+        exp: "No Caso 2 de remoção (nó com 1 filho), o ponteiro do pai de N é redirecionado diretamente para o único filho de N, e a memória de N é liberada."
+    },
+    {
+        part: 3,
+        q: "24. Remoção de Nó com Dois Filhos: De acordo com a estratégia apresentada na disciplina para remover um nó com dois filhos, qual valor deve ser encontrado para substituir o nó removido e garantir a propriedade da ABB?",
+        opts: [
+            "a) O menor valor presente na subárvore esquerda.",
+            "b) O maior valor da subárvore esquerda (ou alternativamente, o menor valor da subárvore direita).",
+            "c) O valor médio da soma de todas as folhas do nível inferior.",
+            "d) O valor contido no nó pai do nó que está sendo removido."
+        ],
+        ans: 1,
+        exp: "Para preservar a ordenação da ABB, substitui-se a chave do nó removido pelo seu antecessor in-ordem (maior elemento da subárvore esquerda) ou sucessor in-ordem (menor elemento da subárvore direita)."
+    },
+    {
+        part: 3,
+        q: "25. Análise de Remoção: Considere a remoção do nó 40 (que possui dois filhos: 10 e 45). Seguindo a regra descrita na disciplina, encontramos o maior valor da sua subárvore esquerda para substituição. Qual chave assumirá a posição ocupada anteriormente pelo nó 40 após a conclusão da remoção?",
+        diagram: "abbRemove",
+        opts: [
+            "a) O nó 10.",
+            "b) O nó 45.",
+            "c) O nó 35 (que é o maior valor presente na subárvore esquerda de 40).",
+            "d) O nó 99."
+        ],
+        ans: 2,
+        exp: "A subárvore esquerda de 40 contém os nós 10 e 35. O maior valor entre eles é o 35, que copia sua chave para o lugar do 40 e tem seu nó original removido."
+    },
+
+    // PARTE 4: AVL (26 a 36)
+    {
+        part: 4,
+        q: "26. Exercício 1.a) Sequência: [30, 15, 50, 5, 10, 20]. Sobre o balanceamento e os Fatores de Balanceamento (FB = altura(SAE) - altura(SAD)) desta árvore, assinale a opção correta:",
+        diagram: "avl1a",
+        opts: [
+            "a) É uma árvore AVL válida, pois todos os nós têm FB igual a 0 ou 1.",
+            "b) Não é uma AVL; o nó 15 está desbalanceado com FB = +2.",
+            "c) Não é uma AVL; o nó raiz (30) está desbalanceado com FB = -2.",
+            "d) É uma AVL válida, porém o nó 5 necessita de rotação simples."
+        ],
+        ans: 1,
+        exp: "Para o nó 15, a subárvore esquerda (nós 5 e 10) tem altura 2 (ou 1 contando arestas, enquanto a direita tem 1 nó / altura 0), gerando FB = +2. Como |FB| > 1, a árvore não é AVL."
+    },
+    {
+        part: 4,
+        q: "27. Exercício 1.b) Sequência: [80, 40, 100, 120, 90, 30]. Analise a estrutura gerada e selecione a afirmação correta:",
+        diagram: "avl1b",
+        opts: [
+            "a) A árvore é uma AVL; todos os nós possuem FB (-1, 0, 1) e nenhum está desbalanceado.",
+            "b) O nó 80 está desbalanceado com FB = +2.",
+            "c) O nó 100 está desbalanceado com FB = -2.",
+            "d) A árvore não é AVL pois o nó 40 tem FB = +2."
+        ],
+        ans: 0,
+        exp: "Calculando os FBs: folhas (30, 90, 120) têm FB = 0; nó 100 tem FB = 0; nó 40 tem FB = +1 (SAE altura 1, SAD vazia); raiz 80 tem FB = 0 (ambas subárvores com mesma altura). Todos estão em {-1, 0, +1}."
+    },
+    {
+        part: 4,
+        q: "28. Exercício 1.c) Sequência: [10, 50, 4, 90, 20, 8]. Ao inserir esta sequência em uma árvore binária de busca sem rotações, qual é o estado de balanceamento do nó 50?",
+        opts: [
+            "a) FB(50) = 0 (Balanceado)",
+            "b) FB(50) = +1 (Subárvore Esquerda: nó 20, Subárvore Direita: nó 90)",
+            "c) FB(50) = +2 (Desbalanceado à esquerda)",
+            "d) A árvore é uma AVL válida sem nós desbalanceados."
+        ],
+        ans: 0,
+        exp: "Na inserção [10, 50, 4, 90, 20, 8], o nó 50 recebe 90 à direita e 20 à esquerda. Como ambas as subárvores de 50 possuem exatamente 1 nó (mesma altura), FB(50) = 0 (balanceado)."
+    },
+    {
+        part: 4,
+        q: "29. Exercício 2.1.a) Rotação Simples à Esquerda (Caso RR) - Sequência: [40, 50, 60]. Ao inserir 60, o nó 40 desbalanceia (FB = -2). Qual é a estrutura da árvore após a Rotação Simples à Esquerda?",
+        opts: [
+            "a) Raiz: 40 | Esquerda: NULL | Direita: 50 (com filho direito 60)",
+            "b) Raiz: 50 | Esquerda: 40 | Direita: 60",
+            "c) Raiz: 60 | Esquerda: 50 | Direita: 40",
+            "d) Raiz: 40 | Esquerda: 50 | Direita: 60"
+        ],
+        ans: 1,
+        exp: "Na Rotação Simples à Esquerda no nó 40, seu filho direito (50) sobe para assumir a raiz da subárvore, e o nó 40 desce como filho esquerdo de 50, ficando 60 à direita."
+    },
+    {
+        part: 4,
+        q: "30. Exercício 2.1.b) Rotação Simples à Esquerda - Sequência: [40, 20, 50, 60, 70]. Qual nó fica desbalanceado na inserção do 70 e qual nó passa a ser o pai de 50 e 70 após a rotação?",
+        opts: [
+            "a) Nó desbalanceado: 50 | Nova subárvore com raiz 60 (filhos 50 e 70)",
+            "b) Nó desbalanceado: 40 | Nova subárvore com raiz 60 (filhos 50 e 70)",
+            "c) Nó desbalanceado: 20 | Rotação à direita no nó 40",
+            "d) A árvore já se mantém balanceada sem necessidade de rotação."
+        ],
+        ans: 0,
+        exp: "Ao inserir 70 à direita de 60, o nó 50 (ancestral mais próximo) atinge FB = -2. A rotação simples à esquerda em 50 promove o nó 60, que passa a ter 50 como filho esquerdo e 70 como filho direito."
+    },
+    {
+        part: 4,
+        q: "31. Exercício 2.2.a) Rotação Simples à Direita (Caso LL) - Sequência: [40, 30, 20]. Ao inserir 20, o nó 40 desbalanceia com FB = +2. Qual é a estrutura obtida após a Rotação Simples à Direita a partir da raiz?",
+        opts: [
+            "a) Raiz: 30 | Filho Esquerdo: 20 | Filho Direito: 40",
+            "b) Raiz: 20 | Filho Esquerdo: 30 | Filho Direito: 40",
+            "c) Raiz: 40 | Filho Esquerdo: 20 (com filho esquerdo 30)",
+            "d) Raiz: 30 | Filho Esquerdo: 40 | Filho Direito: 20"
+        ],
+        ans: 0,
+        exp: "Na Rotação Simples à Direita no nó 40, seu filho esquerdo (30) sobe para a raiz, mantendo 20 à sua esquerda e fazendo o antigo nó 40 descer como seu filho direito."
+    },
+    {
+        part: 4,
+        q: "32. Exercício 2.2.b) Rotação Simples à Direita - Sequência: [40, 30, 20, 35]. Considerando a rotação simples à direita na raiz (40) após a inserção de 20, onde a chave 35 fica posicionada na árvore final?",
+        opts: [
+            "a) Como filho esquerdo do nó 40 (nova subárvore direita do nó 30).",
+            "b) Como filho direito do nó 20.",
+            "c) Como filho direito do nó 40.",
+            "d) Como nova raiz principal da árvore."
+        ],
+        ans: 0,
+        exp: "Após rotacionar [40, 30, 20], 30 torna-se raiz com 20 à esquerda e 40 à direita. Ao inserir 35, como 35 > 30 e 35 < 40, ele é posicionado como filho esquerdo do nó 40."
+    },
+    {
+        part: 4,
+        q: "33. Exercício 2.3.a) Rotação Dupla à Esquerda (Caso RL) - Sequência: [20, 40, 30]. Qual nó assume a raiz da árvore após a Rotação Dupla à Esquerda?",
+        opts: [
+            "a) Nó 20",
+            "b) Nó 30 (com 20 à esquerda e 40 à direita)",
+            "c) Nó 40",
+            "d) A árvore não requer rotação."
+        ],
+        ans: 1,
+        exp: "No caso RL ([20, 40, 30]), primeiro rotaciona-se 40 à direita (30 sobe, 40 vai para sua direita) e depois rotaciona-se 20 à esquerda, fazendo o nó 30 assumir a raiz com 20 à esquerda e 40 à direita."
+    },
+    {
+        part: 4,
+        q: "34. Exercício 2.3.b) Rotação Dupla à Esquerda - Sequência: [20, 40, 30, 50]. Ao inserir a sequência acima, em qual momento ocorre o desbalanceamento e como fica o nó 50 após os ajustes?",
+        opts: [
+            "a) O desbalanceamento ocorre na inserção do 30 (corrigido com Rotação Dupla); o 50 é inserido normalmente como filho direito do 40.",
+            "b) O desbalanceamento ocorre na inserção do 50, exigindo Rotação Simples.",
+            "c) O nó 50 passa a ser a nova raiz principal da árvore.",
+            "d) O nó 20 continua sendo a raiz com FB = 0."
+        ],
+        ans: 0,
+        exp: "A árvore desbalanceia logo na inserção do 30 (FB(20) = -2, FB(40) = +1), sendo corrigida imediatamente pela Rotação Dupla à Esquerda (raiz 30, filhos 20 e 40). Depois, o 50 entra sem desbalancear como filho direito do 40."
+    },
+    {
+        part: 4,
+        q: "35. Exercício 2.4.a) Rotação Dupla à Direita (Caso LR) - Sequência: [40, 20, 30]. Após a Rotação Dupla à Direita a partir da raiz, qual é a estrutura final da árvore?",
+        opts: [
+            "a) Raiz: 30 | Filho Esquerdo: 20 | Filho Direito: 40",
+            "b) Raiz: 20 | Filho Esquerdo: 30 | Filho Direito: 40",
+            "c) Raiz: 40 | Filho Esquerdo: 20 | Filho Direito: 30",
+            "d) Raiz: 30 | Filho Esquerdo: 40 | Filho Direito: 20"
+        ],
+        ans: 0,
+        exp: "No caso LR ([40, 20, 30]), aplica-se rotação simples à esquerda no filho esquerdo (20) e depois rotação simples à direita na raiz (40), resultando na raiz 30 com filho esquerdo 20 e filho direito 40."
+    },
+    {
+        part: 4,
+        q: "36. Exercício 2.4.b) Rotação Dupla à Direita - Sequência: [40, 20, 30, 50]. Onde o nó 50 é posicionado na árvore já balanceada obtida no item anterior?",
+        opts: [
+            "a) Como filho direito do nó 40.",
+            "b) Como filho esquerdo do nó 20.",
+            "c) Como filho direito do nó 20.",
+            "d) Como nova raiz da árvore no lugar do 30."
+        ],
+        ans: 0,
+        exp: "Partindo da árvore balanceada (raiz 30, esquerda 20, direita 40), ao inserir 50, como 50 > 30 e 50 > 40, ele é inserido como filho direito do nó 40."
+    }
+];
+
+const questionSources = [
+    'Slide 12 · 8.1 Conceitos · slides 5 e 9–10',
+    'Slide 12 · 8.1 Conceitos · slide 13',
+    'Slide 12 · 8.1 Conceitos · slide 14',
+    'Slide 12 · 8.1 Conceitos · slide 19',
+    'Slide 12 · 8.1 Conceitos · slide 11',
+    'Slide 12 · 8.1 Conceitos · slides 17–18',
+    'Slide 12 · 8.1 Conceitos · slide 14',
+    'Slide 12 · 8.1 Conceitos · slide 13',
+    'Slide 13 · 8.2 Árvores binárias · slides 16 e 18',
+    'Slide 13 · 8.2 Árvores binárias · slides 23–25',
+    'Slide 13 · 8.2 Árvores binárias · slides 23 e 26–27',
+    'Slide 13 · 8.2 Árvores binárias · slides 23 e 28–29',
+    'Slide 13 · 8.2 Árvores binárias · slide 21',
+    'Slide 13 · 8.2 Árvores binárias · slide 22',
+    'Slide 13 · 8.2 Árvores binárias · slides 20 e 24–25',
+    'Slide 13 · 8.2 Árvores binárias · slides 20 e 26–27',
+    'Slide 13 · 8.2 Árvores binárias · slides 20 e 28–29',
+    'Slide 14 · 8.3 Árvores binárias de pesquisa · slide 9',
+    'Slide 14 · 8.3 Árvores binárias de pesquisa · slide 16',
+    'Slide 14 · 8.3 Árvores binárias de pesquisa · slides 17–19',
+    'Slide 14 · 8.3 Árvores binárias de pesquisa · slides 11–12',
+    'Slide 14 · 8.3 Árvores binárias de pesquisa · slides 20–21',
+    'Slide 14 · 8.3 Árvores binárias de pesquisa · slide 22',
+    'Slide 14 · 8.3 Árvores binárias de pesquisa · slide 23',
+    'Slide 14 · 8.3 Árvores binárias de pesquisa · slide 23',
+    'Slide 15 · 8.4 Balanceamento (Parte 1) · slides 21 e 23–36',
+    'Slide 15 · 8.4 Balanceamento (Parte 1) · slides 21 e 23–36',
+    'Slide 15 · 8.4 Balanceamento (Parte 1) · slides 21 e 23–36',
+    'Slide 16 · 8.4 Rotações simples · slides 34–36',
+    'Slide 16 · 8.4 Rotações simples · slide 36',
+    'Slide 16 · 8.4 Rotações simples · slides 29–33',
+    'Slide 16 · 8.4 Rotações simples · slides 29 e 33',
+    'Slide 17 · 8.4 Rotações duplas · slides 14–18 e 22–24',
+    'Slide 17 · 8.4 Rotações duplas · slides 14–18 e 22–25',
+    'Slide 17 · 8.4 Rotações duplas · slides 26–30',
+    'Slide 17 · 8.4 Rotações duplas · slides 26–30'
+];
+
+function renderQuestions() {
+    questions.forEach((item, index) => {
+        const container = document.getElementById(`part${item.part}-container`);
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.id = `card-${index}`;
+
+        let diagramHTML = "";
+        if (item.diagram && diagrams[item.diagram]) {
+            diagramHTML = `<div class="q-inline-diagram">${diagrams[item.diagram]}</div>`;
+        }
+
+        const optionsHTML = item.opts.map((opt, optIdx) => `
+            <label class="option-label" id="lbl-${index}-${optIdx}">
+                <input type="radio" name="q${index}" value="${optIdx}">
+                <span>${opt.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>
+            </label>
+        `).join("");
+
+        card.innerHTML = `
+            <div class="q-header">
+                <span class="q-num">Questão ${index + 1} de ${questions.length}</span>
+                <span class="q-badge" id="badge-${index}"></span>
+            </div>
+            <div class="q-title">${item.q}</div>
+            <div class="source-ref"><strong>Slides relacionados:</strong> ${questionSources[index]}</div>
+            ${diagramHTML}
+            <div class="options">${optionsHTML}</div>
+            <div class="explanation-box" id="exp-${index}">
+                <strong>Explicação:</strong> ${item.exp.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function gradeQuiz() {
+    let correctCount = 0;
+    let answeredCount = 0;
+
+    questions.forEach((item, index) => {
+        const card = document.getElementById(`card-${index}`);
+        const badge = document.getElementById(`badge-${index}`);
+        const expBox = document.getElementById(`exp-${index}`);
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+
+        card.classList.remove("correct-card", "wrong-card", "unanswered-card");
+        for (let i = 0; i < item.opts.length; i++) {
+            const lbl = document.getElementById(`lbl-${index}-${i}`);
+            lbl.classList.remove("opt-correct", "opt-wrong");
+        }
+
+        const correctLabel = document.getElementById(`lbl-${index}-${item.ans}`);
+        correctLabel.classList.add("opt-correct");
+
+        badge.style.display = "inline-block";
+        expBox.style.display = "block";
+
+        if (selected) {
+            answeredCount++;
+            const val = parseInt(selected.value, 10);
+            if (val === item.ans) {
+                correctCount++;
+                card.classList.add("correct-card");
+                badge.textContent = "Correta";
+                badge.style.background = "#dcfce7";
+                badge.style.color = "#166534";
+            } else {
+                card.classList.add("wrong-card");
+                document.getElementById(`lbl-${index}-${val}`).classList.add("opt-wrong");
+                badge.textContent = "Incorreta";
+                badge.style.background = "#fee2e2";
+                badge.style.color = "#991b1b";
+            }
+        } else {
+            card.classList.add("unanswered-card");
+            badge.textContent = "Não respondida";
+            badge.style.background = "#fef3c7";
+            badge.style.color = "#92400e";
+        }
+    });
+
+    const studentName = document.getElementById("student-name").value.trim();
+    const greeting = studentName ? `Resultado de <strong>${studentName}</strong>` : "Resultado do Simulado";
+    const pct = ((correctCount / questions.length) * 100).toFixed(1);
+    const nota = ((correctCount / questions.length) * 10).toFixed(2);
+
+    const summary = document.getElementById("result-summary");
+    summary.style.display = "block";
+    summary.innerHTML = `
+        <div style="font-size: 1.1rem; color: #334155;">${greeting}</div>
+        <div class="score-big">${correctCount} / ${questions.length} acertos (${pct}%)</div>
+        <div style="font-size: 1rem; color: #475569;">Nota equivalente (escala 0 a 10): <strong>${nota}</strong> &bull; Questões respondidas: ${answeredCount}/${questions.length}</div>
+        <p style="margin-top: 10px; font-size: 0.9rem; color: #64748b;">Confira abaixo o gabarito e as explicações detalhadas de todas as questões.</p>
+    `;
+    summary.scrollIntoView({ behavior: "smooth" });
+}
+
+function resetQuiz() {
+    document.getElementById("quiz-form").reset();
+    document.getElementById("result-summary").style.display = "none";
+    questions.forEach((item, index) => {
+        const card = document.getElementById(`card-${index}`);
+        const badge = document.getElementById(`badge-${index}`);
+        const expBox = document.getElementById(`exp-${index}`);
+        card.classList.remove("correct-card", "wrong-card", "unanswered-card");
+        badge.style.display = "none";
+        expBox.style.display = "none";
+        for (let i = 0; i < item.opts.length; i++) {
+            document.getElementById(`lbl-${index}-${i}`).classList.remove("opt-correct", "opt-wrong");
+        }
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+renderQuestions();
+</script>
+</body>
+</html>
