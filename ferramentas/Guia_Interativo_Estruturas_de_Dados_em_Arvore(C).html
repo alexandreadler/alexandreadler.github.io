@@ -570,6 +570,18 @@
             color: var(--text-muted);
         }
 
+        .slide-ref {
+            display: inline-block;
+            margin-top: 0.45rem;
+            padding: 0.25rem 0.65rem;
+            background: rgba(148, 163, 184, 0.12);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 5px;
+            font-size: 0.78rem;
+            color: #94a3b8;
+            font-family: monospace;
+        }
+
         footer {
             text-align: center;
             padding: 2rem;
@@ -584,6 +596,253 @@
             text-decoration: none;
         }
         footer a:hover { text-decoration: underline; }
+
+        /* ==================== RESPONSIVIDADE MOBILE ==================== */
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        main.container,
+        .card,
+        .concept-box,
+        .grid-2 > div,
+        .ide-wrapper > div,
+        .editor-container,
+        .console-container {
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        .svg-stage svg {
+            width: 100%;
+            height: auto;
+            max-width: 440px;
+            display: block;
+        }
+
+        @media (max-width: 960px) {
+            header {
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.6rem;
+            }
+
+            header h1 {
+                font-size: 1.2rem;
+                line-height: 1.3;
+            }
+
+            header p {
+                font-size: 0.85rem;
+            }
+
+            .tabs {
+                padding: 0 0.5rem;
+                gap: 0.2rem;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+
+            .tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tab-btn {
+                padding: 0.78rem 0.85rem;
+                font-size: 0.85rem;
+                flex-shrink: 0;
+            }
+
+            .container {
+                padding: 0.9rem 0.65rem;
+            }
+
+            .card {
+                padding: 0.95rem;
+                margin-bottom: 1rem;
+                border-radius: 8px;
+            }
+
+            .card h2 {
+                font-size: 1.08rem;
+                flex-wrap: wrap;
+                gap: 0.4rem;
+            }
+
+            .card h3 {
+                font-size: 0.95rem;
+            }
+
+            p.desc {
+                font-size: 0.88rem;
+            }
+
+            .concept-box {
+                padding: 0.85rem;
+                font-size: 0.87rem;
+            }
+
+            .legend-pills {
+                flex-direction: column;
+                gap: 0.4rem;
+            }
+
+            .pill {
+                width: 100%;
+                font-size: 0.82rem;
+                padding: 0.45rem 0.65rem;
+            }
+
+            .slide-ref {
+                font-size: 0.72rem;
+                padding: 0.22rem 0.5rem;
+                word-break: break-word;
+                white-space: normal;
+                max-width: 100%;
+            }
+
+            pre.code-box {
+                padding: 0.75rem;
+                font-size: 0.78rem;
+                line-height: 1.45;
+                max-width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .btn-group {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.45rem;
+                width: 100%;
+            }
+
+            .btn-group .btn {
+                width: 100%;
+                justify-content: center;
+                text-align: center;
+                padding: 0.6rem 0.55rem;
+                font-size: 0.82rem;
+                min-height: 40px;
+            }
+
+            .svg-stage {
+                min-height: 210px;
+                padding: 0.35rem;
+            }
+
+            .mem-box-container {
+                padding: 1.35rem 0.4rem 0.85rem;
+            }
+
+            .mem-node {
+                width: 100%;
+                max-width: 100%;
+                font-size: 0.76rem;
+            }
+
+            .mem-cell {
+                padding: 0.5rem 0.25rem;
+                word-break: break-word;
+            }
+
+            .step-narration,
+            .alert-warning {
+                padding: 0.75rem 0.85rem;
+                font-size: 0.86rem;
+            }
+
+            .output-strip {
+                font-size: 0.85rem;
+                padding: 0.7rem 0.8rem;
+                word-break: break-word;
+            }
+
+            .editor-toolbar {
+                padding: 0.55rem 0.75rem;
+            }
+
+            .editor-toolbar > div {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.45rem;
+            }
+
+            .editor-toolbar .btn {
+                width: 100%;
+                justify-content: center;
+                font-size: 0.8rem;
+                padding: 0.55rem 0.5rem;
+                min-height: 38px;
+            }
+
+            textarea.c-editor {
+                height: 290px;
+                font-size: 0.8rem;
+                padding: 0.75rem;
+            }
+
+            .console-screen {
+                min-height: 190px;
+                max-height: 250px;
+                font-size: 0.8rem;
+                padding: 0.75rem;
+            }
+
+            .cmd-chips {
+                padding: 0.5rem;
+                gap: 0.4rem;
+            }
+
+            .chip-btn {
+                padding: 6px 9px;
+                font-size: 0.78rem;
+            }
+
+            .console-input-bar {
+                padding: 0.5rem 0.6rem;
+                gap: 0.4rem;
+            }
+
+            .console-input-bar input {
+                min-width: 0;
+                font-size: 16px; /* Evita zoom automático no iOS/Android ao focar o input */
+            }
+
+            details.exercise-item {
+                padding: 0.75rem 0.85rem;
+            }
+
+            details.exercise-item summary {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.35rem;
+                font-size: 0.9rem;
+            }
+
+            footer {
+                padding: 1.25rem 0.85rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .btn-group {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.1rem;
+            }
+
+            .mem-node {
+                font-size: 0.72rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -600,7 +859,8 @@
     <button class="tab-btn active" onclick="openTab('tab1', this)">1. O que é um Nó e a Memória</button>
     <button class="tab-btn" onclick="openTab('tab2', this)">2. Como Percorrer a Árvore</button>
     <button class="tab-btn" onclick="openTab('tab3', this)">3. Árvore de Busca (ABB)</button>
-    <button class="tab-btn" onclick="openTab('tab4', this)">4. Praticar no Console C</button>
+    <button class="tab-btn" onclick="openTab('tab4', this)">4. Praticar no Terminal C</button>
+    <button class="tab-btn" onclick="openTab('tab5', this)">5. Árvores AVL e Rotações</button>
 </nav>
 
 <main class="container">
@@ -609,6 +869,7 @@
     <section id="tab1" class="tab-content active">
         <div class="concept-box">
             <h4>💡 Conceito: Estrutura Hierárquica e Representação em Memória</h4>
+            <div class="slide-ref">📚 Fonte: ED1_Slide-12-Parte-8-Árvores-8.1-Conceitos &amp; ED1_Slide-13-Parte-8-Árvores-8.2 Árvores binárias</div>
             <p>Na Ciência da Computação, uma árvore é uma estrutura de dados hierárquica não linear representada com o <strong>nó raiz</strong> no nível superior (nível 0) e os <strong>nós folha</strong> nas extremidades inferiores. Em C, cada <strong>nó</strong> é implementado como uma estrutura autorreferenciada (<code>struct</code>) alocada dinamicamente, composta por três campos:</p>
             <div class="legend-pills">
                 <div class="pill"><strong>info:</strong> Campo de dado que armazena a chave ou informação do nó (ex.: <code>'a'</code> ou <code>40</code>)</div>
@@ -620,7 +881,7 @@
 
         <div class="grid-2">
             <div class="card">
-                <h2>Implementação em C: Definição do Nó e Alocação Dinâmica</h2>
+                <h2>Implementação em C: Definição do Nó e Alocação Dinâmica <span class="slide-ref">Slide-13 (Parte 8.2)</span></h2>
                 <p class="desc">Abaixo definimos o tipo estruturado do nó (<code>struct no</code>) e a função auxiliar <code>criarNo</code>, que realiza a alocação dinâmica na memória <em>heap</em> via <code>malloc</code> e inicializa seus ponteiros.</p>
                 
                 <pre class="code-box" id="code-tab1">
@@ -676,6 +937,7 @@
     <section id="tab2" class="tab-content">
         <div class="concept-box">
             <h4>🧭 O que são Percursos e o que significam as siglas R - E - D?</h4>
+            <div class="slide-ref">📚 Fonte: ED1_Slide-13-Parte-8-Árvores-8.2 Árvores binárias (Percursos Pré-Ordem, In-Ordem e Pós-Ordem)</div>
             <p>Percorrer (ou caminhar em) uma árvore binária consiste em visitar sistematicamente cada um de seus nós exatamente uma vez. Como a definição da estrutura é recursiva, cada nó envolve três operações fundamentais, representadas pelas siglas:</p>
             <div class="legend-pills">
                 <div class="pill"><strong>R = Raiz:</strong> Visitar/imprimir o nó atual onde você está</div>
@@ -730,6 +992,7 @@
     <section id="tab3" class="tab-content">
         <div class="concept-box">
             <h4>🔍 Definição Formal: Árvore Binária de Busca (ABB)</h4>
+            <div class="slide-ref">📚 Fonte: ED1_Slide-14-Parte-8-Árvores-8.3 Árvores binárias de pesquisa</div>
             <p>Uma Árvore Binária de Busca é uma árvore binária cuja organização respeita a seguinte propriedade de ordenação para todo nó <em>v</em>:</p>
             <div class="legend-pills">
                 <div class="pill"><strong>Subárvore Esquerda (<code>sae</code>):</strong> Todas as chaves são estritamente <strong>menores</strong> que a chave de <em>v</em></div>
@@ -740,13 +1003,13 @@
 
         <div class="grid-2">
             <div class="card">
-                <h2>Como funciona cada operação em C</h2>
-                <p class="desc">Clique nos botões abaixo para ver o código em C e a explicação de como o algoritmo toma decisões:</p>
+                <h2>1. Algoritmo em C por Operação</h2>
+                <p class="desc">Selecione a operação abaixo para visualizar o código em C e sincronizar o simulador visual ao lado:</p>
                 
                 <div class="btn-group">
-                    <button class="btn" id="btn-bst-busca" onclick="showBstCode('busca')">1. Buscar Número</button>
-                    <button class="btn btn-secondary" id="btn-bst-insercao" onclick="showBstCode('insercao')">2. Inserir Número</button>
-                    <button class="btn btn-secondary" id="btn-bst-remocao" onclick="showBstCode('remocao')">3. Remover Número</button>
+                    <button class="btn" id="btn-bst-busca" onclick="selectBstOperation('busca')">1. Buscar Número</button>
+                    <button class="btn btn-secondary" id="btn-bst-insercao" onclick="selectBstOperation('insercao')">2. Inserir Número</button>
+                    <button class="btn btn-secondary" id="btn-bst-remocao" onclick="selectBstOperation('remocao')">3. Remover Número</button>
                 </div>
 
                 <div class="step-narration" id="bst-op-explain" style="margin-bottom: 1rem; margin-top: 0;"></div>
@@ -755,15 +1018,10 @@
             </div>
 
             <div class="card">
-                <h2>Análise dos 3 Casos de Remoção na ABB</h2>
-                <p class="desc">A remoção de um nó deve preservar a propriedade de ordenação da ABB e evitar perda de referências. Selecione cada caso estrutural abaixo:</p>
+                <h2 id="bst-visual-title">2. Simulação Visual: Busca na ABB <span class="slide-ref">Slide-14 (Parte 8.3)</span></h2>
+                <p class="desc" id="bst-visual-subtitle">Cada botão abaixo demonstra um cenário independente <strong>partindo sempre da Árvore Inicial</strong>:</p>
                 
-                <div class="btn-group" id="bst-scen-btns">
-                    <button class="btn" data-scen="original" onclick="setBstScenario('original')">Árvore Inicial</button>
-                    <button class="btn btn-secondary" data-scen="caso1" onclick="setBstScenario('caso1')">Caso 1: Apagar 45 (Folha)</button>
-                    <button class="btn btn-secondary" data-scen="caso2" onclick="setBstScenario('caso2')">Caso 2: Apagar 30 (1 Filho)</button>
-                    <button class="btn btn-secondary" data-scen="caso3" onclick="setBstScenario('caso3')">Caso 3: Apagar 40 (2 Filhos)</button>
-                </div>
+                <div class="btn-group" id="bst-scen-btns"></div>
 
                 <div class="svg-stage" id="svg-tab3-container"></div>
                 <div class="step-narration" id="bst-scenario-desc"></div>
@@ -771,10 +1029,11 @@
         </div>
     </section>
 
-    <!-- ==================== ABA 4: CONSOLE C & EXERCÍCIOS ==================== -->
+    <!-- ==================== ABA 4: TERMINAL C & EXERCÍCIOS ==================== -->
     <section id="tab4" class="tab-content">
         <div class="concept-box">
             <h4>🧪 Guia de Uso do Ambiente Experimental em C</h4>
+            <div class="slide-ref">📚 Exemplos baseados nos Slides 12 a 15 (Parte 8.1 a 8.4)</div>
             <ul>
                 <li><strong>1. Seleção do Algoritmo:</strong> Escolha um dos 4 programas de referência nos botões abaixo para carregar a implementação completa no editor.</li>
                 <li><strong>2. Execução:</strong> Clique em <strong>▶ Executar Código</strong> para validar a sintaxe e observar a saída do programa no terminal interativo.</li>
@@ -805,7 +1064,7 @@
                     <textarea id="c-code-editor" class="c-editor" spellcheck="false"></textarea>
                 </div>
 
-                <!-- Console Interativo -->
+                <!-- Terminal Interativo -->
                 <div class="console-container">
                     <div class="console-header">
                         <span>💻 Terminal Interativo</span>
@@ -836,7 +1095,7 @@
             <h2>Desafios Guiados (Clique para abrir as dicas)</h2>
             
             <details class="exercise-item">
-                <summary>Desafio 1: Descobrir quais são os nós folhas (Grau 0) <span>▼</span></summary>
+                <summary>Desafio 1: Descobrir quais são os nós folhas (Grau 0) <span class="slide-ref">Slide-12 (Parte 8.1) &amp; Slide-13 (Parte 8.2)</span></summary>
                 <div class="ex-body">
                     <p><strong>O que é uma folha?</strong> É qualquer nó que não tem filhos nem na esquerda (<code>sae == NULL</code>) nem na direita (<code>sad == NULL</code>).</p>
                     <p style="margin-top:0.5rem;"><strong>Como testar:</strong> Carregue o <em>Exemplo 1</em> acima, altere os números dentro de <code>int valores[] = {40, 10, 60, 5, 30, 50, 70};</code> e clique em <strong>Executar Código</strong> para ver quais números ficam nas pontas da árvore.</p>
@@ -844,7 +1103,7 @@
             </details>
 
             <details class="exercise-item">
-                <summary>Desafio 2: Medir a Altura da Árvore <span>▼</span></summary>
+                <summary>Desafio 2: Medir a Altura da Árvore <span class="slide-ref">Slide-12 (Parte 8.1)</span></summary>
                 <div class="ex-body">
                     <p><strong>Regra da disciplina:</strong> Uma árvore totalmente vazia vale <code>-1</code>. Uma árvore com apenas 1 nó (raiz sozinha) tem altura <code>0</code>. A cada andar que a árvore desce, somamos <code>+1</code>.</p>
                     <p style="margin-top:0.5rem;"><strong>Como testar:</strong> Carregue o <em>Exemplo 2</em>, execute e depois use o atalho <code>+ inserir 25</code> no terminal e clique em <code>altura</code> para ver se a altura aumentou.</p>
@@ -852,14 +1111,14 @@
             </details>
 
             <details class="exercise-item">
-                <summary>Desafio 3: Provar que o percurso In-Ordem ordena os dados <span>▼</span></summary>
+                <summary>Desafio 3: Provar que o percurso In-Ordem ordena os dados <span class="slide-ref">Slide-13 (Parte 8.2) &amp; Slide-14 (Parte 8.3)</span></summary>
                 <div class="ex-body">
                     <p><strong>Experimento:</strong> No <em>Exemplo 3</em>, os números <code>{47, 25, 77, 11, ...}</code> estão todos embaralhados. Ao clicar em <strong>Executar Código</strong>, a função <code>inOrdem</code> visita sempre Esquerda → Raiz → Direita, fazendo os números saírem perfeitamente ordenados do menor para o maior.</p>
                 </div>
             </details>
 
             <details class="exercise-item">
-                <summary>Desafio 4: Verificar se a árvore está equilibrada (Fator de Balanceamento AVL) <span>▼</span></summary>
+                <summary>Desafio 4: Verificar se a árvore está equilibrada (Fator de Balanceamento AVL) <span class="slide-ref">Slide-15 (Parte 8.4 - Cálculo do FB)</span></summary>
                 <div class="ex-body">
                     <p><strong>Definição de Fator de Balanceamento (FB):</strong> Para qualquer nó <em>v</em>, o fator de balanceamento é dado por <code>FB(v) = altura(v->sae) - altura(v->sad)</code>. Na condição de balanceamento AVL, todo nó deve satisfazer <code>FB(v) ∈ {-1, 0, +1}</code>; valores como <code>+2</code> ou <code>-2</code> caracterizam desbalanceamento e exigem operações de rotação.</p>
                 </div>
@@ -867,11 +1126,70 @@
         </div>
     </section>
 
+
+    <!-- ==================== ABA 5: ÁRVORES AVL E ROTAÇÕES ==================== -->
+    <section id="tab5" class="tab-content">
+        <div class="concept-box">
+            <h4>⚖️ Árvores Binárias Balanceadas (AVL) e Operações de Rotação</h4>
+            <div class="slide-ref">📚 Fonte: ED1_Slide-15, Slide-16 &amp; Slide-17 (Parte 8.4 - Árvores binárias balanceadas)</div>
+            <p>Uma <strong>Árvore AVL</strong> (criada por Adelson-Velsky e Landis, 1962) é uma Árvore Binária de Busca que se auto-equilibra após inserções ou remoções para evitar que a estrutura degenere em uma lista encadeada e perca eficiência nas buscas.</p>
+            <div class="legend-pills">
+                <div class="pill"><strong>Fator de Balanceamento (FB):</strong> <code>FB(v) = altura(SAE) - altura(SAD)</code> (onde subárvore vazia = <code>-1</code> e nó folha = <code>0</code>)</div>
+                <div class="pill"><strong>Nó Equilibrado (AVL):</strong> <code>FB(v) ∈ {-1, 0, +1}</code></div>
+                <div class="pill"><strong>Nó Desbalanceado (Crítico):</strong> <code>FB(v) = +2</code> (pesado à esquerda) ou <code>FB(v) = -2</code> (pesado à direita)</div>
+            </div>
+            <ul>
+                <li><strong>Rotação Simples à Direita (Caso LL - Left-Left):</strong> Ocorre quando o nó crítico tem <code>FB = +2</code> e seu filho esquerdo tem <code>FB &ge; 0</code> (crescimento esquerda-esquerda).</li>
+                <li><strong>Rotação Simples à Esquerda (Caso RR - Right-Right):</strong> Ocorre quando o nó crítico tem <code>FB = -2</code> e seu filho direito tem <code>FB &le; 0</code> (crescimento direita-direita).</li>
+                <li><strong>Rotação Dupla à Direita (Caso LR - Left-Right):</strong> Ocorre quando o nó crítico tem <code>FB = +2</code> e seu filho esquerdo tem <code>FB = -1</code>. Aplica-se rotação simples à esquerda no filho esquerdo, seguida de rotação simples à direita no nó crítico.</li>
+                <li><strong>Rotação Dupla à Esquerda (Caso RL - Right-Left):</strong> Ocorre quando o nó crítico tem <code>FB = -2</code> e seu filho direito tem <code>FB = +1</code>. Aplica-se rotação simples à direita no filho direito, seguida de rotação simples à esquerda no nó crítico.</li>
+            </ul>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h2>1. Implementação em C das 4 Rotações AVL <span class="slide-ref">Slides 16 e 17 (Parte 8.4)</span></h2>
+                <p class="desc">Selecione um dos 4 casos de desequilíbrio para inspecionar o algoritmo de rotação correspondente em C e sincronizar o simulador passo a passo ao lado:</p>
+
+                <div class="btn-group">
+                    <button class="btn" id="btn-avl-ll" onclick="selectAvlCase('ll')">1. Simples Direita (LL)</button>
+                    <button class="btn btn-secondary" id="btn-avl-rr" onclick="selectAvlCase('rr')">2. Simples Esquerda (RR)</button>
+                    <button class="btn btn-secondary" id="btn-avl-lr" onclick="selectAvlCase('lr')">3. Dupla Direita (LR)</button>
+                    <button class="btn btn-secondary" id="btn-avl-rl" onclick="selectAvlCase('rl')">4. Dupla Esquerda (RL)</button>
+                </div>
+
+                <div class="step-narration" id="avl-case-explain" style="margin-bottom: 1rem; margin-top: 0;"></div>
+
+                <pre class="code-box" id="avl-code-box"></pre>
+
+                <div class="alert-warning">
+                    <strong>Regra de Ouro das Rotações:</strong> Toda rotação reorganiza apenas os ponteiros locais (<code>sae</code> e <code>sad</code>) em tempo constante <code>O(1)</code> e preserva integralmente a propriedade de ordenação da Árvore Binária de Busca (valores menores à esquerda, maiores à direita).
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 id="avl-visual-title">2. Simulação Visual Passo a Passo <span class="slide-ref">Slide-16 (Parte 8.4)</span></h2>
+                <p class="desc">Acompanhe cada etapa da transformação da árvore. Cada nó exibe <code>chave</code> e, logo abaixo, <code>h | FB</code> (Altura e Fator de Balanceamento):</p>
+
+                <div class="btn-group" id="avl-step-btns"></div>
+
+                <div class="svg-stage" id="svg-tab5-container"></div>
+
+                <div class="step-narration" id="avl-step-narration"></div>
+
+                <div class="output-strip" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+                    <span id="avl-status-summary">Status AVL: Aguardando etapa...</span>
+                    <a href="visualizador_avl_altura_fator_balanceamento.html" target="_blank" class="btn btn-amber" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; text-decoration:none;">🔗 Abrir Visualizador AVL Completo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </main>
 
 <footer>
     Guia Interativo • Estruturas de Dados I (DCOMP / UFES) • 
-    <a href="https://alexandreadler.github.io/ferramentas/Visualizador_Arvore_AVL.html" target="_blank">🔗 Abrir Visualizador Interativo de Árvores AVL</a>
+    <a href="visualizador_avl_altura_fator_balanceamento.html" target="_blank">🔗 Abrir Visualizador Interativo de Árvores AVL</a>
     <br>
     Este guia está em desenvolvimento e pode apresentar erros ou comportamentos inesperados durante as operações. Os resultados devem ser conferidos antes de serem utilizados para fins acadêmicos.
     <br>
@@ -883,6 +1201,7 @@
   </p>
     <span class="last-updated">Última atualização: <time datetime="2026-11-24">24/11/2026</time>.</span>
 </footer>
+
 
 <script>
     /* ==================== NAVEGAÇÃO ENTRE ABAS ==================== */
@@ -968,7 +1287,7 @@
             </div>
         `;
 
-        let svg = `<svg width="440" height="245" viewBox="0 0 440 245">`;
+        let svg = `<svg width="100%" height="245" viewBox="0 0 440 245" preserveAspectRatio="xMidYMid meet">`;
         data.edges.forEach(e => {
             svg += `<line x1="${e.x1}" y1="${e.y1}" x2="${e.x2}" y2="${e.y2}" stroke="#64748b" stroke-width="2.5"/>`;
         });
@@ -1106,7 +1425,7 @@
             `;
         }
 
-        let svg = `<svg width="440" height="295" viewBox="0 0 440 295">`;
+        let svg = `<svg width="100%" height="295" viewBox="0 0 440 295" preserveAspectRatio="xMidYMid meet">`;
         traversalEdges.forEach(([u, v]) => {
             const n1 = traversalNodes.find(n => n.id === u);
             const n2 = traversalNodes.find(n => n.id === v);
@@ -1127,9 +1446,19 @@
     }
 
     /* ==================== ABA 3: ÁRVORE BINÁRIA DE BUSCA (ABB) ==================== */
-    const bstOps = {
+    const baseBstNodes = [
+        {id:40, x:220, y:38},
+        {id:10, x:130, y:102}, {id:60, x:310, y:102},
+        {id:5, x:75, y:168}, {id:30, x:175, y:168}, {id:50, x:265, y:168}, {id:70, x:365, y:168},
+        {id:25, x:145, y:232}, {id:35, x:205, y:232}, {id:45, x:240, y:232}
+    ];
+    const baseBstEdges = [[40,10],[40,60],[10,5],[10,30],[60,50],[60,70],[30,25],[30,35],[50,45]];
+
+    const bstOperationsData = {
         busca: {
-            explain: "Como funciona a Busca: Comparamos o número procurado com a raiz. Se for menor, descartamos todo o lado direito e vamos só para a esquerda (sae). Se for maior, vamos só para a direita (sad).",
+            visualTitle: '2. Simulação Visual: Busca na ABB <span class="slide-ref">Slide-14 (Parte 8.3)</span>',
+            visualSubtitle: 'Acompanhe o caminho de comparações (< ou >) a partir da raiz 40. Cada cenário parte da Árvore Inicial:',
+            explain: "Como funciona a Busca: Comparamos a chave procurada com o nó atual. Se for menor, descartamos toda a subárvore direita e descemos apenas à esquerda (sae). Se for maior, descemos apenas à direita (sad).",
             code: `No* <span class="fn">buscar</span>(No* raiz, <span class="tp">int</span> chave) {
     <span class="cm">// Se chegou no vazio (não achou) ou achou o número:</span>
     <span class="kw">if</span> (raiz == NULL || raiz->info == chave)
@@ -1141,9 +1470,47 @@
 
     <span class="cm">// Caso contrário, procura só na direita:</span>
     <span class="kw">return</span> <span class="fn">buscar</span>(raiz->sad, chave);
-}`
+}`,
+            defaultScenario: 'busca_45',
+            scenarios: {
+                busca_45: {
+                    btnLabel: 'Buscar 45 (Sucesso)',
+                    desc: "Busca pelo 45 (encontrado em 4 passos): 45 > 40 (vai para direita: 60) → 45 < 60 (vai para esquerda: 50) → 45 < 50 (vai para esquerda: 45) → 45 == 45 (Encontrado!).",
+                    nodes: baseBstNodes.map(n => ({
+                        ...n,
+                        state: n.id === 45 ? 'found' : ([40, 60, 50].includes(n.id) ? 'path' : 'normal')
+                    })),
+                    edges: baseBstEdges,
+                    highlightEdges: [[40,60],[60,50],[50,45]]
+                },
+                busca_25: {
+                    btnLabel: 'Buscar 25 (Sucesso)',
+                    desc: "Busca pelo 25 (encontrado em 4 passos): 25 < 40 (esquerda: 10) → 25 > 10 (direita: 30) → 25 < 30 (esquerda: 25) → 25 == 25 (Encontrado!).",
+                    nodes: baseBstNodes.map(n => ({
+                        ...n,
+                        state: n.id === 25 ? 'found' : ([40, 10, 30].includes(n.id) ? 'path' : 'normal')
+                    })),
+                    edges: baseBstEdges,
+                    highlightEdges: [[40,10],[10,30],[30,25]]
+                },
+                busca_55: {
+                    btnLabel: 'Buscar 55 (Não existe / NULL)',
+                    desc: "Busca pelo 55 (retorna NULL): 55 > 40 (direita: 60) → 55 < 60 (esquerda: 50) → 55 > 50 (tenta direita do 50, que é NULL). O algoritmo encerra retornando NULL.",
+                    nodes: [
+                        ...baseBstNodes.map(n => ({
+                            ...n,
+                            state: [40, 60, 50].includes(n.id) ? 'path' : 'normal'
+                        })),
+                        {id: 'NULL', x: 295, y: 232, state: 'notfound'}
+                    ],
+                    edges: [...baseBstEdges, [50, 'NULL']],
+                    highlightEdges: [[40,60],[60,50],[50,'NULL']]
+                }
+            }
         },
         insercao: {
+            visualTitle: '2. Simulação Visual: Inserção na ABB <span class="slide-ref">Slide-14 (Parte 8.3)</span>',
+            visualSubtitle: 'Todo novo nó é sempre inserido como folha em um ponteiro NULL. Cada botão parte da Árvore Inicial:',
             explain: "Operação de Inserção: Percorremos a árvore recursivamente comparando a chave com cada nó (valores menores seguem para sae; maiores, para sad) até atingir um ponteiro NULL, ponto onde o novo nó é alocado.",
             code: `No* <span class="fn">inserir</span>(No* raiz, <span class="tp">int</span> valor) {
     <span class="cm">// Achou um espaço vazio! Cria a caixinha aqui:</span>
@@ -1160,9 +1527,60 @@
         raiz->sad = <span class="fn">inserir</span>(raiz->sad, valor);
 
     <span class="kw">return</span> raiz;
-}`
+}`,
+            defaultScenario: 'ins_original',
+            scenarios: {
+                ins_original: {
+                    btnLabel: 'Árvore Inicial',
+                    desc: "Árvore Inicial antes da inserção: Qualquer novo elemento será comparado a partir da raiz 40 até encontrar uma posição livre (NULL).",
+                    nodes: baseBstNodes.map(n => ({...n, state: 'normal'})),
+                    edges: baseBstEdges,
+                    highlightEdges: []
+                },
+                ins_55: {
+                    btnLabel: 'Inserir 55',
+                    desc: "Inserindo 55 a partir da Árvore Inicial: 55 > 40 (direita: 60) → 55 < 60 (esquerda: 50) → 55 > 50 (direita de 50 está NULL). O novo nó 55 é alocado como filho direito de 50!",
+                    nodes: [
+                        ...baseBstNodes.map(n => ({
+                            ...n,
+                            state: [40, 60, 50].includes(n.id) ? 'path' : 'normal'
+                        })),
+                        {id: 55, x: 295, y: 232, state: 'found'}
+                    ],
+                    edges: [...baseBstEdges, [50, 55]],
+                    highlightEdges: [[40,60],[60,50],[50,55]]
+                },
+                ins_20: {
+                    btnLabel: 'Inserir 20',
+                    desc: "Inserindo 20 a partir da Árvore Inicial: 20 < 40 (esquerda: 10) → 20 > 10 (direita: 30) → 20 < 30 (esquerda: 25) → 20 < 25 (esquerda de 25 está NULL). Alocado à esquerda de 25!",
+                    nodes: [
+                        ...baseBstNodes.map(n => ({
+                            ...n,
+                            state: [40, 10, 30, 25].includes(n.id) ? 'path' : 'normal'
+                        })),
+                        {id: 20, x: 112, y: 268, state: 'found'}
+                    ],
+                    edges: [...baseBstEdges, [25, 20]],
+                    highlightEdges: [[40,10],[10,30],[30,25],[25,20]]
+                },
+                ins_80: {
+                    btnLabel: 'Inserir 80',
+                    desc: "Inserindo 80 a partir da Árvore Inicial: 80 > 40 (direita: 60) → 80 > 60 (direita: 70) → 80 > 70 (direita de 70 está NULL). O novo nó 80 é alocado como filho direito de 70!",
+                    nodes: [
+                        ...baseBstNodes.map(n => ({
+                            ...n,
+                            state: [40, 60, 70].includes(n.id) ? 'path' : 'normal'
+                        })),
+                        {id: 80, x: 405, y: 232, state: 'found'}
+                    ],
+                    edges: [...baseBstEdges, [70, 80]],
+                    highlightEdges: [[40,60],[60,70],[70,80]]
+                }
+            }
         },
         remocao: {
+            visualTitle: '2. Simulação Visual: 3 Casos de Remoção na ABB <span class="slide-ref">Slide-14 (Parte 8.3)</span>',
+            visualSubtitle: 'Cada botão abaixo simula uma remoção independente <strong>partindo sempre da Árvore Inicial</strong>:',
             explain: "Como funciona a Remoção: Existem 3 situações: (1) Se o nó não tem filhos, apenas apagamos; (2) Se tem 1 filho, o avô adota o neto; (3) Se tem 2 filhos, promovemos o maior número do lado esquerdo para o lugar dele.",
             code: `No* <span class="fn">remover</span>(No* raiz, <span class="tp">int</span> valor) {
     <span class="kw">if</span> (raiz == NULL) <span class="kw">return</span> NULL;
@@ -1180,74 +1598,121 @@
         raiz->sae = <span class="fn">remover</span>(raiz->sae, aux->info); <span class="cm">// Apaga a cópia</span>
     }
     <span class="kw">return</span> raiz;
-}`
+}`,
+            defaultScenario: 'rem_original',
+            scenarios: {
+                rem_original: {
+                    btnLabel: 'Árvore Inicial',
+                    desc: "Árvore Inicial (ABB válida): À esquerda de 40 todos são menores (10, 5, 30, 25, 35) e à direita todos são maiores (60, 50, 45, 70). Cada caso abaixo parte desta mesma árvore.",
+                    nodes: baseBstNodes.map(n => ({...n, state: 'normal'})),
+                    edges: baseBstEdges,
+                    highlightEdges: []
+                },
+                rem_caso1: {
+                    btnLabel: 'Caso 1: Apagar 45 (Folha)',
+                    desc: "Caso 1 - Apagar Folha (45) a partir da Árvore Inicial: Como o 45 não possui filhos, ele é removido diretamente da memória e o ponteiro esquerdo de 50 passa a apontar para NULL.",
+                    nodes: [
+                        {id:40, x:220, y:38, state:'normal'},
+                        {id:10, x:130, y:102, state:'normal'}, {id:60, x:310, y:102, state:'normal'},
+                        {id:5, x:75, y:168, state:'normal'}, {id:30, x:175, y:168, state:'normal'}, {id:50, x:265, y:168, state:'path'}, {id:70, x:365, y:168, state:'normal'},
+                        {id:25, x:145, y:232, state:'normal'}, {id:35, x:205, y:232, state:'normal'}
+                    ],
+                    edges: [[40,10],[40,60],[10,5],[10,30],[60,50],[60,70],[30,25],[30,35]],
+                    highlightEdges: []
+                },
+                rem_caso2: {
+                    btnLabel: 'Caso 2: Apagar 50 (1 Filho)',
+                    desc: "Caso 2 - Apagar Nó com 1 Filho (50) a partir da Árvore Inicial: Na árvore inicial, o 50 possui apenas o filho esquerdo (45). Ao remover o 50, o pai (60) adota diretamente o 45 (60->sae = 45).",
+                    nodes: [
+                        {id:40, x:220, y:38, state:'normal'},
+                        {id:10, x:130, y:102, state:'normal'}, {id:60, x:310, y:102, state:'path'},
+                        {id:5, x:75, y:168, state:'normal'}, {id:30, x:175, y:168, state:'normal'}, {id:45, x:265, y:168, state:'found'}, {id:70, x:365, y:168, state:'normal'},
+                        {id:25, x:145, y:232, state:'normal'}, {id:35, x:205, y:232, state:'normal'}
+                    ],
+                    edges: [[40,10],[40,60],[10,5],[10,30],[60,45],[60,70],[30,25],[30,35]],
+                    highlightEdges: [[60,45]]
+                },
+                rem_caso3: {
+                    btnLabel: 'Caso 3: Apagar 40 (2 Filhos)',
+                    desc: "Caso 3 - Apagar Raiz com 2 Filhos (40) a partir da Árvore Inicial: Buscamos o maior valor da subárvore esquerda (35) para substituir o 40 na raiz, removendo o 35 de sua antiga posição sob o 30.",
+                    nodes: [
+                        {id:35, x:220, y:38, state:'found'},
+                        {id:10, x:130, y:102, state:'normal'}, {id:60, x:310, y:102, state:'normal'},
+                        {id:5, x:75, y:168, state:'normal'}, {id:30, x:175, y:168, state:'normal'}, {id:50, x:265, y:168, state:'normal'}, {id:70, x:365, y:168, state:'normal'},
+                        {id:25, x:145, y:232, state:'normal'}, {id:45, x:240, y:232, state:'normal'}
+                    ],
+                    edges: [[35,10],[35,60],[10,5],[10,30],[60,50],[60,70],[30,25],[50,45]],
+                    highlightEdges: []
+                }
+            }
         }
     };
 
-    function showBstCode(op) {
+    let currentBstOp = 'busca';
+
+    function selectBstOperation(op) {
+        currentBstOp = op;
         ['busca', 'insercao', 'remocao'].forEach(k => {
             document.getElementById('btn-bst-' + k).className = (k === op) ? 'btn' : 'btn btn-secondary';
         });
-        document.getElementById('bst-op-explain').textContent = bstOps[op].explain;
-        document.getElementById('bst-code-box').innerHTML = bstOps[op].code;
+
+        const opData = bstOperationsData[op];
+        document.getElementById('bst-op-explain').textContent = opData.explain;
+        document.getElementById('bst-code-box').innerHTML = opData.code;
+        document.getElementById('bst-visual-title').innerHTML = opData.visualTitle;
+        document.getElementById('bst-visual-subtitle').innerHTML = opData.visualSubtitle;
+
+        const btnGroup = document.getElementById('bst-scen-btns');
+        btnGroup.innerHTML = Object.entries(opData.scenarios).map(([scenKey, scenObj]) => `
+            <button class="btn btn-secondary" data-scen="${scenKey}" onclick="setBstScenario('${scenKey}')">${scenObj.btnLabel}</button>
+        `).join('');
+
+        setBstScenario(opData.defaultScenario);
     }
 
-    const bstScenarios = {
-        original: {
-            desc: "Árvore Inicial: Observe que à esquerda do 40 todos são menores (10, 5, 30, 35) e à direita todos são maiores (60, 50, 70, 45).",
-            nodes: [
-                {id:40, x:220, y:40}, {id:10, x:130, y:105}, {id:60, x:310, y:105},
-                {id:5, x:80, y:175}, {id:30, x:175, y:175}, {id:50, x:265, y:175}, {id:70, x:360, y:175},
-                {id:35, x:150, y:235}, {id:45, x:205, y:235}
-            ],
-            edges: [[40,10],[40,60],[10,5],[10,30],[60,50],[60,70],[30,35],[30,45]]
-        },
-        caso1: {
-            desc: "Caso 1 (Apagar Folha 45): Como o 45 não tem nenhum filho pendurado nele, basta apagar o 45 da memória e o pai (30) passa a apontar para NULL.",
-            nodes: [
-                {id:40, x:220, y:40}, {id:10, x:130, y:105}, {id:60, x:310, y:105},
-                {id:5, x:80, y:175}, {id:30, x:175, y:175, highlight:true}, {id:50, x:265, y:175}, {id:70, x:360, y:175},
-                {id:35, x:150, y:235}
-            ],
-            edges: [[40,10],[40,60],[10,5],[10,30],[60,50],[60,70],[30,35]]
-        },
-        caso2: {
-            desc: "Caso 2 (Apagar nó com 1 Filho - 30): Se apagarmos o 30, o filho dele (45) ficaria órfão. Então o avô (10) adota diretamente o 45!",
-            nodes: [
-                {id:40, x:220, y:40}, {id:10, x:130, y:105, highlight:true}, {id:60, x:310, y:105},
-                {id:5, x:80, y:175}, {id:45, x:175, y:175, highlight:true}, {id:50, x:265, y:175}, {id:70, x:360, y:175}
-            ],
-            edges: [[40,10],[40,60],[10,5],[10,45],[60,50],[60,70]]
-        },
-        caso3: {
-            desc: "Caso 3 (Apagar Raiz 40 com 2 Filhos): Buscamos o maior número do lado esquerdo (35) para assumir o posto de raiz no lugar do 40, mantendo toda a árvore ordenada!",
-            nodes: [
-                {id:35, x:220, y:40, highlight:true}, {id:10, x:130, y:105}, {id:60, x:310, y:105},
-                {id:5, x:80, y:175}, {id:30, x:175, y:175}, {id:50, x:265, y:175}, {id:70, x:360, y:175},
-                {id:45, x:205, y:235}
-            ],
-            edges: [[35,10],[35,60],[10,5],[10,30],[60,50],[60,70],[30,45]]
-        }
-    };
+    function setBstScenario(scenKey) {
+        const opData = bstOperationsData[currentBstOp];
+        const sc = opData.scenarios[scenKey];
+        if (!sc) return;
 
-    function setBstScenario(key) {
         document.querySelectorAll('#bst-scen-btns button').forEach(b => {
-            b.className = (b.dataset.scen === key) ? 'btn' : 'btn btn-secondary';
+            b.className = (b.dataset.scen === scenKey) ? 'btn' : 'btn btn-secondary';
         });
-        const sc = bstScenarios[key];
+
         document.getElementById('bst-scenario-desc').textContent = sc.desc;
-        let svg = `<svg width="440" height="275" viewBox="0 0 440 275">`;
+
+        const isHighlightedEdge = (u, v) =>
+            (sc.highlightEdges || []).some(([hu, hv]) => hu === u && hv === v);
+
+        let svg = `<svg width="100%" height="295" viewBox="0 0 440 295" preserveAspectRatio="xMidYMid meet">`;
         sc.edges.forEach(([u, v]) => {
             const n1 = sc.nodes.find(n => n.id === u);
             const n2 = sc.nodes.find(n => n.id === v);
-            if(n1 && n2) svg += `<line x1="${n1.x}" y1="${n1.y}" x2="${n2.x}" y2="${n2.y}" stroke="#475569" stroke-width="2"/>`;
+            if (n1 && n2) {
+                const hl = isHighlightedEdge(u, v);
+                svg += `<line x1="${n1.x}" y1="${n1.y}" x2="${n2.x}" y2="${n2.y}" stroke="${hl ? '#fbbf24' : '#475569'}" stroke-width="${hl ? '3' : '2'}" ${n2.id === 'NULL' ? 'stroke-dasharray="4 3"' : ''}/>`;
+            }
         });
         sc.nodes.forEach(n => {
-            const stroke = n.highlight ? '#fbbf24' : '#38bdf8';
-            const fill = n.highlight ? '#78350f' : '#1e293b';
+            let stroke = '#38bdf8';
+            let fill = '#1e293b';
+            let textColor = '#f8fafc';
+            if (n.state === 'path') {
+                stroke = '#fbbf24';
+                fill = '#78350f';
+            } else if (n.state === 'found') {
+                stroke = '#4ade80';
+                fill = '#14532d';
+            } else if (n.state === 'notfound') {
+                stroke = '#f87171';
+                fill = '#450a0a';
+                textColor = '#fca5a5';
+            }
+            const radius = n.id === 'NULL' ? 21 : 18;
+            const fontSize = n.id === 'NULL' ? 10 : 13;
             svg += `
-                <circle cx="${n.x}" cy="${n.y}" r="18" fill="${fill}" stroke="${stroke}" stroke-width="2.5"/>
-                <text x="${n.x}" y="${n.y + 5}" fill="#f8fafc" font-family="monospace" font-size="13" font-weight="bold" text-anchor="middle">${n.id}</text>
+                <circle cx="${n.x}" cy="${n.y}" r="${radius}" fill="${fill}" stroke="${stroke}" stroke-width="2.5"/>
+                <text x="${n.x}" y="${n.y + 4}" fill="${textColor}" font-family="monospace" font-size="${fontSize}" font-weight="bold" text-anchor="middle">${n.id}</text>
             `;
         });
         svg += `</svg>`;
@@ -1277,6 +1742,7 @@ No* inserir(No* raiz, int v) {
     return raiz;
 }
 
+// Fonte: ED1_Slide-12-Parte-8-Árvores-8.1-Conceitos & Slide-13 (8.2)
 // Imprime apenas os nos folhas (aqueles sem filhos)
 void imprimirFolhas(No* raiz) {
     if (raiz == NULL) return;
@@ -1319,6 +1785,7 @@ No* inserir(No* raiz, int v) {
     return raiz;
 }
 
+// Fonte: ED1_Slide-12-Parte-8-Árvores-8.1-Conceitos
 // Arvore vazia = -1 | No sozinho = 0
 int altura(No* raiz) {
     if (raiz == NULL) return -1;
@@ -1362,6 +1829,7 @@ No* inserir(No* raiz, int v) {
     return raiz;
 }
 
+// Fonte: ED1_Slide-13-Parte-8-Árvores-8.2 & Slide-14 (8.3 ABB)
 // Percurso Esquerda -> Raiz -> Direita
 void inOrdem(No* raiz) {
     if (raiz == NULL) return;
@@ -1408,6 +1876,7 @@ int altura(No* raiz) {
     return 1 + (hEsq > hDir ? hEsq : hDir);
 }
 
+// Fonte: ED1_Slide-15-Parte-8-Árvores-8.4 (Parte 1) - Cálculo do FB
 // FB = altura da esquerda - altura da direita
 int fatorBalanceamento(No* raiz) {
     if (raiz == NULL) return 0;
@@ -1668,15 +2137,294 @@ int main() {
         }
     }
 
+    /* ==================== ABA 5: ÁRVORES AVL E ROTAÇÕES ==================== */
+    const avlCasesData = {
+        ll: {
+            title: '2. Simulação Visual: Rotação Simples à Direita (LL) <span class="slide-ref">Slide-16 (Parte 8.4)</span>',
+            explain: "Caso LL (Left-Left): Sequência inserida [30, 20, 10]. O crescimento ocorre à esquerda do filho esquerdo (30 → 20 → 10). O nó 30 fica com FB = +2 e seu filho esquerdo 20 tem FB = +1. Aplicamos uma Rotação Simples à Direita em torno do 30.",
+            code: `<span class="cm">// Rotação Simples à Direita (Caso LL)</span>
+<span class="cm">// Fonte: ED1_Slide-16-Parte-8-Árvores-8.4 (Parte 2)</span>
+No* <span class="fn">rotacaoDireita</span>(No* y) {
+    No* x = y->sae;          <span class="cm">// x (20) é o filho esquerdo do nó crítico y (30)</span>
+    No* T2 = x->sad;         <span class="cm">// Guarda eventual subárvore direita de x</span>
+
+    <span class="cm">// Realiza a rotação:</span>
+    x->sad = y;              <span class="cm">// y (30) desce como filho direito de x (20)</span>
+    y->sae = T2;             <span class="cm">// T2 passa a ser subárvore esquerda de y</span>
+
+    <span class="cm">// Atualiza alturas de y e x e retorna a nova raiz da subárvore:</span>
+    y->altura = <span class="num">1</span> + <span class="fn">max</span>(<span class="fn">altura</span>(y->sae), <span class="fn">altura</span>(y->sad));
+    x->altura = <span class="num">1</span> + <span class="fn">max</span>(<span class="fn">altura</span>(x->sae), <span class="fn">altura</span>(x->sad));
+    <span class="kw">return</span> x;                <span class="cm">// x (20) assume a posição de raiz</span>
+}`,
+            steps: [
+                {
+                    label: '1. Árvore Desbalanceada (LL)',
+                    narration: "Após inserir [30, 20, 10]: O nó 30 apresenta altura 2 e FB = 1 - (-1) = +2 (crítico). O caminho do desequilíbrio segue para a esquerda (20) e novamente para a esquerda (10), caracterizando o caso LL.",
+                    status: "⚠️ Desbalanceada no nó 30 (FB = +2) - Caso LL detectado",
+                    nodes: [
+                        {id: 30, x: 260, y: 45, h: 2, fb: '+2', state: 'critical'},
+                        {id: 20, x: 185, y: 125, h: 1, fb: '+1', state: 'pivot'},
+                        {id: 10, x: 110, y: 205, h: 0, fb: '0', state: 'normal'}
+                    ],
+                    edges: [[30, 20], [20, 10]],
+                    highlightEdges: [[30, 20], [20, 10]]
+                },
+                {
+                    label: '2. Após Rotação Simples à Direita',
+                    narration: "Rotação Simples à Direita concluída: O filho esquerdo (20) sobe e torna-se a nova raiz. O nó 10 permanece à esquerda de 20 e o antigo nó crítico (30) passa a ser filho direito de 20. Todos os nós agora têm FB = 0!",
+                    status: "✅ Árvore AVL Balanceada (todos os nós com FB = 0)",
+                    nodes: [
+                        {id: 20, x: 220, y: 55, h: 1, fb: '0', state: 'balanced'},
+                        {id: 10, x: 135, y: 150, h: 0, fb: '0', state: 'balanced'},
+                        {id: 30, x: 305, y: 150, h: 0, fb: '0', state: 'balanced'}
+                    ],
+                    edges: [[20, 10], [20, 30]],
+                    highlightEdges: [[20, 30]]
+                }
+            ]
+        },
+        rr: {
+            title: '2. Simulação Visual: Rotação Simples à Esquerda (RR) <span class="slide-ref">Slide-16 (Parte 8.4)</span>',
+            explain: "Caso RR (Right-Right): Sequência inserida [10, 20, 30]. O crescimento ocorre à direita do filho direito (10 → 20 → 30). O nó 10 fica com FB = -2 e seu filho direito 20 tem FB = -1. Aplicamos uma Rotação Simples à Esquerda em torno do 10.",
+            code: `<span class="cm">// Rotação Simples à Esquerda (Caso RR)</span>
+<span class="cm">// Fonte: ED1_Slide-16-Parte-8-Árvores-8.4 (Parte 2)</span>
+No* <span class="fn">rotacaoEsquerda</span>(No* x) {
+    No* y = x->sad;          <span class="cm">// y (20) é o filho direito do nó crítico x (10)</span>
+    No* T2 = y->sae;         <span class="cm">// Guarda eventual subárvore esquerda de y</span>
+
+    <span class="cm">// Realiza a rotação:</span>
+    y->sae = x;              <span class="cm">// x (10) desce como filho esquerdo de y (20)</span>
+    x->sad = T2;             <span class="cm">// T2 passa a ser subárvore direita de x</span>
+
+    <span class="cm">// Atualiza alturas de x e y e retorna a nova raiz da subárvore:</span>
+    x->altura = <span class="num">1</span> + <span class="fn">max</span>(<span class="fn">altura</span>(x->sae), <span class="fn">altura</span>(x->sad));
+    y->altura = <span class="num">1</span> + <span class="fn">max</span>(<span class="fn">altura</span>(y->sae), <span class="fn">altura</span>(y->sad));
+    <span class="kw">return</span> y;                <span class="cm">// y (20) assume a posição de raiz</span>
+}`,
+            steps: [
+                {
+                    label: '1. Árvore Desbalanceada (RR)',
+                    narration: "Após inserir [10, 20, 30]: O nó 10 apresenta altura 2 e FB = (-1) - 1 = -2 (crítico). O caminho do desequilíbrio segue para a direita (20) e novamente para a direita (30), caracterizando o caso RR.",
+                    status: "⚠️ Desbalanceada no nó 10 (FB = -2) - Caso RR detectado",
+                    nodes: [
+                        {id: 10, x: 180, y: 45, h: 2, fb: '-2', state: 'critical'},
+                        {id: 20, x: 255, y: 125, h: 1, fb: '-1', state: 'pivot'},
+                        {id: 30, x: 330, y: 205, h: 0, fb: '0', state: 'normal'}
+                    ],
+                    edges: [[10, 20], [20, 30]],
+                    highlightEdges: [[10, 20], [20, 30]]
+                },
+                {
+                    label: '2. Após Rotação Simples à Esquerda',
+                    narration: "Rotação Simples à Esquerda concluída: O filho direito (20) sobe e assume a posição de raiz. O antigo nó crítico (10) torna-se filho esquerdo de 20 e o 30 permanece à direita de 20. Todos os nós ficam com FB = 0!",
+                    status: "✅ Árvore AVL Balanceada (todos os nós com FB = 0)",
+                    nodes: [
+                        {id: 20, x: 220, y: 55, h: 1, fb: '0', state: 'balanced'},
+                        {id: 10, x: 135, y: 150, h: 0, fb: '0', state: 'balanced'},
+                        {id: 30, x: 305, y: 150, h: 0, fb: '0', state: 'balanced'}
+                    ],
+                    edges: [[20, 10], [20, 30]],
+                    highlightEdges: [[20, 10]]
+                }
+            ]
+        },
+        lr: {
+            title: '2. Simulação Visual: Rotação Dupla à Direita (LR) <span class="slide-ref">Slide-17 (Parte 8.4)</span>',
+            explain: "Caso LR (Left-Right): Sequência inserida [40, 20, 30]. O nó 40 está desbalanceado para a esquerda (FB = +2), mas seu filho esquerdo 20 está pesado para a direita (FB = -1). Corrigimos em 2 etapas: (1) Rotação à Esquerda no filho 20; (2) Rotação à Direita no nó crítico 40.",
+            code: `<span class="cm">// Rotação Dupla à Direita (Caso LR = Esquerda-Direita)</span>
+<span class="cm">// Fonte: ED1_Slide-17-Parte-8-Árvores-8.4 (Parte 2)</span>
+No* <span class="fn">rotacaoDuplaDireita</span>(No* z) {
+    <span class="cm">// 1ª Etapa: Rotação Simples à Esquerda no filho esquerdo (20)</span>
+    <span class="cm">// Transforma o "joelho" LR em uma linha reta LL:</span>
+    z->sae = <span class="fn">rotacaoEsquerda</span>(z->sae);
+
+    <span class="cm">// 2ª Etapa: Rotação Simples à Direita no nó crítico (40)</span>
+    <span class="cm">// Promove o nó intermediário (30) para a raiz da subárvore:</span>
+    <span class="kw">return</span> <span class="fn">rotacaoDireita</span>(z);
+}`,
+            steps: [
+                {
+                    label: '1. Desequilíbrio LR',
+                    narration: "Após inserir [40, 20, 30]: O nó 40 está pesado à esquerda (FB = +2), enquanto seu filho esquerdo 20 está pesado à direita (FB = -1). Como há uma dobra ('joelho' 40 → 20 → 30), uma rotação simples direta não resolveria.",
+                    status: "⚠️ Desbalanceada no nó 40 (FB = +2) e filho 20 (FB = -1) - Caso LR",
+                    nodes: [
+                        {id: 40, x: 260, y: 45, h: 2, fb: '+2', state: 'critical'},
+                        {id: 20, x: 165, y: 125, h: 1, fb: '-1', state: 'pivot'},
+                        {id: 30, x: 235, y: 205, h: 0, fb: '0', state: 'normal'}
+                    ],
+                    edges: [[40, 20], [20, 30]],
+                    highlightEdges: [[40, 20], [20, 30]]
+                },
+                {
+                    label: '2. Etapa 1: Esq. no 20',
+                    narration: "Primeira etapa (Rotação à Esquerda no filho 20): O nó 30 sobe dentro da subárvore esquerda e o 20 desce como filho esquerdo de 30. Agora a subárvore está alinhada à esquerda (caso LL: 40 → 30 → 20)!",
+                    status: "🔄 Etapa 1/2 concluída: alinhado para LL (40 → 30 → 20)",
+                    nodes: [
+                        {id: 40, x: 260, y: 45, h: 2, fb: '+2', state: 'critical'},
+                        {id: 30, x: 185, y: 125, h: 1, fb: '+1', state: 'pivot'},
+                        {id: 20, x: 110, y: 205, h: 0, fb: '0', state: 'normal'}
+                    ],
+                    edges: [[40, 30], [30, 20]],
+                    highlightEdges: [[30, 20]]
+                },
+                {
+                    label: '3. Etapa 2: Dir. no 40 (Final)',
+                    narration: "Segunda etapa (Rotação à Direita no nó crítico 40): O nó 30 sobe e assume a posição de raiz, tendo 20 à esquerda e 40 à direita. A árvore está perfeitamente equilibrada!",
+                    status: "✅ Árvore AVL Balanceada (todos os nós com FB = 0)",
+                    nodes: [
+                        {id: 30, x: 220, y: 55, h: 1, fb: '0', state: 'balanced'},
+                        {id: 20, x: 135, y: 150, h: 0, fb: '0', state: 'balanced'},
+                        {id: 40, x: 305, y: 150, h: 0, fb: '0', state: 'balanced'}
+                    ],
+                    edges: [[30, 20], [30, 40]],
+                    highlightEdges: [[30, 40]]
+                }
+            ]
+        },
+        rl: {
+            title: '2. Simulação Visual: Rotação Dupla à Esquerda (RL) <span class="slide-ref">Slide-17 (Parte 8.4)</span>',
+            explain: "Caso RL (Right-Left): Sequência inserida [20, 40, 30]. O nó 20 está desbalanceado para a direita (FB = -2), mas seu filho direito 40 está pesado para a esquerda (FB = +1). Corrigimos em 2 etapas: (1) Rotação à Direita no filho 40; (2) Rotação à Esquerda no nó crítico 20.",
+            code: `<span class="cm">// Rotação Dupla à Esquerda (Caso RL = Direita-Esquerda)</span>
+<span class="cm">// Fonte: ED1_Slide-17-Parte-8-Árvores-8.4 (Parte 2)</span>
+No* <span class="fn">rotacaoDuplaEsquerda</span>(No* z) {
+    <span class="cm">// 1ª Etapa: Rotação Simples à Direita no filho direito (40)</span>
+    <span class="cm">// Transforma o "joelho" RL em uma linha reta RR:</span>
+    z->sad = <span class="fn">rotacaoDireita</span>(z->sad);
+
+    <span class="cm">// 2ª Etapa: Rotação Simples à Esquerda no nó crítico (20)</span>
+    <span class="cm">// Promove o nó intermediário (30) para a raiz da subárvore:</span>
+    <span class="kw">return</span> <span class="fn">rotacaoEsquerda</span>(z);
+}`,
+            steps: [
+                {
+                    label: '1. Desequilíbrio RL',
+                    narration: "Após inserir [20, 40, 30]: O nó 20 está pesado à direita (FB = -2), enquanto seu filho direito 40 está pesado à esquerda (FB = +1). Esse 'joelho' (20 → 40 → 30) exige a rotação dupla à esquerda.",
+                    status: "⚠️ Desbalanceada no nó 20 (FB = -2) e filho 40 (FB = +1) - Caso RL",
+                    nodes: [
+                        {id: 20, x: 180, y: 45, h: 2, fb: '-2', state: 'critical'},
+                        {id: 40, x: 275, y: 125, h: 1, fb: '+1', state: 'pivot'},
+                        {id: 30, x: 205, y: 205, h: 0, fb: '0', state: 'normal'}
+                    ],
+                    edges: [[20, 40], [40, 30]],
+                    highlightEdges: [[20, 40], [40, 30]]
+                },
+                {
+                    label: '2. Etapa 1: Dir. no 40',
+                    narration: "Primeira etapa (Rotação à Direita no filho 40): O nó 30 sobe dentro da subárvore direita e o 40 desce como filho direito de 30. Agora a subárvore está alinhada à direita (caso RR: 20 → 30 → 40)!",
+                    status: "🔄 Etapa 1/2 concluída: alinhado para RR (20 → 30 → 40)",
+                    nodes: [
+                        {id: 20, x: 180, y: 45, h: 2, fb: '-2', state: 'critical'},
+                        {id: 30, x: 255, y: 125, h: 1, fb: '-1', state: 'pivot'},
+                        {id: 40, x: 330, y: 205, h: 0, fb: '0', state: 'normal'}
+                    ],
+                    edges: [[20, 30], [30, 40]],
+                    highlightEdges: [[30, 40]]
+                },
+                {
+                    label: '3. Etapa 2: Esq. no 20 (Final)',
+                    narration: "Segunda etapa (Rotação à Esquerda no nó crítico 20): O nó 30 sobe e assume a posição de raiz, tendo 20 à esquerda e 40 à direita. A árvore está perfeitamente equilibrada!",
+                    status: "✅ Árvore AVL Balanceada (todos os nós com FB = 0)",
+                    nodes: [
+                        {id: 30, x: 220, y: 55, h: 1, fb: '0', state: 'balanced'},
+                        {id: 20, x: 135, y: 150, h: 0, fb: '0', state: 'balanced'},
+                        {id: 40, x: 305, y: 150, h: 0, fb: '0', state: 'balanced'}
+                    ],
+                    edges: [[30, 20], [30, 40]],
+                    highlightEdges: [[30, 20]]
+                }
+            ]
+        }
+    };
+
+    let currentAvlCase = 'll';
+
+    function selectAvlCase(caseKey) {
+        currentAvlCase = caseKey;
+        ['ll', 'rr', 'lr', 'rl'].forEach(k => {
+            document.getElementById('btn-avl-' + k).className = (k === caseKey) ? 'btn' : 'btn btn-secondary';
+        });
+
+        const caseData = avlCasesData[caseKey];
+        document.getElementById('avl-case-explain').textContent = caseData.explain;
+        document.getElementById('avl-code-box').innerHTML = caseData.code;
+        document.getElementById('avl-visual-title').innerHTML = caseData.title;
+
+        const stepBtns = document.getElementById('avl-step-btns');
+        stepBtns.innerHTML = caseData.steps.map((st, idx) => `
+            <button class="btn btn-secondary" data-astep="${idx}" onclick="setAvlStep(${idx})">${st.label}</button>
+        `).join('');
+
+        setAvlStep(0);
+    }
+
+    function setAvlStep(stepIdx) {
+        const caseData = avlCasesData[currentAvlCase];
+        const st = caseData.steps[stepIdx];
+        if (!st) return;
+
+        document.querySelectorAll('#avl-step-btns button').forEach(b => {
+            b.className = (parseInt(b.dataset.astep) === stepIdx) ? 'btn' : 'btn btn-secondary';
+        });
+
+        document.getElementById('avl-step-narration').textContent = st.narration;
+        document.getElementById('avl-status-summary').textContent = st.status;
+
+        const isHighlighted = (u, v) =>
+            (st.highlightEdges || []).some(([hu, hv]) => hu === u && hv === v);
+
+        let svg = `<svg width="100%" height="265" viewBox="0 0 440 265" preserveAspectRatio="xMidYMid meet">`;
+        st.edges.forEach(([u, v]) => {
+            const n1 = st.nodes.find(n => n.id === u);
+            const n2 = st.nodes.find(n => n.id === v);
+            if (n1 && n2) {
+                const hl = isHighlighted(u, v);
+                svg += `<line x1="${n1.x}" y1="${n1.y}" x2="${n2.x}" y2="${n2.y}" stroke="${hl ? '#fbbf24' : '#475569'}" stroke-width="${hl ? '3' : '2'}"/>`;
+            }
+        });
+
+        st.nodes.forEach(n => {
+            let stroke = '#38bdf8';
+            let fill = '#1e293b';
+            let badgeColor = '#94a3b8';
+            if (n.state === 'critical') {
+                stroke = '#f87171';
+                fill = '#450a0a';
+                badgeColor = '#fca5a5';
+            } else if (n.state === 'pivot') {
+                stroke = '#fbbf24';
+                fill = '#78350f';
+                badgeColor = '#fde68a';
+            } else if (n.state === 'balanced') {
+                stroke = '#4ade80';
+                fill = '#14532d';
+                badgeColor = '#86efac';
+            }
+            svg += `
+                <circle cx="${n.x}" cy="${n.y}" r="20" fill="${fill}" stroke="${stroke}" stroke-width="2.5"/>
+                <text x="${n.x}" y="${n.y + 5}" fill="#f8fafc" font-family="monospace" font-size="14" font-weight="bold" text-anchor="middle">${n.id}</text>
+                <rect x="${n.x - 36}" y="${n.y + 24}" width="72" height="17" rx="4" fill="#0f172a" stroke="${stroke}" stroke-width="1"/>
+                <text x="${n.x}" y="${n.y + 36}" fill="${badgeColor}" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">h:${n.h} | FB:${n.fb}</text>
+            `;
+        });
+        svg += `</svg>`;
+        document.getElementById('svg-tab5-container').innerHTML = svg;
+    }
+
     /* ==================== INICIALIZAÇÃO ==================== */
-    window.onload = () => {
+    function initApp() {
         setMemStep(1);
         selectTraversal('pre');
-        showBstCode('busca');
-        setBstScenario('original');
+        selectBstOperation('busca');
+        selectAvlCase('ll');
         loadTemplate('ex1');
         logConsole("Bem-vindo! Clique em '▶ Executar Código' acima ou use os atalhos abaixo.", 'console-line-ok');
-    };
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+        initApp();
+    }
 </script>
 
 </body>
